@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geardesigner.Controller">
+   <children>
+      <VBox>
+         <children>
+            <VBox alignment="TOP_CENTER">
+               <children>
+                  <Label alignment="TOP_CENTER" text="输入已知参数" />
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="TOP_CENTER" text="参数名" />
+                        <Label alignment="TOP_CENTER" text="参数符号" GridPane.columnIndex="1" />
+                        <Label alignment="TOP_CENTER" text="参数值" GridPane.columnIndex="2" />
+                        <Label alignment="TOP_CENTER" text="法向模数" GridPane.rowIndex="1" />
+                        <Label alignment="TOP_CENTER" text="齿数(内齿为负)" GridPane.rowIndex="2" />
+                        <Label alignment="TOP_CENTER" text="法向压力角(角度)" GridPane.rowIndex="3" />
+                        <Label alignment="TOP_CENTER" text="螺旋角" GridPane.rowIndex="4" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="法向变位系数" GridPane.rowIndex="5" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="齿顶高系数" GridPane.rowIndex="6" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="齿根高系数" GridPane.rowIndex="7" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="顶隙系数" GridPane.rowIndex="8" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="量棒直径" GridPane.rowIndex="9" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="公法线上偏差" GridPane.rowIndex="10" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="公法线下偏差" GridPane.rowIndex="11" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="跨棒距上偏差" GridPane.rowIndex="12" />
+                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="跨棒距下偏差" GridPane.rowIndex="13" />
+                        <JFXTextField fx:id="tfIntMn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <JFXTextField fx:id="tfIntZ" layoutX="186.0" layoutY="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <JFXTextField fx:id="tfDoubleAlphaN" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <JFXTextField fx:id="tfDoubleBeta" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <JFXTextField fx:id="tfDoubleXn" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <JFXTextField fx:id="tfDoubleHa" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <JFXTextField fx:id="tfDoubleHf" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                        <JFXTextField fx:id="tfDoubleCf" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                        <JFXTextField fx:id="tfDoubleDp" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                        <JFXTextField fx:id="tfDoubleWs" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+                        <JFXTextField fx:id="tfDoubleWx" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                        <JFXTextField fx:id="tfDoubleMs" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                        <JFXTextField fx:id="tfDoubleMx" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label alignment="TOP_CENTER" text="计算任一圆齿厚" />
+                  <AnchorPane fx:id="anchorAnyCircle" />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="btCalAnyCircle" buttonType="RAISED" text="计算任一圆" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <HBox>
+               <children>
+                  <JFXRadioButton fx:id="rbToDegree" selected="true" text="角度制">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="groupAngles" />
+                     </toggleGroup>
+                  </JFXRadioButton>
+                  <JFXRadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <Label text="公法线与跨棒距" />
+               </children>
+            </HBox>
+            <AnchorPane fx:id="anchorBaseTanAndSpan" />
+            <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="30.0">
+               <children>
+                  <Label text="偏差转换" />
+               </children>
+            </HBox>
+            <AnchorPane fx:id="anchorDeviation" layoutX="10.0" layoutY="50.0" />
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <JFXButton fx:id="btCalculate" buttonType="RAISED" defaultButton="true" text="计算" />
+                  <JFXButton fx:id="btSaveParams" buttonType="RAISED" layoutX="44.0" layoutY="10.0" text="保存参数" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>
