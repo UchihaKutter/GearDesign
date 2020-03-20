@@ -5,7 +5,7 @@ package geardesigner;
  */
 public class Specifications {
     /**
-    角全部以弧度制存储
+     角全部以弧度制存储
      */
     /**
      * 法向模数
@@ -16,7 +16,7 @@ public class Specifications {
      */
     int Z;
     /**
-     *法向压力角
+     * 法向压力角
      */
     double alphaN;
     /**
@@ -62,9 +62,10 @@ public class Specifications {
 
     /**
      * 检查参数设置是否合法
+     *
      * @return
      */
-    public boolean isValued(){
+    public boolean isValued() {
         return true;//// TODO: 2020/2/9 检查参数设置是否合法
     }
 
@@ -173,7 +174,7 @@ public class Specifications {
             specifications.Cf = this.Cf;
             if (specifications.isValued()) {
                 return specifications;
-            }else {
+            } else {
                 throw new IllegalArgumentException("填入的参数不正确");
             }
         }

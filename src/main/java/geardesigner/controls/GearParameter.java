@@ -15,25 +15,25 @@ public class GearParameter extends HBox {
     private final String symbol;
     private final JFXTextField value;//TextField
 
-    public GearParameter( String name, String symbol,boolean editable) {
-        this.name =new Label(name);
+    public GearParameter(String name, String symbol, boolean editable) {
+        this.name = new Label(name);
         this.symbol = symbol;
-        value=new JFXTextField();
+        value = new JFXTextField();
         value.setEditable(editable);
         value.setValidators(new NumberValidator("请输入有效的数值"));
-        this.getChildren().addAll(this.name,new Label(symbol),value);
+        this.getChildren().addAll(this.name, new Label(symbol), value);
     }
 
-    public boolean isEditable(){
+    public boolean isEditable() {
         return value.isEditable();
     }
 
-    public final void setValue(String text){
-        value.setText(text);
+    public final String getValue() {
+        return value.getText().trim();
     }
 
-    public final String getValue(){
-        return value.getText().trim();
+    public final void setValue(String text) {
+        value.setText(text);
     }
 
     @Override

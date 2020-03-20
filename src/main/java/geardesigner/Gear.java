@@ -25,7 +25,7 @@ public strictfp class Gear {
      */
     double dm;
     /**
-     * 断面压力角
+     * 端面压力角
      */
     double alphaT;
     /**
@@ -53,81 +53,89 @@ public strictfp class Gear {
 
     public Gear(Specifications specs) {
         this.specs = specs;
-        baseTangent=new BaseTangent();
-        span=new Span();
+        baseTangent = new BaseTangent();
+        span = new Span();
     }
 
-    public Gear calculate(){
-        calD();
-        calDa();
-        calDf();
-        calAlphaT();
-        calDb();
-        calZp();
-        calK();
+    /**
+     * 牛顿法求解渐开线压力角，默认参数角取值范围(0,PI)，已测试
+     *
+     * @param theta 极角（弧度制）
+     * @return 压力角（弧度制）
+     */
+    public static double NewtonCalAlpha(double theta) {
+        /**
+         * 迭代初始值
+         */
+        double alpha0 = 0.0001;
+        double alpha = 1;
+        /**
+         * 求解精度设置
+         */
+        double precision = 0.000001;
+        while (Math.abs(alpha - alpha0) > precision) {
+            alpha0 = alpha;
+            alpha = alpha0 - (Math.tan(alpha0) - alpha0 - theta) / (Math.tan(alpha0) * Math.tan(alpha0));
+        }
+        return alpha;
+    }
+
+    public Gear calculate() {
+        calGear();
         baseTangent.calculate();
         span.calculate();
         return this;
     }
 
-    public Gear calculateDeviation(){
+    public Gear calculateDeviation() {
         baseTangent.calculateDeviation();
         span.calculateDeviation();
         return this;
     }
 
-    private void calD() {
-        d = specs.Mn * Math.abs(specs.Z)/ Math.cos(specs.beta);
-    }
-
-    private void calDa() {
-        da = d + 2 * specs.Xn * specs.Mn;
-        if (specs.Z > 0) {
-            da += 2 * specs.Mn * specs.ha;
-        } else {
-            da -= 2 * specs.Mn * specs.ha;
-        }
-    }
-
-    private void calDf() {
-        df = d + 2 * specs.Xn * specs.Mn;
-        if (specs.Z > 0) {
-            df -= 2 * specs.Mn * (specs.hf + specs.Cf);
-        } else {
-            df += 2 * specs.Mn * (specs.hf + specs.Cf);
-        }
-    }
-
-    private void calAlphaT() {
+    private void calGear() {
+        d = specs.Mn * Math.abs(specs.Z) / Math.cos(specs.beta);
+        da = calDa(specs);
+        calDf(specs);
         alphaT = Math.atan(Math.tan(specs.alphaN) / Math.cos(specs.beta));
-    }
-
-    private void calDb() {
         db = d * Math.cos(alphaT);
-    }
-
-    private void calZp() {
         Zp = Math.abs(specs.Z) * (Math.tan(alphaT) - alphaT) / (Math.tan(specs.alphaN) - specs.alphaN);
-    }
-
-    private void calK() {
         /**
          * 只允许正数，向下取整
          */
         k = (int) Math.floor(specs.alphaN / Math.PI * Zp + 1);
     }
 
-    public double getWk(){
+    private double calDa(Specifications specs) {
+        double da = d + 2 * specs.Xn * specs.Mn;
+        if (specs.Z > 0) {
+            da += 2 * specs.Mn * specs.ha;
+        } else {
+            da -= 2 * specs.Mn * specs.ha;
+        }
+        return da;
+    }
+
+    private double calDf(Specifications specs) {
+        double df = d + 2 * specs.Xn * specs.Mn;
+        if (specs.Z > 0) {
+            df -= 2 * specs.Mn * (specs.hf + specs.Cf);
+        } else {
+            df += 2 * specs.Mn * (specs.hf + specs.Cf);
+        }
+        return df;
+    }
+
+    public double getWk() {
         return baseTangent.Wk;
     }
-    public double getDWk(){
+
+    public double getDWk() {
         return baseTangent.dWk;
     }
-    public double getDkm(){
+
+    public double getDkm() {
         return span.dkm;
-    }
-    public double getM(){
-        return span.M;
     }
 
     public double getX1() {
@@ -170,32 +178,41 @@ public strictfp class Gear {
         return span.Wx;
     }
 
+    public double getM() {
+        return span.M;
+    }
+
     /**
-     * 牛顿法求解渐开线参数角，默认参数角取值范围(0,PI)，已测试
+     * 计算跨棒距初值
      *
-     * @param theta
-     * @return 参数角（弧度制）
+     * @param specs 输入参数
+     * @param db    基圆直径
+     * @param alpha 渐开线压力角
+     * @return
      */
-    public static double NewtonCalAlpha(double theta) {
-        /**
-         * 迭代初始值
-         */
-        double x = 0.0001;
-        double x1 = 1;
-        /**
-         * 求解精度设置
-         */
-        double precision = 0.000001;
-        while (Math.abs(x1 - x) > precision) {
-            x = x1;
-            x1 = x - (Math.tan(x) - x - theta) / (Math.tan(x) * Math.tan(x));
+    private double calMi(Specifications specs, double db, double alpha) {
+        if ((specs.Z & 1) == 1) {
+            return db / Math.cos(alpha) * Math.cos(Math.PI / 2 / Math.abs(specs.Z)) + specs.dp;
+        } else {
+            return db / Math.cos(alpha) + specs.dp;
         }
-        return x1;
+    }
+
+    /**
+     * 计算跨棒距
+     *
+     * @param specs
+     * @param Mi
+     * @return
+     */
+    private double calM(Specifications specs, double Mi) {
+        return (specs.Z > 0) ? Mi : (Mi - 2 * specs.dp);
     }
 
     /**
      * 公法线
      * 需要先计算公法线基础部分和跨棒距基础部分，才能计算偏差部分
+     *
      * @author SuperNote
      */
     private strictfp class BaseTangent {
@@ -209,147 +226,122 @@ public strictfp class Gear {
         double dWk;
         double dWkInvA;
         double alphaM;
-
-        private void calWk() {
-            Wk = specs.Mn * Math.cos(specs.alphaN) * ((k - 0.5) * Math.PI + Zp * (Math.tan(specs.alphaN) - specs.alphaN)) + 2 * specs.Xn * specs.Mn * Math.sin(specs.alphaN);
-        }
-
-        private void calDWk() {
-            dWk = Math.sqrt(db * db + Math.pow(Wk * Math.cos(specs.beta), 2));
-        }
-
-        private void calDWkInvA() {
-            dWkInvA = Math.tan(alphaT)
-                    - alphaT
-                    + 2 * specs.Xn * Math.tan(specs.alphaN) / Math.abs(specs.Z)
-                    + specs.dp / specs.Mn / specs.Z / Math.cos(specs.alphaN)
-                    - Math.PI / 2/specs.Z;
-        }
-
-        private void calAlphaAm() {
-            alphaM = NewtonCalAlpha(dWkInvA);
-        }
-
-        BaseTangent calculate(){
-            calWk();
-            calDWk();
-            calDWkInvA();
-            calAlphaAm();
-            return this;
-        }
-
         /**
          * 公法线上偏差
          */
         double x1;
         double x1InvA;
         double alphaM1;
-        private double Mi1;
         double M1;
         double Ms;
-
         /**
          * 公法线下偏差
          */
         double x2;
         double x2InvA;
         double alphaM2;
-        private double Mi2;
         double M2;
         double Mx;
+        private double Mi1;
+        private double Mi2;
 
         /**
-         * 上偏差
+         * 计算公法线长度
+         *
+         * @param specs 输入参数
+         * @param k     跨齿数
+         * @param Zp    当量齿数
+         * @return
          */
-        private void calX1() {
-            x1 = specs.Ws / specs.Mn / 2 / Math.sin(specs.alphaN);
+        private double calWk(Specifications specs, double k, double Zp) {
+            return specs.Mn * Math.cos(specs.alphaN) * ((k - 0.5) * Math.PI + Zp * (Math.tan(specs.alphaN) - specs.alphaN)) + 2 * specs.Xn * specs.Mn * Math.sin(specs.alphaN);
         }
 
-        private void calX1InvA() {
-            x1InvA = Math.tan(alphaT)
-                    - alphaT
-                    + 2 * (specs.Xn + x1) * Math.tan(specs.alphaN) / Math.abs(specs.Z)
+        /**
+         * 计算公法线长度处直径
+         *
+         * @param db   基圆直径
+         * @param Wk   公法线长度
+         * @param beta 螺旋角
+         * @return
+         */
+        private double calDWk(double db, double Wk, double beta) {
+            return Math.sqrt(db * db + Math.pow(Wk * Math.cos(beta), 2));
+        }
+
+        /**
+         * 计算极角值（弧度）
+         *
+         * @param specs
+         * @param deviation
+         * @param alpha
+         * @return
+         */
+        private double calInv(Specifications specs, double deviation, double alpha) {
+            return Math.tan(alpha)
+                    - alpha
+                    + 2 * (specs.Xn + deviation) * Math.tan(specs.alphaN) / Math.abs(specs.Z)
                     + specs.dp / specs.Mn / specs.Z / Math.cos(specs.alphaN)
                     - Math.PI / 2 / specs.Z;
         }
 
-        private void calAlphaM1() {
-            alphaM1 = NewtonCalAlpha(x1InvA);
-        }
-
-        private void calMi1() {
-            if ((specs.Z & 1) == 1) {
-                Mi1 = db / Math.cos(alphaM1) * Math.cos(Math.PI / 2 / Math.abs(specs.Z)) + specs.dp;
-            } else {
-                Mi1 = db / Math.cos(alphaM1) + specs.dp;
-            }
-        }
-
-        private void calM1() {
-            M1 = (specs.Z > 0) ? Mi1 : (Mi1 - 2 * specs.dp);
-        }
-
-        private void calMs() {
-            Ms = M1 - span.M;
-        }
-
-        /**
-         * 下偏差
-         */
-        private void calX2() {
-            x2 = specs.Wx / specs.Mn / 2 / Math.sin(specs.alphaN);
-        }
-
-        private void calX2InvA() {
-            x2InvA = Math.tan(alphaT)
-                    - alphaT
-                    + 2 * (specs.Xn + x2) * Math.tan(specs.alphaN) / Math.abs(specs.Z)
-                    + specs.dp / specs.Mn / specs.Z / Math.cos(specs.alphaN)
-                    - Math.PI / 2 / specs.Z;
-        }
-
-        private void calAlphaM2() {
-            alphaM2 = NewtonCalAlpha(x2InvA);
-        }
-
-        private void calMi2() {
-            if ((specs.Z & 1) == 1) {
-                //cos是偶函数
-                Mi2 = db / Math.cos(alphaM2) * Math.cos(Math.PI / 2 / Math.abs(specs.Z)) + specs.dp;
-            } else {
-                Mi2 = db / Math.cos(alphaM2) + specs.dp;
-            }
-        }
-
-        private void calM2() {
-            M2 = (specs.Z > 0) ? Mi2 : (Mi2 - 2 * specs.dp);
-        }
-
-        private void calMx() {
-            Mx = M2 - span.M;
-        }
-
-        BaseTangent calculateDeviation(){
-            calX1();
-            calX1InvA();
-            calAlphaM1();
-            calMi1();
-            calM1();
-            calMs();
-            calX2();
-            calX2InvA();
-            calAlphaM2();
-            calMi2();
-            calM2();
-            calMx();
+        BaseTangent calculate() {
+            Wk = calWk(specs, k, Zp);
+            dWk = calDWk(db, Wk, specs.beta);
+            dWkInvA = calInv(specs, 0, alphaT);
+            alphaM = NewtonCalAlpha(dWkInvA);
             return this;
         }
 
+        /**
+         * 计算偏差尺寸x
+         *
+         * @param specs     输入参数
+         * @param deviation 偏差值
+         * @return
+         */
+        private double calX(Specifications specs, double deviation) {
+            return deviation / specs.Mn / 2 / Math.sin(specs.alphaN);
+        }
+
+        /**
+         * 计算跨棒距偏差
+         *
+         * @param M     当前跨棒距
+         * @param Mbase 标准跨棒距
+         * @return
+         */
+        private double calDM(double M, double Mbase) {
+            return M - Mbase;
+        }
+
+        BaseTangent calculateDeviation() {
+            /**
+             * 上偏差
+             */
+            x1 = calX(specs, specs.Ws);
+            x1InvA = calInv(specs, x1, alphaT);
+            alphaM1 = NewtonCalAlpha(x1InvA);
+            Mi1 = calMi(specs, db, alphaM1);
+            M1 = calM(specs, Mi1);
+            Ms = calDM(M1, span.M);
+            /**
+             * 下偏差
+             */
+            x2 = calX(specs, specs.Wx);
+            x2InvA = calInv(specs, x2, alphaT);
+            alphaM2 = NewtonCalAlpha(x2InvA);
+            Mi2 = calMi(specs, db, alphaM2);
+            M2 = calM(specs, Mi2);
+            Mx = calDM(M2, span.M);
+            return this;
+        }
     }
 
     /**
      * 跨棒距
      * 需要先计算公法线基础部分和跨棒距基础部分，才能计算偏差部分
+     *
      * @author SuperNote
      */
     private strictfp class Span {
@@ -358,37 +350,9 @@ public strictfp class Gear {
          */
         double dkm;
         /**
-         * 跨棒距初算
-         */
-        private double Mi;
-        /**
          * 跨棒距
          */
         double M;
-
-        private void calDkm() {
-            dkm = db / Math.cos(baseTangent.alphaM);
-        }
-
-        private void calMi() {
-            if ((specs.Z & 1) == 1) {
-                Mi = db / Math.cos(baseTangent.alphaM) * Math.cos(Math.PI / 2 / Math.abs(specs.Z)) + specs.dp;
-            } else {
-                Mi = db / Math.cos(baseTangent.alphaM) + specs.dp;
-            }
-        }
-
-        private void calM() {
-            M = (specs.Z > 0) ? Mi : (Mi - 2 * specs.dp);
-        }
-
-        Span calculate(){
-            calDkm();
-            calMi();
-            calM();
-            return this;
-        }
-
         /**
          * 跨棒距上偏差
          */
@@ -401,53 +365,71 @@ public strictfp class Gear {
         double alphaM2;
         double x2;
         double Wx;
+        /**
+         * 跨棒距初算
+         */
+        private double Mi;
+
+        private double calDkm(double db, double alphaM) {
+            return db / Math.cos(alphaM);
+        }
+
+        Span calculate() {
+            dkm = calDkm(db, baseTangent.alphaM);
+            Mi = calMi(specs, db, baseTangent.alphaM);
+            M = calM(specs, Mi);
+            return this;
+        }
 
         /**
          * 上偏差
          */
-        private void calAlphaM1(){
+
+        /**
+         * 计算压力角（从跨棒距）
+         *
+         * @param specs
+         * @param db
+         * @param Mi
+         */
+        private double calAlphaM(Specifications specs, double db, double Mi, double deviation) {
             if ((specs.Z & 1) == 1) {
-                alphaM1 = Math.acos(db * Math.cos(Math.PI / 2 / Math.abs(specs.Z))/(Mi+specs.Ms-specs.dp));//Excel
+                return Math.acos(db * Math.cos(Math.PI / 2 / Math.abs(specs.Z)) / (Mi + deviation - specs.dp));//Excel
                 // 实际公式与标称公式不符
             } else {
-                alphaM1 =Math.acos(db /(Mi+specs.Ms-specs.dp));
+                return Math.acos(db / (Mi + deviation - specs.dp));
             }
         }
 
-        private void calX1(){
-            x1=(Math.tan(alphaM1)-alphaM1-baseTangent.dWkInvA)*Math.abs(specs.Z)/2/Math.tan(specs.alphaN);
-        }
-
-        private void calWs(){
-            Ws=2*x1*specs.Mn*Math.sin(specs.alphaN);
+        private double calX(Specifications specs, double dWkInvA, double alphaM) {
+            return (Math.tan(alphaM) - alphaM - dWkInvA) * Math.abs(specs.Z) / 2 / Math.tan(specs.alphaN);
         }
 
         /**
-         * 下偏差
+         * 计算偏差（从跨棒距）
+         *
+         * @param Mn     法向模数
+         * @param alphaN 法向压力角
+         * @param dx     偏差设定
+         * @return
          */
-        private void calAlphaM2(){
-            if ((specs.Z & 1) == 1) {
-                alphaM2 = Math.acos(db * Math.cos(Math.PI / 2 / Math.abs(specs.Z))/(Mi+specs.Mx-specs.dp));//Excel
-                // 实际公式与标称公式不符
-            } else {
-                alphaM2 =Math.acos(db /(Mi+specs.Mx-specs.dp));
-            }
+        private double calDeviation(double Mn, double alphaN, double dx) {
+            return 2 * dx * Mn * Math.sin(alphaN);
         }
 
-        private void calX2(){
-            x2=(Math.tan(alphaM2)-alphaM2-baseTangent.dWkInvA)*Math.abs(specs.Z)/2/Math.tan(specs.alphaN);
-        }
-
-        private void calWx(){
-            Wx=2*x2*specs.Mn*Math.sin(specs.alphaN);
-        }
-        Span calculateDeviation(){
-            calAlphaM1();
-            calX1();
-            calWs();
-            calAlphaM2();
-            calX2();
-            calWx();
+        Span calculateDeviation() {
+            /**
+             * 上偏差
+             **/
+            alphaM1 = calAlphaM(specs, db, Mi, specs.Ms);
+            x1 = calX(specs, baseTangent.dWkInvA, alphaM1);
+            Ws = calDeviation(specs.Mn, specs.alphaN, x1);
+            /**
+             * 下偏差
+             */
+            alphaM2 = calAlphaM(specs, db, Mi, specs.Mx);
+            x2 = calX(specs, baseTangent.dWkInvA, alphaM2);
+            Wx = calDeviation(specs.Mn, specs.alphaN, x2);
             return this;
         }
 
@@ -456,7 +438,7 @@ public strictfp class Gear {
     /**
      * 任一圆齿厚计算，非惰性
      */
-    public strictfp class AnyCircle{
+    public strictfp class AnyCircle {
         /**
          * 任一圆直径
          */
@@ -481,41 +463,84 @@ public strictfp class Gear {
          * 任一圆处法向弦齿厚
          */
         private double sn1;
+
         public AnyCircle(double da) {
             this.da1 = da;
         }
 
-        private void calAlphaT(){
-            alphaT1 =Math.acos(db/ da1);
+        /**
+         * 齿顶圆端面压力角
+         *
+         * @param db 基圆直径
+         * @param da 任一圆直径
+         * @return
+         */
+        private double calAlphaT(double db, double da) {
+            return Math.acos(db / da);
         }
 
-        private void calS(){
-            s=(Math.PI/2+2*specs.Xn*Math.tan(specs.alphaN))*specs.Mn/Math.cos(specs.beta);
+        /**
+         * 计算分度圆处弧齿厚
+         *
+         * @param specs 输入参数
+         * @return
+         */
+        private double calS(Specifications specs) {
+            return (Math.PI / 2 + 2 * specs.Xn * Math.tan(specs.alphaN)) * specs.Mn / Math.cos(specs.beta);
         }
 
-        private void calSa(){
-            sa1=s* da1 /d;
-            if (specs.Z>0){
-                sa1-=da1 *(Math.tan(alphaT1)- alphaT1 -Math.tan(alphaT)+ alphaT);
-            }else{
-                sa1+=da1 *(Math.tan(alphaT1)- alphaT1 -Math.tan(alphaT)+ alphaT);
+        /**
+         * 计算任一圆处弧齿厚
+         *
+         * @param d       分度圆直径
+         * @param alphaT  端面压力角
+         * @param z       齿数
+         * @param alphaT1 齿顶圆端面压力角
+         * @param s       分度圆处弧齿厚
+         * @param da      任一圆直径
+         * @return
+         */
+        private double calSa(double d, double alphaT, int z, double alphaT1, double s, double da) {
+            double sa = s * da / d;
+            double part = da * (Math.tan(alphaT1) - alphaT1 - Math.tan(alphaT) + alphaT);
+            if (z > 0) {
+                sa -= part;
+            } else {
+                sa += part;
             }
+            return sa;
         }
 
-        private void calBeta(){
-            beta1=Math.atan(Math.tan(specs.beta)*Math.cos(alphaT)/Math.cos(alphaT1));
+        /**
+         * 任一园螺旋角
+         *
+         * @param beta0   螺旋角
+         * @param alphaT  端面压力角
+         * @param alphaT1 齿顶圆端面压力角
+         * @return
+         */
+        private double calBeta(double beta0, double alphaT, double alphaT1) {
+            return Math.atan(Math.tan(beta0) * Math.cos(alphaT) / Math.cos(alphaT1));
         }
 
-        private void calSn(){
-            sn1=sa1*Math.cos(beta1);
+        /**
+         * 任一圆处法向弦齿厚
+         *
+         * @param sa1   任一圆处弧齿厚
+         * @param beta1 任一园螺旋角
+         * @return
+         */
+        private double calSn(double sa1, double beta1) {
+            return sa1 * Math.cos(beta1);
         }
 
-        AnyCircle calculate(){
-            calAlphaT();
-            calS();
-            calSa();
-            calBeta();
-            calSn();
+        AnyCircle calculate() {
+            alphaT1 = calAlphaT(db, da1);
+            s = calS(specs);
+            //
+            sa1 = calSa(d, alphaT, specs.Z, alphaT1, s, da1);
+            beta1 = calBeta(specs.beta, alphaT, alphaT1);
+            sn1 = calSn(sa1, beta1);
             return this;
         }
 
