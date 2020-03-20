@@ -1,30 +1,41 @@
 package geardesigner.controls;
 
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.validation.NumberValidator;
+import com.sun.istack.internal.Nullable;
+import javafx.beans.property.Property;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 /**
  * @author SuperNote
  */
 // TODO: 2020/3/19 JLatexMath符号功能
 // TODO: 2020/3/20 可输入框与不可输入框视觉区分
+// TODO: 2020/3/20 输入监视器
 public class GearParameter extends HBox {
     private final Label name;
-    private final String symbol;
-    private final JFXTextField value;//TextField
+    private final StackPane symbol;
+    private final TextField value;
+    private String unit;
 
     public GearParameter(String name, String symbol, boolean editable) {
         this.name = new Label(name);
-        this.symbol = symbol;
+        this.symbol = new StackPane(new Label(symbol));
         value = new JFXTextField();
         value.setEditable(editable);
-        value.setValidators(new NumberValidator("请输入有效的数值"));
-        this.getChildren().addAll(this.name, new Label(symbol), value);
+        this.getChildren().addAll(this.name, this.symbol, value);
+        initStyle();
     }
 
-    public boolean isEditable() {
+    private void initStyle() {
+        this.setAlignment(Pos.BOTTOM_LEFT);
+        symbol.setAlignment(Pos.BOTTOM_LEFT);
+    }
+
+    public final boolean isEditable() {
         return value.isEditable();
     }
 
@@ -36,8 +47,29 @@ public class GearParameter extends HBox {
         value.setText(text);
     }
 
+    @Nullable
+    public final String getUnit() {
+        return unit;
+    }
+
+    public final void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public final void bindNamePreWidthProperty(Property<Number> width) {
+        name.prefWidthProperty().bindBidirectional(width);
+    }
+
+    public final void bindSymbolPreWidthProperty(Property<Number> width) {
+        symbol.prefWidthProperty().bindBidirectional(width);
+    }
+
+    public final void bindValuePreWidthProperty(Property<Number> width) {
+        value.prefWidthProperty().bindBidirectional(width);
+    }
+
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         int result = name.getText().hashCode();
         result = 31 * result + symbol.hashCode();
         return result;

@@ -108,30 +108,51 @@ public class Controller {
         anchorDeviation.getChildren().add(tableDeviation);
         btCalculate.setOnAction(event -> refreshGear());
         btCalAnyCircle.setOnAction(event -> setTableAnyCircle());
+        setLayout();
     }
 
-    private Specifications getAllSpecs() {
-        specificationsBuilder.alphaN(Math.toRadians(Double.parseDouble(tfDoubleAlphaN.getText().trim())))
-                .beta(Math.toRadians(Double.parseDouble(tfDoubleBeta.getText().trim())))
-                .Cf(Double.parseDouble(tfDoubleCf.getText().trim()))
-                .dp(Double.parseDouble(tfDoubleDp.getText().trim()))
-                .ha(Double.parseDouble(tfDoubleHa.getText().trim()))
-                .hf(Double.parseDouble(tfDoubleHf.getText().trim()))
-                .Mn(Integer.parseInt(tfIntMn.getText().trim()))
-                .Ms(Double.parseDouble(tfDoubleMs.getText().trim()))
-                .Mx(Double.parseDouble(tfDoubleMx.getText().trim()))
-                .Ws(Double.parseDouble(tfDoubleWs.getText().trim()))
-                .Wx(Double.parseDouble(tfDoubleWx.getText().trim()))
-                .Xn(Double.parseDouble(tfDoubleXn.getText().trim()))
-                .Z(Integer.parseInt(tfIntZ.getText().trim()));
-        return specificationsBuilder.build();
+    private void setLayout() {
+        tableAnyCircle.setNameWidth(160);
+        tableAnyCircle.setSymbolWidth(80);
+        tableAnyCircle.setValueWidth(160);
+        tableBaseTanAndSpan.setNameWidth(160);
+        tableBaseTanAndSpan.setSymbolWidth(80);
+        tableBaseTanAndSpan.setValueWidth(160);
+        tableDeviation.setNameWidth(160);
+        tableDeviation.setSymbolWidth(80);
+        tableDeviation.setValueWidth(160);
+    }
+
+    private Specifications getAllSpecs() throws InputException {
+        try {
+            specificationsBuilder.alphaN(Math.toRadians(Double.parseDouble(tfDoubleAlphaN.getText().trim())))
+                    .beta(Math.toRadians(Double.parseDouble(tfDoubleBeta.getText().trim())))
+                    .Cf(Double.parseDouble(tfDoubleCf.getText().trim()))
+                    .dp(Double.parseDouble(tfDoubleDp.getText().trim()))
+                    .ha(Double.parseDouble(tfDoubleHa.getText().trim()))
+                    .hf(Double.parseDouble(tfDoubleHf.getText().trim()))
+                    .Mn(Integer.parseInt(tfIntMn.getText().trim()))
+                    .Ms(Double.parseDouble(tfDoubleMs.getText().trim()))
+                    .Mx(Double.parseDouble(tfDoubleMx.getText().trim()))
+                    .Ws(Double.parseDouble(tfDoubleWs.getText().trim()))
+                    .Wx(Double.parseDouble(tfDoubleWx.getText().trim()))
+                    .Xn(Double.parseDouble(tfDoubleXn.getText().trim()))
+                    .Z(Integer.parseInt(tfIntZ.getText().trim()));
+            return specificationsBuilder.build();
+        } catch (NumberFormatException e) {
+            throw new InputException("请输入有效数值");
+        }
     }
 
     private void refreshGear() {
-        gear = new Gear(getAllSpecs());
-        gear.calculate();
-        gear.calculateDeviation();
-        refreshTables();
+        try {
+            gear = new Gear(getAllSpecs());
+            gear.calculate();
+            gear.calculateDeviation();
+            refreshTables();
+        } catch (InputException e) {
+            // TODO: 2020/3/20
+        }
     }
 
     private void refreshTables() {
