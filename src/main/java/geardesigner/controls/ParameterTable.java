@@ -39,7 +39,10 @@ public class ParameterTable extends VBox {
         valueLabel = new StackPane(new Label("参数值"));
         header = new HBox();
         initHeader();
-        setStyle(4, 30, 20, 30, 20);
+        /**
+         * 设置面板间距
+         */
+        setStyle(4, 20, 20, 30, 20);
         if (names.length == symbols.length && symbols.length == editable.length) {
             ObservableList<Node> children = this.getChildren();
             children.add(header);
