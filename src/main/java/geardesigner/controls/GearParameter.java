@@ -1,13 +1,12 @@
 package geardesigner.controls;
 
-import com.jfoenix.controls.JFXTextField;
-import com.sun.istack.internal.Nullable;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author SuperNote
@@ -24,7 +23,7 @@ public class GearParameter extends HBox {
     public GearParameter(String name, String symbol, boolean editable) {
         this.name = new Label(name);
         this.symbol = new StackPane(new Label(symbol));
-        value = new JFXTextField();
+        value = new TextField();
         value.setEditable(editable);
         this.getChildren().addAll(this.name, this.symbol, value);
         initStyle();

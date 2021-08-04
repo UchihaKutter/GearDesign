@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <HBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
@@ -61,20 +60,20 @@
                                        GridPane.rowIndex="12"/>
                                 <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="跨棒距下偏差"
                                        GridPane.rowIndex="13"/>
-                                <JFXTextField fx:id="tfIntMn" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                                <JFXTextField fx:id="tfIntZ" layoutX="186.0" layoutY="40.0" GridPane.columnIndex="2"
+                                <TextField fx:id="tfIntMn" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <TextField fx:id="tfIntZ" layoutX="186.0" layoutY="40.0" GridPane.columnIndex="2"
                                               GridPane.rowIndex="2"/>
-                                <JFXTextField fx:id="tfDoubleAlphaN" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                                <JFXTextField fx:id="tfDoubleBeta" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
-                                <JFXTextField fx:id="tfDoubleXn" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-                                <JFXTextField fx:id="tfDoubleHa" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
-                                <JFXTextField fx:id="tfDoubleHf" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
-                                <JFXTextField fx:id="tfDoubleCf" GridPane.columnIndex="2" GridPane.rowIndex="8"/>
-                                <JFXTextField fx:id="tfDoubleDp" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
-                                <JFXTextField fx:id="tfDoubleWs" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
-                                <JFXTextField fx:id="tfDoubleWx" GridPane.columnIndex="2" GridPane.rowIndex="11"/>
-                                <JFXTextField fx:id="tfDoubleMs" GridPane.columnIndex="2" GridPane.rowIndex="12"/>
-                                <JFXTextField fx:id="tfDoubleMx" GridPane.columnIndex="2" GridPane.rowIndex="13"/>
+                                <TextField fx:id="tfDoubleAlphaN" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                                <TextField fx:id="tfDoubleBeta" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                                <TextField fx:id="tfDoubleXn" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                                <TextField fx:id="tfDoubleHa" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+                                <TextField fx:id="tfDoubleHf" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+                                <TextField fx:id="tfDoubleCf" GridPane.columnIndex="2" GridPane.rowIndex="8"/>
+                                <TextField fx:id="tfDoubleDp" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
+                                <TextField fx:id="tfDoubleWs" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
+                                <TextField fx:id="tfDoubleWx" GridPane.columnIndex="2" GridPane.rowIndex="11"/>
+                                <TextField fx:id="tfDoubleMs" GridPane.columnIndex="2" GridPane.rowIndex="12"/>
+                                <TextField fx:id="tfDoubleMx" GridPane.columnIndex="2" GridPane.rowIndex="13"/>
                             </children>
                         </GridPane>
                     </children>
@@ -85,7 +84,7 @@
                         <AnchorPane fx:id="anchorAnyCircle"/>
                         <HBox alignment="CENTER">
                             <children>
-                                <JFXButton fx:id="btCalAnyCircle" buttonType="RAISED" text="计算任一圆"/>
+                                <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
                             </children>
                         </HBox>
                     </children>
@@ -96,12 +95,12 @@
             <children>
                 <HBox>
                     <children>
-                        <JFXRadioButton fx:id="rbToDegree" selected="true" text="角度制">
+                        <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
                             <toggleGroup>
                                 <ToggleGroup fx:id="groupAngles"/>
                             </toggleGroup>
-                        </JFXRadioButton>
-                        <JFXRadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles"/>
+                        </RadioButton>
+                        <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles"/>
                     </children>
                 </HBox>
                 <HBox alignment="TOP_CENTER">
@@ -118,8 +117,8 @@
                 <AnchorPane fx:id="anchorDeviation" layoutX="10.0" layoutY="50.0"/>
                 <HBox alignment="TOP_CENTER">
                     <children>
-                        <JFXButton fx:id="btCalculate" buttonType="RAISED" defaultButton="true" text="计算"/>
-                        <JFXButton fx:id="btSaveParams" buttonType="RAISED" layoutX="44.0" layoutY="10.0" text="保存参数"/>
+                        <Button fx:id="btCalculate"  defaultButton="true" text="计算"/>
+                        <Button fx:id="btSaveParams" layoutX="44.0" layoutY="10.0" text="保存参数"/>
                     </children>
                 </HBox>
             </children>

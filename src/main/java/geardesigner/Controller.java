@@ -1,18 +1,16 @@
 package geardesigner;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
 import geardesigner.controls.ParameterTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+
+import javax.swing.*;
 
 public class Controller {
     @FXML
@@ -25,52 +23,52 @@ public class Controller {
     private AnchorPane anchorDeviation;
 
     @FXML
-    private JFXTextField tfIntMn;
+    private TextField tfIntMn;
 
     @FXML
-    private JFXTextField tfIntZ;
+    private TextField tfIntZ;
 
     @FXML
-    private JFXTextField tfDoubleAlphaN;
+    private TextField tfDoubleAlphaN;
 
     @FXML
-    private JFXTextField tfDoubleBeta;
+    private TextField tfDoubleBeta;
 
     @FXML
-    private JFXTextField tfDoubleXn;
+    private TextField tfDoubleXn;
 
     @FXML
-    private JFXTextField tfDoubleHa;
+    private TextField tfDoubleHa;
 
     @FXML
-    private JFXTextField tfDoubleHf;
+    private TextField tfDoubleHf;
 
     @FXML
-    private JFXTextField tfDoubleCf;
+    private TextField tfDoubleCf;
 
     @FXML
-    private JFXTextField tfDoubleDp;
+    private TextField tfDoubleDp;
 
     @FXML
-    private JFXTextField tfDoubleWs;
+    private TextField tfDoubleWs;
 
     @FXML
-    private JFXTextField tfDoubleWx;
+    private TextField tfDoubleWx;
 
     @FXML
-    private JFXTextField tfDoubleMs;
+    private TextField tfDoubleMs;
 
     @FXML
-    private JFXTextField tfDoubleMx;
+    private TextField tfDoubleMx;
 
     @FXML
-    private JFXButton btCalAnyCircle;
+    private Button btCalAnyCircle;
 
     @FXML
-    private JFXRadioButton rbToDegree;
+    private RadioButton rbToDegree;
 
     @FXML
-    private JFXRadioButton rbToRadius;
+    private RadioButton rbToRadius;
 
     @FXML
     private ToggleGroup groupAngles;
@@ -79,10 +77,10 @@ public class Controller {
     /**
      * 重算所有值
      */
-    private JFXButton btCalculate;
+    private Button btCalculate;
 
     @FXML
-    private JFXButton btSaveParams;
+    private Button btSaveParams;
 
     private ParameterTable tableAnyCircle;
     private ParameterTable tableBaseTanAndSpan;
