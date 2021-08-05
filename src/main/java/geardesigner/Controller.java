@@ -10,8 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
-import javax.swing.*;
-
 public class Controller {
     @FXML
     private AnchorPane anchorAnyCircle;
@@ -62,6 +60,9 @@ public class Controller {
     private TextField tfDoubleMx;
 
     @FXML
+    private TextField tfDoubleAnyCircle;
+
+    @FXML
     private Button btCalAnyCircle;
 
     @FXML
@@ -108,19 +109,16 @@ public class Controller {
     public Controller() {
         specificationsBuilder = Specifications.SpecificationsBuilder.aSpecifications();
         tableAnyCircle = new ParameterTable(
-                new String[]{"任一圆直径", "齿顶圆端面压力角", "分度圆处弧齿厚", "任一圆处弧齿厚", "任一园螺旋角", "任一圆处法向弦齿厚"},
-                new String[]{"1", "1", "1", "1", "1", "1"},
-                new boolean[]{true, false, false, false, false, false});
+                new String[]{"齿顶圆端面压力角", "分度圆处弧齿厚", "任一圆处弧齿厚", "任一园螺旋角", "任一圆处法向弦齿厚"},
+                new String[]{"m^2", "1", "1", "1", "1"});
         tableBaseTanAndSpan = new ParameterTable(
                 new String[]{"分度圆直径", "齿顶圆直径", "齿根圆直径", "端面压力角", "基园", "当量齿数", "跨齿数", "公法线长度", "公法线长度处直径", "跨棒距测量点直径", "跨棒距"
                 },
-                new String[]{"2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"},
-                new boolean[]{false, false, false, false, false, false, false, false, false, false, false});
+                new String[]{"2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"});
         tableDeviation = new ParameterTable(
                 new String[]{"公法线上偏差", "跨棒距一", "跨棒距上偏差", "公法线下偏差", "跨棒距二", "跨棒距下偏差", "跨棒距上偏差am1", "公法线上偏差Ws", "跨棒距下偏差am2",
                         "公法线下偏差Wx"},
-                new String[]{"3", "3", "3", "3", "3", "3", "3", "3", "3", "3"},
-                new boolean[]{false, false, false, false, false, false, false, false, false, false});
+                new String[]{"3", "3", "3", "3", "3", "3", "3", "3", "3", "3"});
         preservedDigits = new SimpleIntegerProperty(6);
     }
 

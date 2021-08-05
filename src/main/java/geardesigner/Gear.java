@@ -1,6 +1,7 @@
 package geardesigner;
 
 /**
+ * 计算结果。角全部以弧度制存储
  * @author SuperNote
  */
 public strictfp class Gear {

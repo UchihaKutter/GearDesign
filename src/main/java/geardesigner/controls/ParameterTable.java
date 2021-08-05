@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
  */
 public class ParameterTable extends VBox {
     private final HBox header;
-    private final ObservableMap<String, GearParameter> table;
+    private final ObservableMap<String, OutputParameter> table;
     private final Property<Number> nameWidth;
     private final Property<Number> symbolWidth;
     private final Property<Number> valueWidth;
@@ -27,7 +27,7 @@ public class ParameterTable extends VBox {
     private final StackPane symbolLabel;
     private final StackPane valueLabel;
 
-    public ParameterTable(String[] names, String[] symbols, boolean[] editable) {
+    public ParameterTable(String[] names, String[] symbols) {
         /**
          * 带宽度默认值
          */
@@ -43,12 +43,12 @@ public class ParameterTable extends VBox {
          * 设置面板间距
          */
         setStyle(4, 20, 20, 30, 20);
-        if (names.length == symbols.length && symbols.length == editable.length) {
+        if (names.length == symbols.length) {
             ObservableList<Node> children = this.getChildren();
             children.add(header);
             table = FXCollections.observableHashMap();
             for (int i = 0; i < names.length; i++) {
-                GearParameter parameter = new GearParameter(names[i], symbols[i], editable[i]);
+                OutputParameter parameter = new OutputParameter(names[i], symbols[i]);
                 parameter.bindNamePreWidthProperty(nameWidth);
                 parameter.bindSymbolPreWidthProperty(symbolWidth);
                 parameter.bindValuePreWidthProperty(valueWidth);
@@ -79,7 +79,7 @@ public class ParameterTable extends VBox {
     }
 
     public String getValue(String name) {
-        GearParameter parameter = table.get(name);
+        OutputParameter parameter = table.get(name);
         if (parameter != null) {
             return parameter.getValue();
         }
@@ -87,7 +87,7 @@ public class ParameterTable extends VBox {
     }
 
     public ParameterTable setValue(String name, String value) {
-        GearParameter parameter = table.get(name);
+        OutputParameter parameter = table.get(name);
         if (parameter != null) {
             parameter.setValue(value);
             return this;

@@ -1,12 +1,12 @@
 package geardesigner;
 
 /**
+ * 存储计算参数。
+ * 角全部以弧度制存储
+ *
  * @author SuperNote
  */
 public class Specifications {
-    /**
-     角全部以弧度制存储
-     */
     /**
      * 法向模数
      */
