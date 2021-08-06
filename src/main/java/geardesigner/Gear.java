@@ -1,7 +1,10 @@
 package geardesigner;
 
+import geardesigner.beans.Decimal;
+
 /**
  * 计算结果。角全部以弧度制存储
+ *
  * @author SuperNote
  */
 public strictfp class Gear {
@@ -58,29 +61,6 @@ public strictfp class Gear {
         span = new Span();
     }
 
-    /**
-     * 牛顿法求解渐开线压力角，默认参数角取值范围(0,PI)，已测试
-     *
-     * @param theta 极角（弧度制）
-     * @return 压力角（弧度制）
-     */
-    public static double NewtonCalAlpha(double theta) {
-        /**
-         * 迭代初始值
-         */
-        double alpha0 = 0.0001;
-        double alpha = 1;
-        /**
-         * 求解精度设置
-         */
-        double precision = 0.000001;
-        while (Math.abs(alpha - alpha0) > precision) {
-            alpha0 = alpha;
-            alpha = alpha0 - (Math.tan(alpha0) - alpha0 - theta) / (Math.tan(alpha0) * Math.tan(alpha0));
-        }
-        return alpha;
-    }
-
     public Gear calculate() {
         calGear();
         baseTangent.calculate();
@@ -127,60 +107,60 @@ public strictfp class Gear {
         return df;
     }
 
-    public double getWk() {
-        return baseTangent.Wk;
+    public Decimal getWk() {
+        return Decimal.valueOf(baseTangent.Wk);
     }
 
-    public double getDWk() {
-        return baseTangent.dWk;
+    public Decimal getDWk() {
+        return Decimal.valueOf(baseTangent.dWk);
     }
 
-    public double getDkm() {
-        return span.dkm;
+    public Decimal getDkm() {
+        return Decimal.valueOf(span.dkm);
     }
 
-    public double getX1() {
-        return baseTangent.x1;
+    public Decimal getX1() {
+        return Decimal.valueOf(baseTangent.x1);
     }
 
-    public double getM1() {
-        return baseTangent.M1;
+    public Decimal getM1() {
+        return Decimal.valueOf(baseTangent.M1);
     }
 
-    public double getMs() {
-        return baseTangent.Ms;
+    public Decimal getMs() {
+        return Decimal.valueOf(baseTangent.Ms);
     }
 
-    public double getX2() {
-        return baseTangent.x2;
+    public Decimal getX2() {
+        return Decimal.valueOf(baseTangent.x2);
     }
 
-    public double getM2() {
-        return baseTangent.M2;
+    public Decimal getM2() {
+        return Decimal.valueOf(baseTangent.M2);
     }
 
-    public double getMx() {
-        return baseTangent.Mx;
+    public Decimal getMx() {
+        return Decimal.valueOf(baseTangent.Mx);
     }
 
-    public double getAlphaM1() {
-        return span.alphaM1;
+    public Decimal getAlphaM1() {
+        return Decimal.valueOf(span.alphaM1);
     }
 
-    public double getWs() {
-        return span.Ws;
+    public Decimal getWs() {
+        return Decimal.valueOf(span.Ws);
     }
 
-    public double getAlphaM2() {
-        return span.alphaM2;
+    public Decimal getAlphaM2() {
+        return Decimal.valueOf(span.alphaM2);
     }
 
-    public double getWx() {
-        return span.Wx;
+    public Decimal getWx() {
+        return Decimal.valueOf(span.Wx);
     }
 
-    public double getM() {
-        return span.M;
+    public Decimal getM() {
+        return Decimal.valueOf(span.M);
     }
 
     /**
@@ -290,7 +270,7 @@ public strictfp class Gear {
             Wk = calWk(specs, k, Zp);
             dWk = calDWk(db, Wk, specs.beta);
             dWkInvA = calInv(specs, 0, alphaT);
-            alphaM = NewtonCalAlpha(dWkInvA);
+            alphaM = MathUtils.NewtonCalAlpha(dWkInvA);
             return this;
         }
 
@@ -322,7 +302,7 @@ public strictfp class Gear {
              */
             x1 = calX(specs, specs.Ws);
             x1InvA = calInv(specs, x1, alphaT);
-            alphaM1 = NewtonCalAlpha(x1InvA);
+            alphaM1 = MathUtils.NewtonCalAlpha(x1InvA);
             Mi1 = calMi(specs, db, alphaM1);
             M1 = calM(specs, Mi1);
             Ms = calDM(M1, span.M);
@@ -331,7 +311,7 @@ public strictfp class Gear {
              */
             x2 = calX(specs, specs.Wx);
             x2InvA = calInv(specs, x2, alphaT);
-            alphaM2 = NewtonCalAlpha(x2InvA);
+            alphaM2 = MathUtils.NewtonCalAlpha(x2InvA);
             Mi2 = calMi(specs, db, alphaM2);
             M2 = calM(specs, Mi2);
             Mx = calDM(M2, span.M);
@@ -465,8 +445,8 @@ public strictfp class Gear {
          */
         private double sn1;
 
-        public AnyCircle(double da) {
-            this.da1 = da;
+        public AnyCircle(Decimal da) {
+            this.da1 = da.doubleValue();
         }
 
         /**
@@ -545,28 +525,28 @@ public strictfp class Gear {
             return this;
         }
 
-        public double getDa1() {
-            return da1;
+        public Decimal getDa1() {
+            return Decimal.valueOf(da1);
         }
 
-        public double getAlphaT1() {
-            return alphaT1;
+        public Decimal getAlphaT1() {
+            return Decimal.valueOf(alphaT1);
         }
 
-        public double getS() {
-            return s;
+        public Decimal getS() {
+            return Decimal.valueOf(s);
         }
 
-        public double getSa1() {
-            return sa1;
+        public Decimal getSa1() {
+            return Decimal.valueOf(sa1);
         }
 
-        public double getBeta1() {
-            return beta1;
+        public Decimal getBeta1() {
+            return Decimal.valueOf(beta1);
         }
 
-        public double getSn1() {
-            return sn1;
+        public Decimal getSn1() {
+            return Decimal.valueOf(sn1);
         }
     }
 }

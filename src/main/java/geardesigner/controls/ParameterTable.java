@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.beans.Decimal;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -78,7 +79,7 @@ public class ParameterTable extends VBox {
         setStyle("-fx-border-color:midnightblue;-fx-border-width:2;-fx-border-radius:8");
     }
 
-    public String getValue(String name) {
+    public Decimal getValue(String name) {
         OutputParameter parameter = table.get(name);
         if (parameter != null) {
             return parameter.getValue();
@@ -86,7 +87,7 @@ public class ParameterTable extends VBox {
         throw new IllegalArgumentException("没有这样的参数");
     }
 
-    public ParameterTable setValue(String name, String value) {
+    public ParameterTable setValue(String name, Decimal value) {
         OutputParameter parameter = table.get(name);
         if (parameter != null) {
             parameter.setValue(value);

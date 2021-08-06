@@ -12,6 +12,9 @@ import java.awt.image.BufferedImage;
  * @author SUPERSTATION
  */
 public class TexFormula {
+    public static final float DEFAULT_FONT_SIZE=12;
+    public static final int DEFAULT_STYLE=0;
+
     private final String formulaPattern;
     /**
      * 设置公式样式，0-“显示”样式（默认）；2-“文本”样式；4-“脚本”样式；6-更小的“脚本”样式
@@ -30,8 +33,8 @@ public class TexFormula {
      */
     public TexFormula(String p){
         formulaPattern= p;
-        fontSize = 12;
-        style = 0;
+        fontSize = DEFAULT_FONT_SIZE;
+        style = DEFAULT_STYLE;
     }
 
     public Image getPatternImage(){

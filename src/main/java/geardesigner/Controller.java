@@ -1,5 +1,6 @@
 package geardesigner;
 
+import geardesigner.beans.Decimal;
 import geardesigner.controls.ParameterTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -202,18 +203,17 @@ public class Controller {
      * 包含计算
      */
     private void setTableAnyCircle() {
-        String value = tableAnyCircle.getValue("任一圆直径");
-        if (!(gear == null || value.isEmpty())) {
-            double da = Double.parseDouble(value);
-            Gear.AnyCircle anyCircle = gear.new AnyCircle(da).calculate();
-            tableAnyCircle.setValue("齿顶圆端面压力角", String.valueOf(anyCircle.getAlphaT1()))
-                    .setValue("分度圆处弧齿厚", String.valueOf(anyCircle.getS()))
-                    .setValue("任一圆处弧齿厚", String.valueOf(anyCircle.getSa1()))
-                    .setValue("任一圆处法向弦齿厚", String.valueOf(anyCircle.getSn1()));
+        Decimal value = tableAnyCircle.getValue("任一圆直径");
+        if (gear != null) {
+            Gear.AnyCircle anyCircle = gear.new AnyCircle(value).calculate();
+            tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
+                    .setValue("分度圆处弧齿厚", anyCircle.getS())
+                    .setValue("任一圆处弧齿厚", anyCircle.getSa1())
+                    .setValue("任一圆处法向弦齿厚", anyCircle.getSn1());
             if (isRadius) {
-                tableAnyCircle.setValue("任一园螺旋角", String.valueOf(anyCircle.getBeta1()));
+                tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
             } else {
-                tableAnyCircle.setValue("任一园螺旋角", String.valueOf(Math.toDegrees(anyCircle.getBeta1())));
+                tableAnyCircle.setValue("任一园螺旋角", MathUtils.toDegrees(anyCircle.getBeta1()));
             }
         }
     }
@@ -223,20 +223,20 @@ public class Controller {
      */
     private void setTableBaseTanAndSpan() {
         if (gear != null) {
-            tableBaseTanAndSpan.setValue("分度圆直径", String.valueOf(gear.d))
-                    .setValue("齿顶圆直径", String.valueOf(gear.da))
-                    .setValue("齿根圆直径", String.valueOf(gear.df))
-                    .setValue("基园", String.valueOf(gear.db))
-                    .setValue("当量齿数", String.valueOf(gear.Zp))
-                    .setValue("跨齿数", String.valueOf(gear.k))
-                    .setValue("公法线长度", String.valueOf(gear.getWk()))
-                    .setValue("公法线长度处直径", String.valueOf(gear.getDWk()))
-                    .setValue("跨棒距测量点直径", String.valueOf(gear.getDkm()))
-                    .setValue("跨棒距", String.valueOf(gear.getM()));
+            tableBaseTanAndSpan.setValue("分度圆直径", Decimal.valueOf(gear.d))
+                    .setValue("齿顶圆直径", Decimal.valueOf(gear.da))
+                    .setValue("齿根圆直径", Decimal.valueOf(gear.df))
+                    .setValue("基园", Decimal.valueOf(gear.db))
+                    .setValue("当量齿数", Decimal.valueOf(gear.Zp))
+                    .setValue("跨齿数", Decimal.valueOf(gear.k))
+                    .setValue("公法线长度", gear.getWk())
+                    .setValue("公法线长度处直径", gear.getDWk())
+                    .setValue("跨棒距测量点直径", gear.getDkm())
+                    .setValue("跨棒距", gear.getM());
             if (isRadius) {
-                tableBaseTanAndSpan.setValue("端面压力角", String.valueOf(gear.alphaT));
+                tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(gear.alphaT));
             } else {
-                tableBaseTanAndSpan.setValue("端面压力角", String.valueOf(Math.toDegrees(gear.alphaT)));
+                tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(Math.toDegrees(gear.alphaT)));
             }
         }
     }
@@ -246,25 +246,26 @@ public class Controller {
      */
     private void setTableDeviation() {
         if (gear != null) {
-            tableDeviation.setValue("公法线上偏差", String.valueOf(gear.getX1()))
-                    .setValue("跨棒距一", String.valueOf(gear.getM1()))
-                    .setValue("跨棒距上偏差", String.valueOf(gear.getMs()))
-                    .setValue("公法线下偏差", String.valueOf(gear.getX2()))
-                    .setValue("跨棒距二", String.valueOf(gear.getM2()))
-                    .setValue("跨棒距下偏差", String.valueOf(gear.getMx()))
-                    .setValue("公法线上偏差Ws", String.valueOf(gear.getWs()))
-                    .setValue("公法线下偏差Wx", String.valueOf(gear.getWx()));
+            tableDeviation.setValue("公法线上偏差", (gear.getX1()))
+                    .setValue("跨棒距一", gear.getM1())
+                    .setValue("跨棒距上偏差",gear.getMs())
+                    .setValue("公法线下偏差", gear.getX2())
+                    .setValue("跨棒距二", gear.getM2())
+                    .setValue("跨棒距下偏差", gear.getMx())
+                    .setValue("公法线上偏差Ws", gear.getWs())
+                    .setValue("公法线下偏差Wx", gear.getWx());
             if (isRadius) {
-                tableDeviation.setValue("跨棒距上偏差am1", String.valueOf(gear.getAlphaM1()))
-                        .setValue("跨棒距下偏差am2", String.valueOf(gear.getAlphaM2()));
+                tableDeviation.setValue("跨棒距上偏差am1", gear.getAlphaM1())
+                        .setValue("跨棒距下偏差am2", gear.getAlphaM2());
             } else {
-                tableDeviation.setValue("跨棒距上偏差am1", String.valueOf(Math.toDegrees(gear.getAlphaM1())))
-                        .setValue("跨棒距下偏差am2", String.valueOf(Math.toDegrees(gear.getAlphaM2())));
+                tableDeviation.setValue("跨棒距上偏差am1", Decimal.valueOf(Math.toDegrees(gear.getAlphaM1().doubleValue())))
+                        .setValue("跨棒距下偏差am2", MathUtils.toDegrees(gear.getAlphaM2()));
             }
         }
     }
 
     private void angleUnitSwitch() {
+        //待办 2021/8/6: 先检查待转换的参数是否完备
         isRadius = groupAngles.getSelectedToggle() == rbToRadius;
         setTableBaseTanAndSpan();
         setTableDeviation();
