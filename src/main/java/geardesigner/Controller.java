@@ -1,17 +1,29 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
-import geardesigner.controls.ParameterTable;
+import geardesigner.controls.InputParamTable;
+import geardesigner.controls.OutputParamTable;
+import geardesigner.controls.ParamTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
+
+import static geardesigner.TableSettings.*;
+
 public class Controller {
+    @FXML
+    private AnchorPane anchorInputParams;
+
     @FXML
     private AnchorPane anchorAnyCircle;
 
@@ -20,48 +32,6 @@ public class Controller {
 
     @FXML
     private AnchorPane anchorDeviation;
-
-    @FXML
-    private TextField tfIntMn;
-
-    @FXML
-    private TextField tfIntZ;
-
-    @FXML
-    private TextField tfDoubleAlphaN;
-
-    @FXML
-    private TextField tfDoubleBeta;
-
-    @FXML
-    private TextField tfDoubleXn;
-
-    @FXML
-    private TextField tfDoubleHa;
-
-    @FXML
-    private TextField tfDoubleHf;
-
-    @FXML
-    private TextField tfDoubleCf;
-
-    @FXML
-    private TextField tfDoubleDp;
-
-    @FXML
-    private TextField tfDoubleWs;
-
-    @FXML
-    private TextField tfDoubleWx;
-
-    @FXML
-    private TextField tfDoubleMs;
-
-    @FXML
-    private TextField tfDoubleMx;
-
-    @FXML
-    private TextField tfDoubleAnyCircle;
 
     @FXML
     private Button btCalAnyCircle;
@@ -84,9 +54,10 @@ public class Controller {
     @FXML
     private Button btSaveParams;
 
-    private ParameterTable tableAnyCircle;
-    private ParameterTable tableBaseTanAndSpan;
-    private ParameterTable tableDeviation;
+    private ParamTable tableInputParams;
+    private ParamTable tableAnyCircle;
+    private ParamTable tableBaseTanAndSpan;
+    private ParamTable tableDeviation;
 
     // TODO: 2020/3/21 显示数值保留位数
     private IntegerProperty preservedDigits;
@@ -107,24 +78,36 @@ public class Controller {
         }
     };
 
-    public Controller() {
+    public Controller() throws IOException {
         specificationsBuilder = Specifications.SpecificationsBuilder.aSpecifications();
-        tableAnyCircle = new ParameterTable(
-                new String[]{"齿顶圆端面压力角", "分度圆处弧齿厚", "任一圆处弧齿厚", "任一园螺旋角", "任一圆处法向弦齿厚"},
-                new String[]{"m^2", "1", "1", "1", "1"});
-        tableBaseTanAndSpan = new ParameterTable(
-                new String[]{"分度圆直径", "齿顶圆直径", "齿根圆直径", "端面压力角", "基园", "当量齿数", "跨齿数", "公法线长度", "公法线长度处直径", "跨棒距测量点直径", "跨棒距"
-                },
-                new String[]{"2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"});
-        tableDeviation = new ParameterTable(
-                new String[]{"公法线上偏差", "跨棒距一", "跨棒距上偏差", "公法线下偏差", "跨棒距二", "跨棒距下偏差", "跨棒距上偏差am1", "公法线上偏差Ws", "跨棒距下偏差am2",
-                        "公法线下偏差Wx"},
-                new String[]{"3", "3", "3", "3", "3", "3", "3", "3", "3", "3"});
+        initTables();
         preservedDigits = new SimpleIntegerProperty(6);
+    }
+
+    private void initTables() throws IOException {
+        tableInputParams = InputParamTable.createTable(
+                INPUT_PARAMS_PANE_NAME,
+                INPUT_PARAMS_COLUMNS,
+                INPUT_PARAMS_NAME_UNIT);
+        tableAnyCircle = OutputParamTable.createTable(
+                ANY_CIRCLE_PARAMS_PANE_NAME,
+                ANY_CIRCLE_PARAMS_COLUMNS,
+                ANY_CIRCLE_PARAMS_NAME_UNIT);
+        tableBaseTanAndSpan = OutputParamTable.createTable(
+                BASE_TAN_AND_SPAN_PARAMS_PANE_NAME,
+                BASE_TAN_AND_SPAN_PARAMS_COLUMNS,
+                BASE_TAN_AND_SPAN_PARAMS_NAME_UNIT
+        );
+        tableDeviation = OutputParamTable.createTable(
+                DEVIATION_PARAMS_PANE_NAME,
+                DEVIATION_PARAMS_COLUMNS,
+                DEVIATION_PARAMS_NAME_UNIT
+        );
     }
 
     @FXML
     void initialize() {
+        anchorInputParams.getChildren().add(tableInputParams);
         anchorAnyCircle.getChildren().add(tableAnyCircle);
         anchorBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
         anchorDeviation.getChildren().add(tableDeviation);
@@ -137,36 +120,29 @@ public class Controller {
     }
 
     private void setLayout() {
-        tableAnyCircle.setNameWidth(160);
-        tableAnyCircle.setSymbolWidth(80);
-        tableAnyCircle.setValueWidth(160);
-        tableBaseTanAndSpan.setNameWidth(160);
-        tableBaseTanAndSpan.setSymbolWidth(80);
-        tableBaseTanAndSpan.setValueWidth(160);
-        tableDeviation.setNameWidth(160);
-        tableDeviation.setSymbolWidth(80);
-        tableDeviation.setValueWidth(160);
+
     }
 
     private Specifications getAllSpecs() {
-        try {
-            specificationsBuilder.alphaN(Math.toRadians(Double.parseDouble(tfDoubleAlphaN.getText().trim())))
-                    .beta(Math.toRadians(Double.parseDouble(tfDoubleBeta.getText().trim())))
-                    .Cf(Double.parseDouble(tfDoubleCf.getText().trim()))
-                    .dp(Double.parseDouble(tfDoubleDp.getText().trim()))
-                    .ha(Double.parseDouble(tfDoubleHa.getText().trim()))
-                    .hf(Double.parseDouble(tfDoubleHf.getText().trim()))
-                    .Mn(Integer.parseInt(tfIntMn.getText().trim()))
-                    .Ms(Double.parseDouble(tfDoubleMs.getText().trim()))
-                    .Mx(Double.parseDouble(tfDoubleMx.getText().trim()))
-                    .Ws(Double.parseDouble(tfDoubleWs.getText().trim()))
-                    .Wx(Double.parseDouble(tfDoubleWx.getText().trim()))
-                    .Xn(Double.parseDouble(tfDoubleXn.getText().trim()))
-                    .Z(Integer.parseInt(tfIntZ.getText().trim()));
-            return specificationsBuilder.build();
-        } catch (NumberFormatException e) {
-            return null;
-        }
+//        try {
+//            specificationsBuilder.alphaN(Math.toRadians(Double.parseDouble(tfDoubleAlphaN.getText().trim())))
+//                    .beta(Math.toRadians(Double.parseDouble(tfDoubleBeta.getText().trim())))
+//                    .Cf(Double.parseDouble(tfDoubleCf.getText().trim()))
+//                    .dp(Double.parseDouble(tfDoubleDp.getText().trim()))
+//                    .ha(Double.parseDouble(tfDoubleHa.getText().trim()))
+//                    .hf(Double.parseDouble(tfDoubleHf.getText().trim()))
+//                    .Mn(Integer.parseInt(tfIntMn.getText().trim()))
+//                    .Ms(Double.parseDouble(tfDoubleMs.getText().trim()))
+//                    .Mx(Double.parseDouble(tfDoubleMx.getText().trim()))
+//                    .Ws(Double.parseDouble(tfDoubleWs.getText().trim()))
+//                    .Wx(Double.parseDouble(tfDoubleWx.getText().trim()))
+//                    .Xn(Double.parseDouble(tfDoubleXn.getText().trim()))
+//                    .Z(Integer.parseInt(tfIntZ.getText().trim()));
+//            return specificationsBuilder.build();
+//        } catch (NumberFormatException e) {
+//            return null;
+//        }
+        return null;
     }
 
     private void refreshGear() {
@@ -248,7 +224,7 @@ public class Controller {
         if (gear != null) {
             tableDeviation.setValue("公法线上偏差", (gear.getX1()))
                     .setValue("跨棒距一", gear.getM1())
-                    .setValue("跨棒距上偏差",gear.getMs())
+                    .setValue("跨棒距上偏差", gear.getMs())
                     .setValue("公法线下偏差", gear.getX2())
                     .setValue("跨棒距二", gear.getM2())
                     .setValue("跨棒距下偏差", gear.getMx())

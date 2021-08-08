@@ -10,14 +10,14 @@ import javafx.scene.text.Text;
 
 public class OutputParameter extends Parameter {
 
-    private final Text value;
+    private final Text field;
     final DecimalProperty valueProperty;
 
     public OutputParameter(String name, Decimal value, String unit) {
         super(name, unit);
         valueProperty=new DecimalProperty(name,value);
-        this.value = (value == null) ? new Text() : new Text(value.toString());
-        valuePane.getChildren().add(this.value);
+        this.field = (value == null) ? new Text() : new Text(value.toString());
+        valuePane.getChildren().add(this.field);
     }
 
     public OutputParameter(String name) {
@@ -42,6 +42,6 @@ public class OutputParameter extends Parameter {
     //待办 2021/8/6: 同步修改功能
     @Override
     public void setValue(Decimal v) {
-        value.setText(v.toString());
+        field.setText(v.toString());
     }
 }

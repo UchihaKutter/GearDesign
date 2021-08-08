@@ -10,14 +10,14 @@ import javafx.scene.control.TextField;
  * @author SUPERSTATION
  */
 public class InputParameter extends Parameter {
-    private final TextField value;
+    private final TextField field;
     final DecimalProperty valueProperty;
 
     public InputParameter(String name, Decimal initialValue, String unit) {
         super(name, unit);
         valueProperty = new DecimalProperty(name, initialValue);
-        this.value = (initialValue == null) ? new TextField() : new TextField(initialValue.toString());
-        valuePane.getChildren().add(this.value);
+        this.field = (initialValue == null) ? new TextField() : new TextField(initialValue.toString());
+        valuePane.getChildren().add(this.field);
     }
 
     public InputParameter(String name) {
@@ -39,7 +39,7 @@ public class InputParameter extends Parameter {
      */
     @Override
     public Decimal getValue() {
-        return Decimal.valueOf(value.getText());
+        return Decimal.valueOf(field.getText());
     }
 
     /**
@@ -47,6 +47,10 @@ public class InputParameter extends Parameter {
      */
     @Override
     public void setValue(final Decimal v) {
-        value.setText(String.valueOf(v.doubleValue()));
+        field.setText(String.valueOf(v.doubleValue()));
+    }
+
+    public void setPromptText(final String str){
+        field.setPromptText(str);
     }
 }

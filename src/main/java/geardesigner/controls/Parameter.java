@@ -9,7 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 
-// TODO: 2020/3/19 JLatexMath符号功能
 // TODO: 2020/3/20 可输入框与不可输入框视觉区分
 
 /**
@@ -22,10 +21,10 @@ public abstract class Parameter extends HBox {
     final StackPane valuePane;
     final StackPane symbolPane;
     private final ImageView symbol;
-    TexFormula unit;
+    private TexFormula unit;
 
     public Parameter(String name) {
-        this(name,null);
+        this(name, null);
     }
 
     /**
@@ -39,7 +38,6 @@ public abstract class Parameter extends HBox {
         this.valuePane = new StackPane();
         this.symbolPane = new StackPane();
         symbol = new ImageView();
-        symbolPane.getChildren().add(symbol);
         if (unit != null) {
             this.unit = new TexFormula(unit);
         }
@@ -51,6 +49,11 @@ public abstract class Parameter extends HBox {
      */
     void initStyle() {
         this.setAlignment(Pos.BOTTOM_LEFT);
+        symbolPane.getChildren().add(symbol);
+        /**
+         * 预设尺寸
+         */
+        //name.setPrefSize(100,25);
         valuePane.setAlignment(Pos.BOTTOM_LEFT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
         refresh();
@@ -63,6 +66,11 @@ public abstract class Parameter extends HBox {
         if (unit != null) {
             symbol.setImage(unit.getPatternImage());
         }
+    }
+
+
+    public final String getName() {
+        return name.getText().trim();
     }
 
     /**
@@ -80,13 +88,11 @@ public abstract class Parameter extends HBox {
     }
 
     /**
-     *
      * @return
      */
     public abstract Decimal getValue();
 
     /**
-     *
      * @param v
      */
     public abstract void setValue(Decimal v);
@@ -101,5 +107,10 @@ public abstract class Parameter extends HBox {
 
     public final void bindValuePreWidthProperty(Property<Number> width) {
         valuePane.prefWidthProperty().bindBidirectional(width);
+    }
+
+    @Override
+    public String toString() {
+        return "Parameter{" + "name=" + name.getText() + '}';
     }
 }

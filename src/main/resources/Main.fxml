@@ -6,65 +6,8 @@
     <children>
         <VBox>
             <children>
-                <VBox alignment="TOP_CENTER">
-                    <children>
-                        <Label alignment="TOP_CENTER" text="输入已知参数" />
-                        <GridPane>
-                            <columnConstraints>
-                                <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" minWidth="10.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Label alignment="TOP_CENTER" text="参数名" />
-                                <Label alignment="TOP_CENTER" text="参数符号" GridPane.columnIndex="1" />
-                                <Label alignment="TOP_CENTER" text="参数值" GridPane.columnIndex="2" />
-                                <Label alignment="TOP_CENTER" text="法向模数" GridPane.rowIndex="1" />
-                                <Label alignment="TOP_CENTER" text="齿数(内齿为负)" GridPane.rowIndex="2" />
-                                <Label alignment="TOP_CENTER" text="法向压力角(角度)" GridPane.rowIndex="3" />
-                                <Label alignment="TOP_CENTER" text="螺旋角" GridPane.rowIndex="4" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="法向变位系数" GridPane.rowIndex="5" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="齿顶高系数" GridPane.rowIndex="6" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="齿根高系数" GridPane.rowIndex="7" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="顶隙系数" GridPane.rowIndex="8" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="量棒直径" GridPane.rowIndex="9" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="公法线上偏差" GridPane.rowIndex="10" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="公法线下偏差" GridPane.rowIndex="11" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="跨棒距上偏差" GridPane.rowIndex="12" />
-                                <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="15.0" text="跨棒距下偏差" GridPane.rowIndex="13" />
-                                <TextField fx:id="tfIntMn" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                <TextField fx:id="tfIntZ" layoutX="186.0" layoutY="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                <TextField fx:id="tfDoubleAlphaN" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                <TextField fx:id="tfDoubleBeta" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                                <TextField fx:id="tfDoubleXn" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                                <TextField fx:id="tfDoubleHa" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                                <TextField fx:id="tfDoubleHf" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                                <TextField fx:id="tfDoubleCf" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                                <TextField fx:id="tfDoubleDp" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-                                <TextField fx:id="tfDoubleWs" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-                                <TextField fx:id="tfDoubleWx" GridPane.columnIndex="2" GridPane.rowIndex="11" />
-                                <TextField fx:id="tfDoubleMs" GridPane.columnIndex="2" GridPane.rowIndex="12" />
-                                <TextField fx:id="tfDoubleMx" GridPane.columnIndex="2" GridPane.rowIndex="13" />
-                            </children>
-                        </GridPane>
-                    </children>
-                </VBox>
+            <AnchorPane fx:id="anchorInputParams" />
+                <VBox alignment="TOP_CENTER" />
                 <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                     <children>
                         <Label alignment="TOP_CENTER" text="计算任一圆齿厚" />
@@ -93,17 +36,7 @@
                         <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles" />
                     </children>
                 </HBox>
-                <HBox alignment="TOP_CENTER">
-                    <children>
-                        <Label text="公法线与跨棒距" />
-                    </children>
-                </HBox>
                 <AnchorPane fx:id="anchorBaseTanAndSpan" />
-                <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="30.0">
-                    <children>
-                        <Label text="偏差转换" />
-                    </children>
-                </HBox>
                 <AnchorPane fx:id="anchorDeviation" layoutX="10.0" layoutY="50.0" />
                 <HBox alignment="TOP_CENTER">
                     <children>
