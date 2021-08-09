@@ -1,0 +1,12 @@
+VBox {
+    -fx-border-color: midnightblue;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-spacing: 10;
+    -fx-padding: 10 10 20 10;
+}
+
+.label {
+    -fx-alignment: top-center;
+}
+

@@ -3,13 +3,12 @@ package geardesigner.controls;
 import geardesigner.beans.Decimal;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import org.jetbrains.annotations.Nullable;
 
-
-// TODO: 2020/3/20 可输入框与不可输入框视觉区分
 
 /**
  * 参数的UI控件基类
@@ -17,9 +16,10 @@ import javafx.scene.layout.StackPane;
  * @author SUPERSTATION
  */
 public abstract class Parameter extends HBox {
-    final Label name;
+    final StackPane namePane;
     final StackPane valuePane;
     final StackPane symbolPane;
+    private final Text name;
     private final ImageView symbol;
     private TexFormula unit;
 
@@ -28,16 +28,17 @@ public abstract class Parameter extends HBox {
     }
 
     /**
-     * @param name
+     * @param name Parameter控件实例的名称
      * @param unit 应为Latex字符串
      */
     public Parameter(String name, String unit) {
-        this.name = new Label();
+        this.name = new Text();
         this.name.setText(name);
 
+        this.symbol = new ImageView();
+        this.namePane = new StackPane(this.name);
         this.valuePane = new StackPane();
-        this.symbolPane = new StackPane();
-        symbol = new ImageView();
+        this.symbolPane = new StackPane(this.symbol);
         if (unit != null) {
             this.unit = new TexFormula(unit);
         }
@@ -48,12 +49,15 @@ public abstract class Parameter extends HBox {
      * 派生类应重写该方法，修改组件的布局
      */
     void initStyle() {
-        this.setAlignment(Pos.BOTTOM_LEFT);
-        symbolPane.getChildren().add(symbol);
         /**
-         * 预设尺寸
+         * 设定CSS类选择器名
          */
-        //name.setPrefSize(100,25);
+        getStyleClass().setAll(DEFAULT_STYLE_CLASS);
+        /**
+         * 预设布局
+         */
+        this.setAlignment(Pos.CENTER_LEFT);
+        namePane.setAlignment(Pos.BOTTOM_LEFT);
         valuePane.setAlignment(Pos.BOTTOM_LEFT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
         refresh();
@@ -76,7 +80,7 @@ public abstract class Parameter extends HBox {
     /**
      * 修改单位（不刷新）
      *
-     * @param unit
+     * @param unit Latex格式字符串表示的数值单位
      */
     public final void setUnit(String unit) {
         //待办 2021/8/5: 修改为绑定同步刷新的
@@ -88,17 +92,18 @@ public abstract class Parameter extends HBox {
     }
 
     /**
-     * @return
+     * @return 返回 Parameter 面板实例当前的值
      */
+    @Nullable
     public abstract Decimal getValue();
 
     /**
-     * @param v
+     * @param v 为 Parameter 面板实例设定新的值
      */
-    public abstract void setValue(Decimal v);
+    public abstract void setValue(@Nullable Decimal v);
 
     public final void bindNamePreWidthProperty(Property<Number> width) {
-        name.prefWidthProperty().bindBidirectional(width);
+        namePane.prefWidthProperty().bindBidirectional(width);
     }
 
     public final void bindSymbolPreWidthProperty(Property<Number> width) {
@@ -108,6 +113,12 @@ public abstract class Parameter extends HBox {
     public final void bindValuePreWidthProperty(Property<Number> width) {
         valuePane.prefWidthProperty().bindBidirectional(width);
     }
+
+    /**
+     * Stylesheet Handling
+     */
+
+    private static final String DEFAULT_STYLE_CLASS = "Parameter";
 
     @Override
     public String toString() {

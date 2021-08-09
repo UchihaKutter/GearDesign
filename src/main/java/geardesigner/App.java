@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Main.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main.fxml"));
         Parent root = fxmlLoader.load();
         primaryStage.setTitle("齿轮设计计算器");
         primaryStage.setScene(new Scene(root));

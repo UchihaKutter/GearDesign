@@ -6,32 +6,37 @@ import geardesigner.controls.OutputParamTable;
 import geardesigner.controls.ParamTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static geardesigner.TableSettings.*;
 
 public class Controller {
     @FXML
-    private AnchorPane anchorInputParams;
+    private AnchorPane APaneInputParams;
 
     @FXML
-    private AnchorPane anchorAnyCircle;
+    private AnchorPane APaneAnyCircle;
 
     @FXML
-    private AnchorPane anchorBaseTanAndSpan;
+    private AnchorPane APaneBaseTanAndSpan;
 
     @FXML
-    private AnchorPane anchorDeviation;
+    private AnchorPane APaneDeviation;
+
+    @FXML
+    private TextField tfDoubleAnyCircle;
+
+    @FXML
+    private AnchorPane APaneAnyCircleUnit;
 
     @FXML
     private Button btCalAnyCircle;
@@ -65,23 +70,23 @@ public class Controller {
 
     private Gear gear;
 
-    private Specifications.SpecificationsBuilder specificationsBuilder;
-
-    private EventHandler<KeyEvent> anyCirclePressedEvent = event -> {
-        if (event.getCode() == KeyCode.ENTER) {
-            event.consume();
-            if (event.isShiftDown()) {
-
-            } else {
-                setTableAnyCircle();
-            }
-        }
-    };
 
     public Controller() throws IOException {
-        specificationsBuilder = Specifications.SpecificationsBuilder.aSpecifications();
         initTables();
         preservedDigits = new SimpleIntegerProperty(6);
+    }
+
+    @FXML
+    void initialize() {
+        APaneInputParams.getChildren().add(tableInputParams);
+        APaneAnyCircle.getChildren().add(tableAnyCircle);
+        APaneBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
+        APaneDeviation.getChildren().add(tableDeviation);
+        btCalculate.setOnAction(event -> refreshGear());
+        btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
+//        rbToDegree.setOnAction(event -> angleUnitSwitch());
+//        rbToRadius.setOnAction(event -> angleUnitSwitch());
+        setLayout();
     }
 
     private void initTables() throws IOException {
@@ -105,87 +110,93 @@ public class Controller {
         );
     }
 
-    @FXML
-    void initialize() {
-        anchorInputParams.getChildren().add(tableInputParams);
-        anchorAnyCircle.getChildren().add(tableAnyCircle);
-        anchorBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
-        anchorDeviation.getChildren().add(tableDeviation);
-        btCalculate.setOnAction(event -> refreshGear());
-        btCalAnyCircle.setOnAction(event -> setTableAnyCircle());
-        rbToDegree.setOnAction(event -> angleUnitSwitch());
-        rbToRadius.setOnAction(event -> angleUnitSwitch());
-        tableAnyCircle.setOnKeyPressed(anyCirclePressedEvent);
-        setLayout();
-    }
-
     private void setLayout() {
 
     }
 
-    private Specifications getAllSpecs() {
-//        try {
-//            specificationsBuilder.alphaN(Math.toRadians(Double.parseDouble(tfDoubleAlphaN.getText().trim())))
-//                    .beta(Math.toRadians(Double.parseDouble(tfDoubleBeta.getText().trim())))
-//                    .Cf(Double.parseDouble(tfDoubleCf.getText().trim()))
-//                    .dp(Double.parseDouble(tfDoubleDp.getText().trim()))
-//                    .ha(Double.parseDouble(tfDoubleHa.getText().trim()))
-//                    .hf(Double.parseDouble(tfDoubleHf.getText().trim()))
-//                    .Mn(Integer.parseInt(tfIntMn.getText().trim()))
-//                    .Ms(Double.parseDouble(tfDoubleMs.getText().trim()))
-//                    .Mx(Double.parseDouble(tfDoubleMx.getText().trim()))
-//                    .Ws(Double.parseDouble(tfDoubleWs.getText().trim()))
-//                    .Wx(Double.parseDouble(tfDoubleWx.getText().trim()))
-//                    .Xn(Double.parseDouble(tfDoubleXn.getText().trim()))
-//                    .Z(Integer.parseInt(tfIntZ.getText().trim()));
-//            return specificationsBuilder.build();
-//        } catch (NumberFormatException e) {
-//            return null;
-//        }
-        return null;
+
+    private Specifications getAllSpecs() throws InputException {
+        final Map<String, Decimal> values = tableInputParams.getValues();
+        return new Specifications(values);
     }
 
     private void refreshGear() {
-        Specifications specs = getAllSpecs();
-        if (specs == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setContentText("请输入参数值");
-            alert.showAndWait();
-        } else {
+        try {
+            Specifications specs = getAllSpecs();
             gear = new Gear(specs);
             gear.calculate();
             gear.calculateDeviation();
-            refreshTables();
+            flushTables();
+        } catch (InputException e) {
+            //待办 2021/8/9: 警告弹窗
+            Log.warning("参数输入错误", e);
         }
     }
 
-    private void autoRefreshGear() {
-        Specifications specs = getAllSpecs();
-        if (specs != null) {
-            gear = new Gear(getAllSpecs());
-            gear.calculate();
-            gear.calculateDeviation();
-            refreshTables();
+    private void flushTables() {
+        flushTableBaseTanAndSpan();
+        flushTableDeviation();
+        flushAnyCircle(false);
+    }
+
+    private void flushTableBaseTanAndSpan(){
+        try {
+            setTableBaseTanAndSpan(gear);
+        } catch (CodeException e) {
+            Log.error(e);
         }
     }
 
-    private void refreshTables() {
-        setTableBaseTanAndSpan();
-        setTableDeviation();
-        setTableAnyCircle();
+    private void flushTableDeviation(){
+        try {
+            setTableDeviation(gear);
+        } catch (CodeException e) {
+            Log.error(e);
+        }
     }
 
     /**
-     * 包含计算
+     * 刷新任一圆面板
+     * @param popup 当输入无法运行计算时，是否弹窗提示
      */
-    private void setTableAnyCircle() {
-        Decimal value = tableAnyCircle.getValue("任一圆直径");
-        if (gear != null) {
-            Gear.AnyCircle anyCircle = gear.new AnyCircle(value).calculate();
+    private void flushAnyCircle(final boolean popup) {
+        final String dText = tfDoubleAnyCircle.getText().trim();
+        Gear.AnyCircle anyCircle = null;
+        if (!dText.isBlank() && checkAnyCircleInputs()) {
+            final Decimal diameter = Decimal.valueOf(dText);
+            anyCircle = calculateAnyCircle(gear, diameter);
+        } else if (popup) {
+            //todo"参数输入不全，无法计算任一圆";
+        }
+        /**
+         * 捕获编程错误
+         */
+        try {
+            setTableAnyCircle(anyCircle);
+        } catch (CodeException e) {
+            Log.error(e);
+        }
+    }
+
+    /**
+     * 设置任一圆数据面板值
+     *
+     * @param anyCircle 计算过的AnyCircle，如果是null，则清空面板
+     * @throws CodeException
+     */
+    private void setTableAnyCircle(Gear.AnyCircle anyCircle) throws CodeException {
+        if (anyCircle == null) {
+            tableAnyCircle.setValue("齿顶圆端面压力角", null)
+                    .setValue("分度圆处弧齿厚", null)
+                    .setValue("任一圆处弧齿厚", null)
+                    .setValue("任一圆处法向弦齿厚", null)
+                    .setValue("任一园螺旋角", null);
+        } else {
             tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
                     .setValue("分度圆处弧齿厚", anyCircle.getS())
                     .setValue("任一圆处弧齿厚", anyCircle.getSa1())
                     .setValue("任一圆处法向弦齿厚", anyCircle.getSn1());
+            //待办 2021/8/9: 单位转换
             if (isRadius) {
                 tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
             } else {
@@ -194,10 +205,29 @@ public class Controller {
         }
     }
 
+    //待办 2021/8/9: 执行计算前先检查参数是否齐备,不包含输入项”任一园直径“
+    private boolean checkAnyCircleInputs() {
+        if (gear == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 计算任一圆参数
+     *
+     * @return 计算结果Gear.AnyCircle
+     */
+    @Contract(value = "!null,!null->!null", pure = true)
+    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Decimal diameter) {
+        return gear.new AnyCircle(diameter).calculate();
+    }
+
+
     /**
      * 不包含计算
      */
-    private void setTableBaseTanAndSpan() {
+    private void setTableBaseTanAndSpan(Gear gear) throws CodeException {
         if (gear != null) {
             tableBaseTanAndSpan.setValue("分度圆直径", Decimal.valueOf(gear.d))
                     .setValue("齿顶圆直径", Decimal.valueOf(gear.da))
@@ -220,7 +250,7 @@ public class Controller {
     /**
      * 不包含计算
      */
-    private void setTableDeviation() {
+    private void setTableDeviation(Gear gear) throws CodeException {
         if (gear != null) {
             tableDeviation.setValue("公法线上偏差", (gear.getX1()))
                     .setValue("跨棒距一", gear.getM1())
@@ -240,11 +270,11 @@ public class Controller {
         }
     }
 
-    private void angleUnitSwitch() {
-        //待办 2021/8/6: 先检查待转换的参数是否完备
-        isRadius = groupAngles.getSelectedToggle() == rbToRadius;
-        setTableBaseTanAndSpan();
-        setTableDeviation();
-        setTableAnyCircle();
-    }
+//    private void angleUnitSwitch() {
+//        //待办 2021/8/6: 先检查待转换的参数是否完备
+//        isRadius = groupAngles.getSelectedToggle() == rbToRadius;
+//        setTableBaseTanAndSpan();
+//        setTableDeviation();
+//        setTableAnyCircle();
+//    }
 }

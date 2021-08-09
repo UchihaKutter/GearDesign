@@ -3,6 +3,7 @@ package geardesigner.controls;
 import geardesigner.beans.Decimal;
 import geardesigner.beans.DecimalProperty;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author SuperNote
@@ -15,7 +16,7 @@ public class OutputParameter extends Parameter {
 
     public OutputParameter(String name, Decimal value, String unit) {
         super(name, unit);
-        valueProperty=new DecimalProperty(name,value);
+        valueProperty = new DecimalProperty(name, value);
         this.field = (value == null) ? new Text() : new Text(value.toString());
         valuePane.getChildren().add(this.field);
     }
@@ -31,17 +32,18 @@ public class OutputParameter extends Parameter {
     @Override
     void initStyle() {
         super.initStyle();
-        this.getChildren().addAll(name, valuePane, symbolPane);
+        this.getChildren().addAll(namePane, valuePane, symbolPane);
     }
 
+    //待办 2021/8/9:
     @Override
-    public Decimal getValue() {
+    public @Nullable Decimal getValue() {
         return new Decimal(valueProperty.get());
     }
 
     //待办 2021/8/6: 同步修改功能
     @Override
-    public void setValue(Decimal v) {
-        field.setText(v.toString());
+    public void setValue(@Nullable Decimal v) {
+        field.setText(v == null ? null : v.toString());
     }
 }

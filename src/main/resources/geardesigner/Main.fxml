@@ -2,29 +2,29 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geardesigner.Controller">
+<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geardesigner.Controller">
     <children>
-        <VBox>
+        <VBox alignment="TOP_CENTER">
             <children>
-            <AnchorPane fx:id="anchorInputParams" />
+                <AnchorPane fx:id="APaneInputParams" />
                 <VBox alignment="TOP_CENTER" />
-                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                <VBox alignment="TOP_CENTER">
                     <children>
                         <Label alignment="TOP_CENTER" text="计算任一圆齿厚" />
-                  <HBox>
-                     <children>
-                        <Label alignment="TOP_CENTER" text="任一园直径" />
-                        <TextField fx:id="tfDoubleAnyCircle" />
-                        <Label alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" text="计量单位" />
-                     </children>
-                  </HBox>
-                        <AnchorPane fx:id="anchorAnyCircle" />
-                          <Button fx:id="btCalAnyCircle" text="计算任一圆" />
+                        <HBox alignment="CENTER_LEFT">
+                            <children>
+                                <Label alignment="TOP_CENTER" text="任一园直径" />
+                                <TextField fx:id="tfDoubleAnyCircle" />
+                        <AnchorPane fx:id="APaneAnyCircleUnit" />
+                            </children>
+                        </HBox>
+                        <AnchorPane fx:id="APaneAnyCircle" />
+                        <Button fx:id="btCalAnyCircle" text="计算任一圆" />
                     </children>
                 </VBox>
             </children>
         </VBox>
-        <VBox>
+        <VBox alignment="TOP_CENTER">
             <children>
                 <HBox>
                     <children>
@@ -36,8 +36,8 @@
                         <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles" />
                     </children>
                 </HBox>
-                <AnchorPane fx:id="anchorBaseTanAndSpan" />
-                <AnchorPane fx:id="anchorDeviation" layoutX="10.0" layoutY="50.0" />
+                <AnchorPane fx:id="APaneBaseTanAndSpan" />
+                <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0" />
                 <HBox alignment="TOP_CENTER">
                     <children>
                         <Button fx:id="btCalculate" defaultButton="true" text="计算" />

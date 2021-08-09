@@ -3,6 +3,7 @@ package geardesigner.controls;
 import geardesigner.beans.Decimal;
 import geardesigner.beans.DecimalProperty;
 import javafx.scene.control.TextField;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 输入型参数的UI控件
@@ -31,26 +32,27 @@ public class InputParameter extends Parameter {
     @Override
     void initStyle() {
         super.initStyle();
-        this.getChildren().addAll(name, symbolPane, valuePane);
+        this.getChildren().addAll(namePane, symbolPane, valuePane);
     }
 
     /**
      * @return
      */
     @Override
-    public Decimal getValue() {
-        return Decimal.valueOf(field.getText());
+    public @Nullable Decimal getValue() {
+        final String vs = field.getText().trim();
+        return vs.isBlank() ? null : Decimal.valueOf(vs);
     }
 
     /**
      * @param v
      */
     @Override
-    public void setValue(final Decimal v) {
-        field.setText(String.valueOf(v.doubleValue()));
+    public void setValue(final @Nullable Decimal v) {
+        field.setText(v == null ? null : String.valueOf(v.doubleValue()));
     }
 
-    public void setPromptText(final String str){
+    public void setPromptText(@Nullable final String str) {
         field.setPromptText(str);
     }
 }

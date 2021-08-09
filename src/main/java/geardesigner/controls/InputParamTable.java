@@ -1,9 +1,12 @@
 package geardesigner.controls;
 
+import geardesigner.CodeException;
+
 import java.io.IOException;
 
 /**
  * 输入参数的数据面板
+ *
  * @author SUPERSTATION
  */
 public class InputParamTable extends ParamTable {
@@ -12,8 +15,8 @@ public class InputParamTable extends ParamTable {
     }
 
     /**
-     *
      * 创建输入数据面板的静态方法
+     *
      * @param paneName
      * @param colName
      * @param pNameAndUnit
@@ -45,7 +48,6 @@ public class InputParamTable extends ParamTable {
 
     @Override
     void initStyle() {
-        super.initStyle();
         /**
          * 设置列宽的默认值
          */
@@ -54,8 +56,21 @@ public class InputParamTable extends ParamTable {
         setCol2Width(130);
     }
 
-    //待办 2021/8/7: 设置文本输入框中预置文本的方法
-    public void setPromptText() {
-
+    /**
+     * 设置文本输入框中预置文本
+     *
+     * @param paramName  参数控件的名称
+     * @param promptText 预设文本
+     */
+    public void setPromptText(String paramName, String promptText) throws CodeException {
+        final Parameter parameter = table.get(paramName);
+        if (parameter == null) {
+            throw new CodeException("指定的参数名不存在");
+        }
+        if (parameter instanceof InputParameter) {
+            ((InputParameter) parameter).setPromptText(promptText);
+        } else {
+            throw new CodeException("Parameter控件不是预期的类型");
+        }
     }
 }
