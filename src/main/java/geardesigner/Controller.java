@@ -3,7 +3,6 @@ package geardesigner;
 import geardesigner.beans.Decimal;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
-import geardesigner.controls.ParamTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -59,10 +58,10 @@ public class Controller {
     @FXML
     private Button btSaveParams;
 
-    private ParamTable tableInputParams;
-    private ParamTable tableAnyCircle;
-    private ParamTable tableBaseTanAndSpan;
-    private ParamTable tableDeviation;
+    private InputParamTable tableInputParams;
+    private OutputParamTable tableAnyCircle;
+    private OutputParamTable tableBaseTanAndSpan;
+    private OutputParamTable tableDeviation;
 
     // TODO: 2020/3/21 显示数值保留位数
     private IntegerProperty preservedDigits;
@@ -73,7 +72,7 @@ public class Controller {
 
     public Controller() throws IOException {
         initTables();
-        preservedDigits = new SimpleIntegerProperty(6);
+        preservedDigits = new SimpleIntegerProperty(4);
     }
 
     @FXML
@@ -87,6 +86,14 @@ public class Controller {
 //        rbToDegree.setOnAction(event -> angleUnitSwitch());
 //        rbToRadius.setOnAction(event -> angleUnitSwitch());
         setLayout();
+        initBindings();
+        btSaveParams.setOnAction(e -> {
+            if (preservedDigits.get() == 4) {
+                preservedDigits.set(2);
+            } else {
+                preservedDigits.set(4);
+            }
+        });
     }
 
     private void initTables() throws IOException {
@@ -108,6 +115,12 @@ public class Controller {
                 DEVIATION_PARAMS_COLUMNS,
                 DEVIATION_PARAMS_NAME_UNIT
         );
+    }
+
+    private void initBindings() {
+        tableBaseTanAndSpan.bindDigitProperty(preservedDigits);
+        tableDeviation.bindDigitProperty(preservedDigits);
+        tableAnyCircle.bindDigitProperty(preservedDigits);
     }
 
     private void setLayout() {
@@ -139,7 +152,7 @@ public class Controller {
         flushAnyCircle(false);
     }
 
-    private void flushTableBaseTanAndSpan(){
+    private void flushTableBaseTanAndSpan() {
         try {
             setTableBaseTanAndSpan(gear);
         } catch (CodeException e) {
@@ -147,7 +160,7 @@ public class Controller {
         }
     }
 
-    private void flushTableDeviation(){
+    private void flushTableDeviation() {
         try {
             setTableDeviation(gear);
         } catch (CodeException e) {
@@ -157,6 +170,7 @@ public class Controller {
 
     /**
      * 刷新任一圆面板
+     *
      * @param popup 当输入无法运行计算时，是否弹窗提示
      */
     private void flushAnyCircle(final boolean popup) {

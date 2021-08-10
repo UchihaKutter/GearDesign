@@ -1,14 +1,31 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
+import org.apache.commons.math3.util.Precision;
 
 /**
  * @author SUPERSTATION
  */
 public final class MathUtils {
-    private MathUtils(){}
-    public static final Decimal toDegrees(Decimal rad){
+    private MathUtils() {
+    }
+
+    public static Decimal toDegrees(Decimal rad) {
         return Decimal.valueOf(Math.toDegrees(rad.doubleValue()));
+    }
+
+    /**
+     * 将双精度值保留指定位数。四舍五入
+     *
+     * @param v     原值
+     * @param digit 小数位数
+     * @return 保留值
+     */
+    public static double precisionScale(double v, int digit) {
+        /**
+         *借用BigDecimal类实现
+         */
+        return Precision.round(v, digit);
     }
 
     /**

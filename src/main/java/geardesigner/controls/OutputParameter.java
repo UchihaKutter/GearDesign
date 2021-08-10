@@ -1,8 +1,11 @@
 package geardesigner.controls;
 
 import geardesigner.beans.Decimal;
-import geardesigner.beans.DecimalProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -10,15 +13,23 @@ import org.jetbrains.annotations.Nullable;
  */
 
 public class OutputParameter extends Parameter {
+    /**
+     * 常量配置
+     */
+    public static final int DEFAULT_SCALE_DIGIT = 3;
 
     private final Text field;
-    final DecimalProperty valueProperty;
+    private final IntegerProperty digit;
+    private Decimal value;
 
     public OutputParameter(String name, Decimal value, String unit) {
         super(name, unit);
-        valueProperty = new DecimalProperty(name, value);
-        this.field = (value == null) ? new Text() : new Text(value.toString());
+        this.field = new Text();
+        this.value = value;
+        this.digit = new SimpleIntegerProperty(DEFAULT_SCALE_DIGIT);
         valuePane.getChildren().add(this.field);
+        initListener();
+        changed();
     }
 
     public OutputParameter(String name) {
@@ -35,15 +46,42 @@ public class OutputParameter extends Parameter {
         this.getChildren().addAll(namePane, valuePane, symbolPane);
     }
 
+    /**
+     * 初始化监听器
+     */
+    private void initListener() {
+        digit.addListener((observable, oldValue, newValue) -> this.changed());
+    }
+
+    private void changed() {
+        field.setText(value == null ? null : value.toString(digit.intValue()));
+    }
+
     //待办 2021/8/9:
     @Override
     public @Nullable Decimal getValue() {
-        return new Decimal(valueProperty.get());
+        return value;
     }
 
-    //待办 2021/8/6: 同步修改功能
     @Override
     public void setValue(@Nullable Decimal v) {
-        field.setText(v == null ? null : v.toString());
+        value = v;
+        changed();
+    }
+
+    public int getDigit() {
+        return digit.get();
+    }
+
+    public void setDigit(int newDigit) {
+        digit.set(newDigit);
+    }
+
+    public void bindDigitProperty(@NotNull Property<Number> digit) {
+        this.digit.bindBidirectional(digit);
+    }
+
+    public void unbindDigitProperty(@NotNull Property<Number> digit) {
+        this.digit.unbindBidirectional(digit);
     }
 }

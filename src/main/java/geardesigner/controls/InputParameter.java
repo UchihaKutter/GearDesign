@@ -1,7 +1,6 @@
 package geardesigner.controls;
 
 import geardesigner.beans.Decimal;
-import geardesigner.beans.DecimalProperty;
 import javafx.scene.control.TextField;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,11 +11,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class InputParameter extends Parameter {
     private final TextField field;
-    final DecimalProperty valueProperty;
+
+    //待办 2021/8/10: 输入过滤器
 
     public InputParameter(String name, Decimal initialValue, String unit) {
         super(name, unit);
-        valueProperty = new DecimalProperty(name, initialValue);
         this.field = (initialValue == null) ? new TextField() : new TextField(initialValue.toString());
         valuePane.getChildren().add(this.field);
     }
@@ -33,6 +32,10 @@ public class InputParameter extends Parameter {
     void initStyle() {
         super.initStyle();
         this.getChildren().addAll(namePane, symbolPane, valuePane);
+    }
+
+    private void initListener() {
+
     }
 
     /**

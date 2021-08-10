@@ -1,12 +1,15 @@
 package geardesigner.beans;
 
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
+
 /**
  * 可变小数位数显示的十进制类型
  *
  * @author SUPERSTATION
  */
-public class Decimal extends Number implements Comparable<Decimal> {
+public class Decimal extends Number implements Comparable<Decimal>, Serializable {
 
     private static final long serialVersionUID = -2769073041747563049L;
 
@@ -34,6 +37,16 @@ public class Decimal extends Number implements Comparable<Decimal> {
      * @since 1.8
      */
     public static final int BYTES = SIZE / Byte.SIZE;
+
+    private static final DecimalFormat[] Formatter = new DecimalFormat[]{
+            new DecimalFormat("0"),
+            new DecimalFormat("0.0"),
+            new DecimalFormat("0.00"),
+            new DecimalFormat("0.000"),
+            new DecimalFormat("0.0000"),
+            new DecimalFormat("0.00000"),
+            new DecimalFormat("0.000000")
+    };
 
     private final double value;
 
@@ -66,6 +79,19 @@ public class Decimal extends Number implements Comparable<Decimal> {
     @Override
     public String toString() {
         return Double.toString(value);
+    }
+
+    /**
+     * 指定小数保留位数的字符串化
+     *
+     * @param digit 保留位数
+     * @return
+     */
+    public String toString(int digit) {
+        if (digit < 0 || digit >= Formatter.length) {
+            throw new NumberFormatException("不支持的保留位数");
+        }
+        return Formatter[digit].format(value);
     }
 
     /**
@@ -190,8 +216,8 @@ public class Decimal extends Number implements Comparable<Decimal> {
         long thisBits = Double.doubleToLongBits(d1);
         long anotherBits = Double.doubleToLongBits(d2);
 
-        return (thisBits == anotherBits ? 0 : // Values are equal
-                (thisBits < anotherBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
-                        1));                          // (0.0, -0.0) or (NaN, !NaN)
+        // Values are equal
+        // (-0.0, 0.0) or (!NaN, NaN)
+        return (Long.compare(thisBits, anotherBits));                          // (0.0, -0.0) or (NaN, !NaN)
     }
 }

@@ -58,7 +58,7 @@ public abstract class Parameter extends HBox {
          */
         this.setAlignment(Pos.CENTER_LEFT);
         namePane.setAlignment(Pos.BOTTOM_LEFT);
-        valuePane.setAlignment(Pos.BOTTOM_LEFT);
+        valuePane.setAlignment(Pos.BOTTOM_RIGHT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
         refresh();
     }
