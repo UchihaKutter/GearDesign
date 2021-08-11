@@ -40,12 +40,12 @@ public class Decimal extends Number implements Comparable<Decimal>, Serializable
 
     private static final DecimalFormat[] Formatter = new DecimalFormat[]{
             new DecimalFormat("0"),
-            new DecimalFormat("0.0"),
-            new DecimalFormat("0.00"),
-            new DecimalFormat("0.000"),
-            new DecimalFormat("0.0000"),
-            new DecimalFormat("0.00000"),
-            new DecimalFormat("0.000000")
+            new DecimalFormat("0.#"),
+            new DecimalFormat("0.##"),
+            new DecimalFormat("0.###"),
+            new DecimalFormat("0.####"),
+            new DecimalFormat("0.#####"),
+            new DecimalFormat("0.######")
     };
 
     private final double value;
@@ -85,7 +85,7 @@ public class Decimal extends Number implements Comparable<Decimal>, Serializable
      * 指定小数保留位数的字符串化
      *
      * @param digit 保留位数
-     * @return
+     * @return 指定保留位数的String
      */
     public String toString(int digit) {
         if (digit < 0 || digit >= Formatter.length) {

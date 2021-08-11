@@ -5,11 +5,9 @@ import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.Contract;
 
@@ -50,6 +48,9 @@ public class Controller {
     private ToggleGroup groupAngles;
 
     @FXML
+    private ChoiceBox<Integer> cbPreservedDigit;
+
+    @FXML
     /**
      * 重算所有值
      */
@@ -63,7 +64,6 @@ public class Controller {
     private OutputParamTable tableBaseTanAndSpan;
     private OutputParamTable tableDeviation;
 
-    // TODO: 2020/3/21 显示数值保留位数
     private IntegerProperty preservedDigits;
     private boolean isRadius = false;
 
@@ -86,14 +86,8 @@ public class Controller {
 //        rbToDegree.setOnAction(event -> angleUnitSwitch());
 //        rbToRadius.setOnAction(event -> angleUnitSwitch());
         setLayout();
+        initChoiceBox();
         initBindings();
-        btSaveParams.setOnAction(e -> {
-            if (preservedDigits.get() == 4) {
-                preservedDigits.set(2);
-            } else {
-                preservedDigits.set(4);
-            }
-        });
     }
 
     private void initTables() throws IOException {
@@ -117,10 +111,31 @@ public class Controller {
         );
     }
 
+    private void initChoiceBox() {
+        /**
+         * 获取Items列表，然后添加元素
+         */
+        final ObservableList<Integer> items = cbPreservedDigit.getItems();
+        items.addAll(0, 1, 2, 3, 4, 5, 6);
+        /**
+         * 或者使用setAll，清空列表并添加新值的列表
+         */
+        items.setAll(0, 1, 2, 3, 4, 5, 6);
+        /**
+         * 设置默认选中项
+         */
+        cbPreservedDigit.getSelectionModel().select(preservedDigits.getValue());
+    }
+
     private void initBindings() {
         tableBaseTanAndSpan.bindDigitProperty(preservedDigits);
         tableDeviation.bindDigitProperty(preservedDigits);
         tableAnyCircle.bindDigitProperty(preservedDigits);
+        /**
+         * 添加Listener，同步修改一个其他的Property
+         */
+        cbPreservedDigit.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> preservedDigits.setValue(newValue));
     }
 
     private void setLayout() {

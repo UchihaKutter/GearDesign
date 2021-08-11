@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geardesigner.Controller">
     <children>
         <VBox alignment="TOP_CENTER">
@@ -26,7 +28,7 @@
         </VBox>
         <VBox alignment="TOP_CENTER">
             <children>
-                <HBox>
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
                     <children>
                         <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
                             <toggleGroup>
@@ -34,7 +36,16 @@
                             </toggleGroup>
                         </RadioButton>
                         <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="保留小数位数">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </Text>
+                  <ChoiceBox fx:id="cbPreservedDigit" />
                     </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+               </VBox.margin>
                 </HBox>
                 <AnchorPane fx:id="APaneBaseTanAndSpan" />
                 <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0" />
