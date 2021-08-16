@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.InputException;
 import geardesigner.beans.Decimal;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
@@ -93,9 +94,10 @@ public abstract class Parameter extends HBox {
 
     /**
      * @return 返回 Parameter 面板实例当前的值
+     * @throws InputException 对输入框，可能会抛出输入不合法错误
      */
     @Nullable
-    public abstract Decimal getValue();
+    public abstract Decimal getValue() throws InputException;
 
     /**
      * @param v 为 Parameter 面板实例设定新的值

@@ -1,6 +1,7 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
+import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
 import javafx.beans.property.IntegerProperty;
@@ -70,7 +71,7 @@ public class Controller {
     private Gear gear;
 
 
-    public Controller() throws IOException {
+    public Controller() throws IOException, NoSuchMethodException {
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
     }
@@ -90,7 +91,7 @@ public class Controller {
         initBindings();
     }
 
-    private void initTables() throws IOException {
+    private void initTables() throws IOException, NoSuchMethodException {
         tableInputParams = InputParamTable.createTable(
                 INPUT_PARAMS_PANE_NAME,
                 INPUT_PARAMS_COLUMNS,
@@ -109,6 +110,10 @@ public class Controller {
                 DEVIATION_PARAMS_COLUMNS,
                 DEVIATION_PARAMS_NAME_UNIT
         );
+        /**
+         * 添加输入过滤器
+         */
+        tableInputParams.setTextFormatters(DecimalFormatter.class);
     }
 
     private void initChoiceBox() {

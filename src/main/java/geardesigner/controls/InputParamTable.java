@@ -1,8 +1,13 @@
 package geardesigner.controls;
 
 import geardesigner.CodeException;
+import geardesigner.Log;
+import geardesigner.beans.Decimal;
+import javafx.scene.control.TextFormatter;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 输入参数的数据面板
@@ -71,6 +76,43 @@ public class InputParamTable extends ParamTable {
             ((InputParameter) parameter).setPromptText(promptText);
         } else {
             throw new CodeException("Parameter控件不是预期的类型");
+        }
+    }
+
+    /**
+     * 设置某一个参数输入框的TextFormatter
+     * @param paramName 参数控件名
+     * @param formatter TextFormatter
+     * @throws CodeException
+     */
+    public void setTextFormatter(String paramName, TextFormatter<Decimal> formatter) throws CodeException {
+        final Parameter parameter = table.get(paramName);
+        if (parameter == null) {
+            throw new CodeException("指定的参数名不存在");
+        }
+        if (parameter instanceof InputParameter) {
+            ((InputParameter) parameter).setTextFormatter(formatter);
+        } else {
+            throw new CodeException("Parameter控件不是预期的类型");
+        }
+    }
+
+
+    /**
+     * 为所有文本框设置同种TextFormatter
+     * @param cls
+     * @throws NoSuchMethodException
+     */
+    public void setTextFormatters(Class<? extends TextFormatter> cls) throws NoSuchMethodException {
+        if (cls!=null){
+            final Constructor<? extends TextFormatter> constructor = cls.getDeclaredConstructor();
+            table.values().parallelStream().forEach(p-> {
+                try {
+                    ((InputParameter)p).setTextFormatter(constructor.newInstance());
+                } catch (InstantiationException|IllegalAccessException|InvocationTargetException e) {
+                    Log.error(e);
+                }
+            });
         }
     }
 }

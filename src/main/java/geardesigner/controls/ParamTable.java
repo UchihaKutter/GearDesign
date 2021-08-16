@@ -1,6 +1,7 @@
 package geardesigner.controls;
 
 import geardesigner.CodeException;
+import geardesigner.InputException;
 import geardesigner.Log;
 import geardesigner.beans.Decimal;
 import javafx.beans.property.Property;
@@ -124,7 +125,7 @@ public abstract class ParamTable extends StackPane {
     abstract void initStyle();
 
 
-    public Decimal getValue(String name) throws CodeException {
+    public Decimal getValue(String name) throws CodeException, InputException {
         Parameter parameter = table.get(name);
         if (parameter != null) {
             return parameter.getValue();
@@ -145,7 +146,7 @@ public abstract class ParamTable extends StackPane {
      * 批量获取数据面板当前显示值。值可能不存在
      * @return
      */
-    public Map<String,Decimal> getValues(){
+    public Map<String,Decimal> getValues() throws InputException {
         final Set<Map.Entry<String, Parameter>> params = table.entrySet();
         final Map<String, Decimal> cValues = new HashMap<>(params.size());
         for (Map.Entry<String,Parameter> p:params){

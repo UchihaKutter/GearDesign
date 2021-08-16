@@ -1,7 +1,9 @@
 package geardesigner.controls;
 
+import geardesigner.InputException;
 import geardesigner.beans.Decimal;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -11,8 +13,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class InputParameter extends Parameter {
     private final TextField field;
-
-    //待办 2021/8/10: 输入过滤器
 
     public InputParameter(String name, Decimal initialValue, String unit) {
         super(name, unit);
@@ -39,12 +39,24 @@ public class InputParameter extends Parameter {
     }
 
     /**
-     * @return
+     * @return null 或数值对象，
+     * @throws
      */
     @Override
-    public @Nullable Decimal getValue() {
+    public @Nullable Decimal getValue() throws InputException {
         final String vs = field.getText().trim();
-        return vs.isBlank() ? null : Decimal.valueOf(vs);
+        if (vs.isBlank()){
+            return null;
+        }else {
+            /**
+             * 捕获输入不合法错误
+             */
+            try {
+                return Decimal.valueOf(vs);
+            }catch (NumberFormatException e){
+                throw new InputException("请输入正确的"+getName());
+            }
+        }
     }
 
     /**
@@ -57,5 +69,13 @@ public class InputParameter extends Parameter {
 
     public void setPromptText(@Nullable final String str) {
         field.setPromptText(str);
+    }
+
+    /**
+     * 设置输入的格式化器
+     * @param formatter 不能和其他输入框共用格式化器实例
+     */
+    public void setTextFormatter(TextFormatter<Decimal> formatter) {
+       field.setTextFormatter(formatter);
     }
 }
