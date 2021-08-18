@@ -1,6 +1,7 @@
 package geardesigner.data;
 
 import geardesigner.Log;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,10 +34,17 @@ public abstract class SQLiteDatabase implements AutoCloseable {
     final String TABLE_NAME;
     final String SQL_CREATE_TABLE;
 
-    public SQLiteDatabase(String dbFilePath, String tableName) {
+    /**
+     * 公用的构造方法
+     *
+     * @param dbFilePath  SQLite.db文件的存储路径
+     * @param tableName   表名
+     * @param createTable 表创建语句
+     */
+    public SQLiteDatabase(@NotNull String dbFilePath, @NotNull String tableName, @NotNull String createTable) {
         DB_FILE_PATH = dbFilePath;
-        TABLE_NAME = tableName;//"HistoryRecord"
-        SQL_CREATE_TABLE = String.format("Create TABLE %s(OBJECT BLOB NOT NULL );", tableName);
+        TABLE_NAME = tableName;
+        SQL_CREATE_TABLE = createTable;
     }
 
     /**
@@ -135,23 +143,4 @@ public abstract class SQLiteDatabase implements AutoCloseable {
         }
     }
 
-    /**
-     * 数据库增删查改方法
-     * todo
-     */
-    public boolean insert() {
-        return true;
-    }
-
-    public boolean delete() {
-        return false;
-    }
-
-    public boolean retrieve() {
-        return true;
-    }
-
-    public boolean update() {
-        return false;
-    }
 }
