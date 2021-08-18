@@ -4,6 +4,7 @@ import geardesigner.beans.Decimal;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -12,7 +13,8 @@ import java.util.Map;
  *
  * @author SuperNote
  */
-public strictfp class Specifications {
+public strictfp class Specifications implements Serializable {
+    private static final long serialVersionUID = 5572715615929878142L;
     /**
      * 法向模数
      */
@@ -97,5 +99,24 @@ public strictfp class Specifications {
         if (!isValid(this)){
             throw new InputException("计算参数不合法");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Specifications{" +
+                "Mn=" + Mn +
+                ", Z=" + Z +
+                ", alphaN=" + alphaN +
+                ", beta=" + beta +
+                ", Xn=" + Xn +
+                ", ha=" + ha +
+                ", hf=" + hf +
+                ", Cf=" + Cf +
+                ", dp=" + dp +
+                ", Ws=" + Ws +
+                ", Wx=" + Wx +
+                ", Ms=" + Ms +
+                ", Mx=" + Mx +
+                '}';
     }
 }
