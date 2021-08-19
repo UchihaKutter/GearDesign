@@ -4,7 +4,9 @@ import geardesigner.Specifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -16,6 +18,11 @@ public class Record implements Serializable {
     private static final long serialVersionUID = -2932634544905763020L;
     private final Specifications specs;
     private final LocalDateTime timestamp;
+
+    public Record(@NotNull final Specifications specs, int year, int month, int day, long secondOfDay) {
+        this.specs = specs;
+        timestamp = LocalDateTime.of(LocalDate.of(year, month, day), LocalTime.ofSecondOfDay(secondOfDay));
+    }
 
     public Record(@NotNull final Specifications specs) {
         this.specs = specs;

@@ -10,9 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -39,9 +43,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
             "YEAR INTEGER NOT NULL" +
             "MONTH INTEGER NOT NULL" +
             "DAY INTEGER NOT NULL" +
-            "HOUR INTEGER NOT NULL" +
-            "MINUTE INTEGER NOT NULL" +
-            "SECOND INTEGER NOT NULL" +
+            "SECOND_OF_DAY INTEGER NOT NULL" +
             ");";
 
     private final ObjectMapper objectMapper;
@@ -115,11 +117,25 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
         }
     }
 
+    @Nullable
+    Specifications deserialize(@NotNull String specString) {
+        try {
+            return objectMapper.readValue(specString, Specifications.class);
+        } catch (JsonProcessingException e) {
+            Log.error("反序列化Specifications对象出错", e);
+            return null;
+        }
+    }
 
     /**
      * 基本操作方法
      */
-
+    /**
+     * 插入新的记录
+     *
+     * @param record 记录实例
+     * @return true->成功，false->失败
+     */
     boolean insert(Record record) {
         if (record != null) {
             final String json = serializeSpecs(record.getSpecs());
@@ -130,10 +146,8 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
                     ps.setInt(2, dateTime.getYear());
                     ps.setInt(3, dateTime.getMonthValue());
                     ps.setInt(4, dateTime.getDayOfMonth());
-                    ps.setInt(5, dateTime.getHour());
-                    ps.setInt(6, dateTime.getMinute());
-                    ps.setInt(7, dateTime.getSecond());
-                    return ps.executeUpdate() > 0 ? true : false;
+                    ps.setLong(5, dateTime.getLong(ChronoField.SECOND_OF_DAY));
+                    return ps.executeUpdate() > 0;
                 } catch (SQLException e) {
                     Log.error("插入新的记录失败", e);
                 }
@@ -142,16 +156,92 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
         return false;
     }
 
-    public boolean delete() {
+    /**
+     * 删除单个年月日的记录
+     *
+     * @param year  年的数值表示
+     * @param month 月的数值表示(1-12)，null->所有月份并忽略days
+     * @param days  月中天的数值表示（1-31），null->所有天
+     * @return true->成功，false->失败
+     */
+    boolean delete(@NotNull Integer year, @Nullable Integer month, @Nullable Integer days) {
+        String sql = "DELETE FROM " + TABLE_NAME + " WHERE YEAR = ?";
+        if (month != null) {
+            sql += "AND MONTH = ?";
+            if (days != null) {
+                sql += "AND DAY = ?";
+            }
+        }
+        try (PreparedStatement ps = connect().prepareStatement(sql)) {
+            ps.setInt(1, year);
+            if (month != null) {
+                ps.setInt(2, month);
+                if (days != null) {
+                    ps.setInt(3, days);
+                }
+            }
+            return ps.executeUpdate() > 0;//待办 2021/8/19: 是否符合预期
+        } catch (SQLException e) {
+            Log.error("删除记录失败", e);
+        }
         return false;
     }
 
-    public boolean retrieve() {
-        return true;
+    /**
+     * 查询单年月日的计算记录
+     *
+     * @param year 年的数值表示
+     * @param month 月的数值表示(1-12)，null->所有月份并忽略days
+     * @param days 月中天的数值表示（1-31），null->所有天
+     * @return
+     */
+    @NotNull
+    List<Record> retrieve(@NotNull Integer year, @Nullable Integer month, @Nullable Integer days) {
+        final List<Record> rs = new ArrayList<>();
+        String sql = "SELECT * FROM " + TABLE_NAME + " WHERE YEAR = ?";
+        if (month != null) {
+            sql += "AND MONTH = ?";
+            if (days != null) {
+                sql += "AND DAY = ?";
+            }
+        }
+        try (PreparedStatement ps = connect().prepareStatement(sql)) {
+            ps.setInt(1, year);
+            if (month != null) {
+                ps.setInt(2, month);
+                if (days != null) {
+                    ps.setInt(3, days);
+                }
+            }
+            final ResultSet resultSet = ps.executeQuery();
+            int count = 0;
+            while (resultSet.next()) {
+                count++;
+                final String specString = resultSet.getString(1);
+                final int yr = resultSet.getInt(2);
+                final int mn = resultSet.getInt(3);
+                final int d = resultSet.getInt(4);
+                final long secondOfDay = resultSet.getLong(5);
+                final Specifications specs = deserialize(specString);
+                if (specs != null) {
+                    rs.add(new Record(specs, yr, mn, d, secondOfDay));
+                }
+            }
+            Log.info("符合条件的记录数量：" + count);
+        } catch (SQLException e) {
+            Log.error("查询记录失败", e);
+        }
+        Log.info("有效记录数量：" + rs.size());
+        return Collections.unmodifiableList(rs);
     }
 
-    public boolean update() {
-        return false;
+    /**
+     * 不允许修改记录
+     *
+     * @return
+     */
+    boolean update() {
+        throw new UnsupportedOperationException("不允许的数据库操作");
     }
 
     /**
@@ -165,7 +255,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      */
     @Override
     public boolean submitRecord(@NotNull final Record record) {
-        return false;
+        return insert(record);
     }
 
     /**
@@ -176,7 +266,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      */
     @Override
     public List<Record> retrievalRecords(@NotNull final LocalDate date) {
-        return null;
+        return retrieve(date.getYear(),date.getMonthValue(), date.getDayOfMonth());
     }
 
     /**
