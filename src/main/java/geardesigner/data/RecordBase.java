@@ -2,6 +2,7 @@ package geardesigner.data;
 
 import geardesigner.beans.Record;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,14 +27,14 @@ public interface RecordBase {
      * @param date 不考虑时区的日期对象
      * @return {@code List<Record>}记录的列表
      */
-    List<Record> retrievalRecords(@NotNull LocalDate date);
+    @NotNull List<Record> retrievalRecords(@NotNull LocalDate date);
 
     /**
      * 获取最新提交的一个计算记录
      *
      * @return {@code Record}最新一条记录
      */
-    Record getLastRecord();
+    @Nullable Record getLastRecord();
 
     /**
      * 获取最新的{@code amount}个计算记录
@@ -41,7 +42,7 @@ public interface RecordBase {
      * @param amount 最新记录数，>0
      * @return {@code List<Record>}指定数量的列表
      */
-    List<Record> getLastRecords(int amount);
+    @NotNull List<Record> getLastRecords(int amount);
 
     /**
      * 获取近期的计算记录
@@ -49,7 +50,7 @@ public interface RecordBase {
      *
      * @return {@code List<Record>}全部记录的时间倒序列表
      */
-    List<Record> getRecords();
+    @NotNull List<Record> getRecords();
 
     /**
      * 清除库中所有记录

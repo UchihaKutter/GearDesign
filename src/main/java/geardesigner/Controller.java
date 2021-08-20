@@ -1,8 +1,8 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
+import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
-import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
 import javafx.beans.property.IntegerProperty;
@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Map;
@@ -124,7 +125,19 @@ public class Controller {
         /**
          * 添加输入过滤器
          */
-        tableInputParams.setTextFormatters(DecimalFormatter.class);
+        //tableInputParams.setTextFormatters(DecimalFormatter.class);
+        /**
+         * 读取历史记录并恢复上一次的记录
+         */
+        final Record lastRecord = Services.get().RecordBase().getLastRecord();
+        if (lastRecord!=null){
+            Log.info("上一次的记录时间为"+lastRecord.getTimestamp().toString());
+            try {
+                tableInputParams.setValues(lastRecord.getSpecs().toValueMap());
+            } catch (CodeException e) {
+                Log.error(e);
+            }
+        }
     }
 
     private void initChoiceBox() {
@@ -158,17 +171,24 @@ public class Controller {
 
     }
 
-    private Specifications getAllSpecs() throws InputException {
+    private @NotNull Specifications getAllSpecs() throws InputException {
         final Map<String, Decimal> values = tableInputParams.getValues();
         return new Specifications(values);
     }
 
+    /**
+     * 执行齿轮计算
+     */
     private void refreshGear() {
         try {
             Specifications specs = getAllSpecs();
             gear = new Gear(specs);
             gear.calculate();
             gear.calculateDeviation();
+            /**
+             * 记录计算历史
+             */
+            Services.get().RecordBase().submitRecord(new Record(specs));
             flushTables();
         } catch (InputException e) {
             //待办 2021/8/9: 警告弹窗

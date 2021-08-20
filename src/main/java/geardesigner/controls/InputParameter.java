@@ -64,6 +64,9 @@ public class InputParameter extends Parameter {
      */
     @Override
     public void setValue(final @Nullable Decimal v) {
+        /**
+         * 先禁用TextFormatter再启用，以支持输入任意值
+         */
         field.setText(v == null ? null : String.valueOf(v.doubleValue()));
     }
 

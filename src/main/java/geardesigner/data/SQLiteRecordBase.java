@@ -31,10 +31,10 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      */
     private static final String SQL_CREATE_TABLE
             = "Create TABLE " + TABLE_NAME + "(" +
-            "SPECS TEXT NOT NULL " +
-            "YEAR INTEGER NOT NULL" +
-            "MONTH INTEGER NOT NULL" +
-            "DAY INTEGER NOT NULL" +
+            "SPECS TEXT NOT NULL ," +
+            "YEAR INTEGER NOT NULL," +
+            "MONTH INTEGER NOT NULL," +
+            "DAY INTEGER NOT NULL," +
             "SECOND_OF_DAY INTEGER NOT NULL" +
             ");";
     /**
@@ -158,7 +158,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
             final String json = serializeSpecs(record.getSpecs());
             final LocalDateTime dateTime = record.getTimestamp();
             if (json != null) {
-                try (PreparedStatement ps = connect().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES(?,?,?,?,?,?,?);")) {
+                try (PreparedStatement ps = connect().prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES(?,?,?,?,?);")) {
                     ps.setString(1, json);
                     ps.setInt(2, dateTime.getYear());
                     ps.setInt(3, dateTime.getMonthValue());
@@ -287,7 +287,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code List<Record>}记录的列表
      */
     @Override
-    public List<Record> retrievalRecords(@NotNull final LocalDate date) {
+    public @NotNull List<Record> retrievalRecords(@NotNull final LocalDate date) {
         return retrieve(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
     }
 
@@ -297,7 +297,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code Record}最新一条记录
      */
     @Override
-    public Record getLastRecord() {
+    public @Nullable Record getLastRecord() {
         final String sql = "SELECT * FROM " + TABLE_NAME + " ORDER BY ROWID DESC LIMIT 1";
         try (Statement st = connect().createStatement()) {
             final ResultSet resultSet = st.executeQuery(sql);
@@ -322,7 +322,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code List<Record>}指定数量的列表
      */
     @Override
-    public List<Record> getLastRecords(final int amount) {
+    public @NotNull List<Record> getLastRecords(final int amount) {
         final List<Record> rs = new ArrayList<>(amount);
         final String sql = "SELECT * FROM " + TABLE_NAME + " ORDER BY ROWID DESC LIMIT ?";
         try (PreparedStatement ps = connect().prepareStatement(sql)) {
@@ -347,7 +347,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code List<Record>}全部记录的时间倒序列表
      */
     @Override
-    public List<Record> getRecords() {
+    public @NotNull List<Record> getRecords() {
         return retrieve(LocalDate.now().getYear(), null, null);
     }
 

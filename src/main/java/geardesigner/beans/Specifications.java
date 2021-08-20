@@ -4,6 +4,7 @@ import geardesigner.InputException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -68,6 +69,36 @@ public strictfp class Specifications implements Serializable {
      */
     public final double Mx;
 
+    @ConstructorProperties({"Mn", "Z", "alphaN", "beta", "Xn", "ha", "hf", "Cf", "dp", "Ws", "Wx", "Ms", "Mx"})
+    public Specifications(final int mn,
+                          final int z,
+                          final double alphaN,
+                          final double beta,
+                          final double xn,
+                          final double ha,
+                          final double hf,
+                          final double cf,
+                          final double dp,
+                          final double ws,
+                          final double wx,
+                          final double ms,
+                          final double mx) {
+        Mn = mn;
+        Z = z;
+        this.alphaN = alphaN;
+        this.beta = beta;
+        Xn = xn;
+        this.ha = ha;
+        this.hf = hf;
+        Cf = cf;
+        this.dp = dp;
+        Ws = ws;
+        Wx = wx;
+        Ms = ms;
+        Mx = mx;
+    }
+
+
     public Specifications(@NotNull Map<String, Decimal> specs) throws InputException {
         try {
             Mn = specs.get("法向模数").intValue();
@@ -89,6 +120,23 @@ public strictfp class Specifications implements Serializable {
         if (!isValid(this)) {
             throw new InputException("计算参数不合法");
         }
+    }
+
+    public @NotNull Map<String, Decimal> toValueMap() {
+        return Map.ofEntries(
+                Map.entry("法向模数", Decimal.valueOf(Mn)),
+                Map.entry("齿数(内齿为负)", Decimal.valueOf(Z)),
+                Map.entry("法向压力角", Decimal.valueOf(alphaN)),
+                Map.entry("螺旋角", Decimal.valueOf(beta)),
+                Map.entry("法向变位系数", Decimal.valueOf(Xn)),
+                Map.entry("齿顶高系数", Decimal.valueOf(ha)),
+                Map.entry("齿根高系数", Decimal.valueOf(hf)),
+                Map.entry("顶隙系数", Decimal.valueOf(Cf)),
+                Map.entry("量棒直径", Decimal.valueOf(dp)),
+                Map.entry("公法线上偏差", Decimal.valueOf(Ws)),
+                Map.entry("公法线下偏差", Decimal.valueOf(Wx)),
+                Map.entry("跨棒距上偏差", Decimal.valueOf(Ms)),
+                Map.entry("跨棒距下偏差", Decimal.valueOf(Mx)));
     }
 
     /**
