@@ -4,7 +4,6 @@ import geardesigner.beans.Record;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -45,21 +44,12 @@ public interface RecordBase {
     List<Record> getLastRecords(int amount);
 
     /**
-     * 获取前{@code amount}个计算记录，使用指定的{@code Comparator<Record>}
-     *
-     * @param amount     指定的数量，>0
-     * @param comparator {@code Comparator<Record>} 指定的比较器，null则默认按时间倒序排列
-     * @return {@code List<Record>}指定数量的排序列表
-     */
-    List<Record> getSortedRecords(int amount, Comparator<Record> comparator);
-
-    /**
-     * 获取全部的计算记录
-     * 慎用！可能引发溢出
+     * 获取近期的计算记录
+     * “近期”的定义由具体实现决定，一般为当前月
      *
      * @return {@code List<Record>}全部记录的时间倒序列表
      */
-    List<Record> getAllRecords();
+    List<Record> getRecords();
 
     /**
      * 清除库中所有记录
