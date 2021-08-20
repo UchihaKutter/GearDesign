@@ -1,6 +1,7 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
+import geardesigner.beans.Specifications;
 import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
@@ -76,6 +77,16 @@ public class Controller {
         preservedDigits = new SimpleIntegerProperty(4);
     }
 
+    /**
+     * 计算任一圆参数
+     *
+     * @return 计算结果Gear.AnyCircle
+     */
+    @Contract(value = "!null,!null->!null", pure = true)
+    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Decimal diameter) {
+        return gear.new AnyCircle(diameter).calculate();
+    }
+
     @FXML
     void initialize() {
         APaneInputParams.getChildren().add(tableInputParams);
@@ -146,7 +157,6 @@ public class Controller {
     private void setLayout() {
 
     }
-
 
     private Specifications getAllSpecs() throws InputException {
         final Map<String, Decimal> values = tableInputParams.getValues();
@@ -246,17 +256,6 @@ public class Controller {
         }
         return true;
     }
-
-    /**
-     * 计算任一圆参数
-     *
-     * @return 计算结果Gear.AnyCircle
-     */
-    @Contract(value = "!null,!null->!null", pure = true)
-    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Decimal diameter) {
-        return gear.new AnyCircle(diameter).calculate();
-    }
-
 
     /**
      * 不包含计算

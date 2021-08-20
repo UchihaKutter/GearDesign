@@ -1,6 +1,6 @@
-package geardesigner;
+package geardesigner.beans;
 
-import geardesigner.beans.Decimal;
+import geardesigner.InputException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,65 +18,55 @@ public strictfp class Specifications implements Serializable {
     /**
      * 法向模数
      */
-    final int Mn;
+    public final int Mn;
     /**
      * 齿数（内齿为负）
      */
-    final int Z;
+    public final int Z;
     /**
      * 法向压力角
      */
-    final double alphaN;
+    public final double alphaN;
     /**
      * 螺旋角
      */
-    final double beta;
+    public final double beta;
     /**
      * 法向变位系数
      */
-    final double Xn;
+    public final double Xn;
     /**
      * 齿顶高系数
      */
-    final double ha;
+    public final double ha;
     /**
      * 齿根高系数
      */
-    final double hf;
+    public final double hf;
     /**
      * 顶隙系数
      */
-    final double Cf;
+    public final double Cf;
     /**
      * 量棒直径
      */
-    final double dp;
+    public final double dp;
     /**
      * 公法线上偏差
      */
-    final double Ws;
+    public final double Ws;
     /**
      * 公法线下偏差
      */
-    final double Wx;
+    public final double Wx;
     /**
      * 跨棒距上偏差
      */
-    final double Ms;
+    public final double Ms;
     /**
      * 跨棒距下偏差
      */
-    final double Mx;
-
-    /**
-     * 检查输入参数值是否是合法
-     * @param specs
-     * @return
-     */
-    @Contract(value = "null->false",pure = true)
-    public static boolean isValid(Specifications specs) {
-        return true;//// TODO: 2020/2/9 检查参数设置是否合法
-    }
+    public final double Mx;
 
     public Specifications(@NotNull Map<String, Decimal> specs) throws InputException {
         try {
@@ -93,12 +83,23 @@ public strictfp class Specifications implements Serializable {
             Wx = specs.get("公法线下偏差").doubleValue();
             Ms = specs.get("跨棒距上偏差").doubleValue();
             Mx = specs.get("跨棒距下偏差").doubleValue();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new InputException("计算参数输入不完整");
         }
-        if (!isValid(this)){
+        if (!isValid(this)) {
             throw new InputException("计算参数不合法");
         }
+    }
+
+    /**
+     * 检查输入参数值是否是合法
+     *
+     * @param specs
+     * @return
+     */
+    @Contract(value = "null->false", pure = true)
+    public static boolean isValid(Specifications specs) {
+        return true;//// TODO: 2020/2/9 检查参数设置是否合法
     }
 
     @Override

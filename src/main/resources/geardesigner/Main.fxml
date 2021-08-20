@@ -4,24 +4,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="geardesigner.Controller">
+<HBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16"
+      fx:controller="geardesigner.Controller">
     <children>
         <VBox alignment="TOP_CENTER">
             <children>
-                <AnchorPane fx:id="APaneInputParams" />
-                <VBox alignment="TOP_CENTER" />
+                <AnchorPane fx:id="APaneInputParams"/>
+                <VBox alignment="TOP_CENTER"/>
                 <VBox alignment="TOP_CENTER">
                     <children>
-                        <Label alignment="TOP_CENTER" text="计算任一圆齿厚" />
+                        <Label alignment="TOP_CENTER" text="计算任一圆齿厚"/>
                         <HBox alignment="CENTER_LEFT">
                             <children>
-                                <Label alignment="TOP_CENTER" text="任一园直径" />
-                                <TextField fx:id="tfDoubleAnyCircle" />
-                        <AnchorPane fx:id="APaneAnyCircleUnit" />
+                                <Label alignment="TOP_CENTER" text="任一园直径"/>
+                                <TextField fx:id="tfDoubleAnyCircle"/>
+                                <AnchorPane fx:id="APaneAnyCircleUnit"/>
                             </children>
                         </HBox>
-                        <AnchorPane fx:id="APaneAnyCircle" />
-                        <Button fx:id="btCalAnyCircle" text="计算任一圆" />
+                        <AnchorPane fx:id="APaneAnyCircle"/>
+                        <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
                     </children>
                 </VBox>
             </children>
@@ -32,27 +34,27 @@
                     <children>
                         <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
                             <toggleGroup>
-                                <ToggleGroup fx:id="groupAngles" />
+                                <ToggleGroup fx:id="groupAngles"/>
                             </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="保留小数位数">
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </Text>
-                  <ChoiceBox fx:id="cbPreservedDigit" />
+                        <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="保留小数位数">
+                            <HBox.margin>
+                                <Insets left="30.0"/>
+                            </HBox.margin>
+                        </Text>
+                        <ChoiceBox fx:id="cbPreservedDigit"/>
                     </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
-               </VBox.margin>
+                    <VBox.margin>
+                        <Insets bottom="20.0" left="10.0" right="10.0" top="20.0"/>
+                    </VBox.margin>
                 </HBox>
-                <AnchorPane fx:id="APaneBaseTanAndSpan" />
-                <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0" />
+                <AnchorPane fx:id="APaneBaseTanAndSpan"/>
+                <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0"/>
                 <HBox alignment="TOP_CENTER">
                     <children>
-                        <Button fx:id="btCalculate" defaultButton="true" text="计算" />
-                        <Button fx:id="btSaveParams" layoutX="44.0" layoutY="10.0" text="保存参数" />
+                        <Button fx:id="btCalculate" defaultButton="true" text="计算"/>
+                        <Button fx:id="btSaveParams" layoutX="44.0" layoutY="10.0" text="保存参数"/>
                     </children>
                 </HBox>
             </children>

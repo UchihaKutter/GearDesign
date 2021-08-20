@@ -3,8 +3,8 @@ package geardesigner.data;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import geardesigner.Log;
-import geardesigner.Specifications;
 import geardesigner.beans.Record;
+import geardesigner.beans.Specifications;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,10 +23,6 @@ import java.util.List;
  */
 public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
     /**
-     * 共享连接
-     */
-    private static volatile Connection INSTANCE = null;
-    /**
      * 数据库表名
      */
     private static final String TABLE_NAME = "RecordHistory";
@@ -41,7 +37,10 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
             "DAY INTEGER NOT NULL" +
             "SECOND_OF_DAY INTEGER NOT NULL" +
             ");";
-
+    /**
+     * 共享连接
+     */
+    private static volatile Connection INSTANCE = null;
     private final ObjectMapper objectMapper;
 
     /**

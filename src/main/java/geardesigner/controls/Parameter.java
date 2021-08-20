@@ -17,6 +17,11 @@ import org.jetbrains.annotations.Nullable;
  * @author SUPERSTATION
  */
 public abstract class Parameter extends HBox {
+    /**
+     * Stylesheet Handling
+     */
+
+    private static final String DEFAULT_STYLE_CLASS = "Parameter";
     final StackPane namePane;
     final StackPane valuePane;
     final StackPane symbolPane;
@@ -73,9 +78,12 @@ public abstract class Parameter extends HBox {
         }
     }
 
-
     public final String getName() {
         return name.getText().trim();
+    }
+
+    public final String getUnit() {
+        return unit == null ? null : unit.getFormula();
     }
 
     /**
@@ -86,10 +94,6 @@ public abstract class Parameter extends HBox {
     public final void setUnit(String unit) {
         //待办 2021/8/5: 修改为绑定同步刷新的
         this.unit = new TexFormula(unit);
-    }
-
-    public final String getUnit() {
-        return unit == null ? null : unit.getFormula();
     }
 
     /**
@@ -115,12 +119,6 @@ public abstract class Parameter extends HBox {
     public final void bindValuePreWidthProperty(Property<Number> width) {
         valuePane.prefWidthProperty().bindBidirectional(width);
     }
-
-    /**
-     * Stylesheet Handling
-     */
-
-    private static final String DEFAULT_STYLE_CLASS = "Parameter";
 
     @Override
     public String toString() {

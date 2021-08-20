@@ -9,11 +9,12 @@ import java.awt.image.BufferedImage;
 
 /**
  * 将Latex公式解析为JavaFX格式的Image对象
+ *
  * @author SUPERSTATION
  */
 public class TexFormula {
-    public static final float DEFAULT_FONT_SIZE=12;
-    public static final int DEFAULT_STYLE=0;
+    public static final float DEFAULT_FONT_SIZE = 12;
+    public static final int DEFAULT_STYLE = 0;
 
     private final String formulaPattern;
     /**
@@ -26,37 +27,39 @@ public class TexFormula {
      */
     private final float fontSize;
 
-    private Image imb ;
+    private Image imb;
+
     /**
      * 构造Latex公式符号
+     *
      * @param p latex字符串
      */
-    public TexFormula(String p){
-        formulaPattern= p;
+    public TexFormula(String p) {
+        formulaPattern = p;
         fontSize = DEFAULT_FONT_SIZE;
         style = DEFAULT_STYLE;
     }
 
-    public Image getPatternImage(){
-        if (imb==null){
+    public Image getPatternImage() {
+        if (imb == null) {
             parsePattern();
         }
         return imb;
     }
 
-    private void parsePattern(){
+    private void parsePattern() {
         final TeXFormula txf = new TeXFormula(formulaPattern);
         /**
          * bg设定为null，启用ARGB，背景透明
          */
-        final java.awt.Image bufferedImage = txf.createBufferedImage(style,fontSize, Color.BLACK, null);
+        final java.awt.Image bufferedImage = txf.createBufferedImage(style, fontSize, Color.BLACK, null);
         /**
          * wimg设置为null，使image对象不可变
          */
-        imb=SwingFXUtils.toFXImage((BufferedImage) bufferedImage, null);
+        imb = SwingFXUtils.toFXImage((BufferedImage) bufferedImage, null);
     }
 
-    public String getFormula(){
+    public String getFormula() {
         return formulaPattern;
     }
 }

@@ -45,16 +45,16 @@ public class InputParameter extends Parameter {
     @Override
     public @Nullable Decimal getValue() throws InputException {
         final String vs = field.getText().trim();
-        if (vs.isBlank()){
+        if (vs.isBlank()) {
             return null;
-        }else {
+        } else {
             /**
              * 捕获输入不合法错误
              */
             try {
                 return Decimal.valueOf(vs);
-            }catch (NumberFormatException e){
-                throw new InputException("请输入正确的"+getName());
+            } catch (NumberFormatException e) {
+                throw new InputException("请输入正确的" + getName());
             }
         }
     }
@@ -73,9 +73,10 @@ public class InputParameter extends Parameter {
 
     /**
      * 设置输入的格式化器
+     *
      * @param formatter 不能和其他输入框共用格式化器实例
      */
     public void setTextFormatter(TextFormatter<Decimal> formatter) {
-       field.setTextFormatter(formatter);
+        field.setTextFormatter(formatter);
     }
 }

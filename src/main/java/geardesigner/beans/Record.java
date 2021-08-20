@@ -1,6 +1,5 @@
 package geardesigner.beans;
 
-import geardesigner.Specifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

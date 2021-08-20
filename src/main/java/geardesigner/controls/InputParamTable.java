@@ -81,6 +81,7 @@ public class InputParamTable extends ParamTable {
 
     /**
      * 设置某一个参数输入框的TextFormatter
+     *
      * @param paramName 参数控件名
      * @param formatter TextFormatter
      * @throws CodeException
@@ -100,16 +101,17 @@ public class InputParamTable extends ParamTable {
 
     /**
      * 为所有文本框设置同种TextFormatter
+     *
      * @param cls
      * @throws NoSuchMethodException
      */
     public void setTextFormatters(Class<? extends TextFormatter> cls) throws NoSuchMethodException {
-        if (cls!=null){
+        if (cls != null) {
             final Constructor<? extends TextFormatter> constructor = cls.getDeclaredConstructor();
-            table.values().parallelStream().forEach(p-> {
+            table.values().parallelStream().forEach(p -> {
                 try {
-                    ((InputParameter)p).setTextFormatter(constructor.newInstance());
-                } catch (InstantiationException|IllegalAccessException|InvocationTargetException e) {
+                    ((InputParameter) p).setTextFormatter(constructor.newInstance());
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     Log.error(e);
                 }
             });

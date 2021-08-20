@@ -1,6 +1,7 @@
 package geardesigner;
 
 import geardesigner.beans.Decimal;
+import geardesigner.beans.Specifications;
 
 /**
  * 计算结果。角全部以弧度制存储

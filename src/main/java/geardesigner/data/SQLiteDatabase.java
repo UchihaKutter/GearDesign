@@ -52,56 +52,6 @@ public abstract class SQLiteDatabase implements AutoCloseable {
      */
 
     /**
-     * 定义连接数据库的方法（快速失败）
-     * 连接SQLite的代码
-     *
-     * @return 一个数据库连接
-     * @throws ClassNotFoundException 数据库驱动不存在
-     * @throws SQLException           建表失败
-     */
-    Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName(DRIVER_NAME);
-        final Connection connection = DriverManager.getConnection(DB_PREFIX + DB_FILE_PATH);
-        Log.info(this.getClass().getName() + ": 成功连接数据库");
-        return connection;
-    }
-
-    /**
-     * 用于获取数据库连接的公用方法，
-     *
-     * @return 每张表持有的Connect
-     */
-    public abstract Connection connect();
-
-    /**
-     * 首次创建数据库时调用,一般进行建库建表操作
-     */
-    boolean onCreate(Connection conn, String createTable) {
-        try (Statement stat = conn.createStatement()) {
-            stat.execute(createTable);
-        } catch (SQLException ts) {
-            Log.error("创建表" + DB_FILE_PATH + '.' + TABLE_NAME + "失败", ts);
-        }
-        return true;
-    }
-
-    boolean isTableExist(Connection conn, String tableName) {
-        try {
-            final DatabaseMetaData metaData = conn.getMetaData();
-            /**返回名称为tableName的所有表*/
-            final ResultSet tts = metaData.getTables(null, null, tableName, null);
-            return tts.next();
-        } catch (SQLException ts) {
-            Log.error("查询表" + this.getClass().getName() + "时触发异常", ts);
-            return false;
-        }
-    }
-
-    /**
-     * 对象数据库工具类
-     */
-
-    /**
      * 数据压缩（Gzip）
      *
      * @param raw 输入数据
@@ -140,6 +90,56 @@ public abstract class SQLiteDatabase implements AutoCloseable {
                 os.write(buff, 0, count);
             }
             return os.toByteArray();
+        }
+    }
+
+    /**
+     * 定义连接数据库的方法（快速失败）
+     * 连接SQLite的代码
+     *
+     * @return 一个数据库连接
+     * @throws ClassNotFoundException 数据库驱动不存在
+     * @throws SQLException           建表失败
+     */
+    Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(DRIVER_NAME);
+        final Connection connection = DriverManager.getConnection(DB_PREFIX + DB_FILE_PATH);
+        Log.info(this.getClass().getName() + ": 成功连接数据库");
+        return connection;
+    }
+
+    /**
+     * 用于获取数据库连接的公用方法，
+     *
+     * @return 每张表持有的Connect
+     */
+    public abstract Connection connect();
+
+    /**
+     * 对象数据库工具类
+     */
+
+    /**
+     * 首次创建数据库时调用,一般进行建库建表操作
+     */
+    boolean onCreate(Connection conn, String createTable) {
+        try (Statement stat = conn.createStatement()) {
+            stat.execute(createTable);
+        } catch (SQLException ts) {
+            Log.error("创建表" + DB_FILE_PATH + '.' + TABLE_NAME + "失败", ts);
+        }
+        return true;
+    }
+
+    boolean isTableExist(Connection conn, String tableName) {
+        try {
+            final DatabaseMetaData metaData = conn.getMetaData();
+            /**返回名称为tableName的所有表*/
+            final ResultSet tts = metaData.getTables(null, null, tableName, null);
+            return tts.next();
+        } catch (SQLException ts) {
+            Log.error("查询表" + this.getClass().getName() + "时触发异常", ts);
+            return false;
         }
     }
 
