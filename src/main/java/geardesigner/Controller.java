@@ -3,6 +3,7 @@ package geardesigner;
 import geardesigner.beans.Decimal;
 import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
+import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
 import javafx.beans.property.IntegerProperty;
@@ -125,13 +126,13 @@ public class Controller {
         /**
          * 添加输入过滤器
          */
-        //tableInputParams.setTextFormatters(DecimalFormatter.class);
+        tableInputParams.setTextFormatters(DecimalFormatter.class);
         /**
          * 读取历史记录并恢复上一次的记录
          */
         final Record lastRecord = Services.get().RecordBase().getLastRecord();
-        if (lastRecord!=null){
-            Log.info("上一次的记录时间为"+lastRecord.getTimestamp().toString());
+        if (lastRecord != null) {
+            Log.info("上一次的记录时间为" + lastRecord.getTimestamp().toString());
             try {
                 tableInputParams.setValues(lastRecord.getSpecs().toValueMap());
             } catch (CodeException e) {

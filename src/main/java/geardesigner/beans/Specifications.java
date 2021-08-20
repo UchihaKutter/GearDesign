@@ -122,6 +122,17 @@ public strictfp class Specifications implements Serializable {
         }
     }
 
+    /**
+     * 检查输入参数值是否是合法
+     *
+     * @param specs
+     * @return
+     */
+    @Contract(value = "null->false", pure = true)
+    public static boolean isValid(Specifications specs) {
+        return true;//// TODO: 2020/2/9 检查参数设置是否合法
+    }
+
     public @NotNull Map<String, Decimal> toValueMap() {
         return Map.ofEntries(
                 Map.entry("法向模数", Decimal.valueOf(Mn)),
@@ -137,17 +148,6 @@ public strictfp class Specifications implements Serializable {
                 Map.entry("公法线下偏差", Decimal.valueOf(Wx)),
                 Map.entry("跨棒距上偏差", Decimal.valueOf(Ms)),
                 Map.entry("跨棒距下偏差", Decimal.valueOf(Mx)));
-    }
-
-    /**
-     * 检查输入参数值是否是合法
-     *
-     * @param specs
-     * @return
-     */
-    @Contract(value = "null->false", pure = true)
-    public static boolean isValid(Specifications specs) {
-        return true;//// TODO: 2020/2/9 检查参数设置是否合法
     }
 
     @Override

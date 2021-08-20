@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.MathUtils;
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 
@@ -46,7 +47,11 @@ public class DecimalFormatter<T extends Double> extends TextFormatter<T> {
          */
         @Override
         public Change apply(final Change change) {
-            return (change.isDeleted() || cFilter.contains(change.getText())) ? change : null;
+            final String text = change.getText();
+            /**
+             * 为支持setValue正常写入值，加入正则判断
+             */
+            return (change.isDeleted() || cFilter.contains(text) || MathUtils.isDecimal(text)) ? change : null;
         }
     }
 

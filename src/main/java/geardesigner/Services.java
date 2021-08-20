@@ -5,17 +5,20 @@ import geardesigner.data.SQLiteRecordBase;
 
 /**
  * 后台服务
+ *
  * @author SUPERSTATION
  */
 public class Services {
+    private static final String DBPath = "History.db";
     /**
      * 懒加载，双重锁
      */
     private static volatile Services INSTANCE = null;
-
-    private static final String DBPath = "History.db";
-
     private final RecordBase recordBase;
+
+    private Services() {
+        recordBase = new SQLiteRecordBase(DBPath);
+    }
 
     public static Services get() {
         if (INSTANCE == null) {
@@ -29,10 +32,6 @@ public class Services {
             }
         }
         return INSTANCE;
-    }
-
-    private Services() {
-        recordBase = new SQLiteRecordBase(DBPath);
     }
 
     public RecordBase RecordBase() {

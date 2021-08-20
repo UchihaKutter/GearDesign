@@ -38,6 +38,7 @@ public class TableSettings {
     public static final String[] DEVIATION_PARAMS_COLUMNS = new String[]{"参数名", "计算值", "单位"};
     public static final String[][] DEVIATION_PARAMS_NAME_UNIT
             = new String[][]{{"公法线上偏差", "mm"}, {"跨棒距一", "mm"}, {"跨棒距上偏差", "mm"}, {"公法线下偏差", "mm"}, {"跨棒距二", "mm"}, {"跨棒距下偏差", "mm"}, {"跨棒距上偏差am1", "mm"}, {"公法线上偏差Ws", "mm"}, {"跨棒距下偏差am2", "mm"}, {"公法线下偏差Wx", "mm"}};
+
     private TableSettings() {
     }
 }
