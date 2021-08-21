@@ -1,64 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<HBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16"
+<VBox xmlns:fx="http://javafx.com/fxml/1" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16"
       fx:controller="geardesigner.Controller">
     <children>
-        <VBox alignment="TOP_CENTER">
+        <ToolBar prefHeight="30.0">
+            <items>
+                <Button mnemonicParsing="false" text="Button"/>
+            </items>
+        </ToolBar>
+        <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+              minWidth="-Infinity" spacing="20.0">
             <children>
-                <AnchorPane fx:id="APaneInputParams"/>
-                <VBox alignment="TOP_CENTER"/>
-                <VBox alignment="TOP_CENTER">
+                <VBox alignment="TOP_CENTER" spacing="20.0">
                     <children>
-                        <Label alignment="TOP_CENTER" text="计算任一圆齿厚"/>
-                        <HBox alignment="CENTER_LEFT">
+                        <AnchorPane fx:id="APaneInputParams"/>
+                        <VBox alignment="TOP_CENTER">
                             <children>
-                                <Label alignment="TOP_CENTER" text="任一园直径"/>
-                                <TextField fx:id="tfDoubleAnyCircle"/>
-                                <AnchorPane fx:id="APaneAnyCircleUnit"/>
+                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Label alignment="TOP_CENTER" text="任一园直径"/>
+                                        <TextField fx:id="tfDoubleAnyCircle"/>
+                                        <AnchorPane fx:id="APaneAnyCircleUnit"/>
+                                        <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
+                                    </children>
+                                </HBox>
                             </children>
-                        </HBox>
+                        </VBox>
                         <AnchorPane fx:id="APaneAnyCircle"/>
-                        <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
                     </children>
                 </VBox>
-            </children>
-        </VBox>
-        <VBox alignment="TOP_CENTER">
-            <children>
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <VBox alignment="TOP_CENTER" spacing="20.0">
                     <children>
-                        <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="groupAngles"/>
-                            </toggleGroup>
-                        </RadioButton>
-                        <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles"/>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="保留小数位数">
-                            <HBox.margin>
-                                <Insets left="30.0"/>
-                            </HBox.margin>
-                        </Text>
-                        <ChoiceBox fx:id="cbPreservedDigit"/>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="groupAngles"/>
+                                    </toggleGroup>
+                                </RadioButton>
+                                <RadioButton fx:id="rbToRadius" text="弧度制" toggleGroup="$groupAngles"/>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="保留小数位数">
+                                    <HBox.margin>
+                                        <Insets left="30.0"/>
+                                    </HBox.margin>
+                                </Text>
+                                <ChoiceBox fx:id="cbPreservedDigit"/>
+                            </children>
+                            <VBox.margin>
+                                <Insets/>
+                            </VBox.margin>
+                        </HBox>
+                        <AnchorPane fx:id="APaneBaseTanAndSpan"/>
+                        <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0"/>
+                        <ButtonBar buttonMinWidth="80.0">
+                            <buttons>
+                                <Button fx:id="btCalculate" defaultButton="true" text="计算"/>
+                                <Button fx:id="btSaveParams" text="保存参数"/>
+                            </buttons>
+                            <padding>
+                                <Insets left="30.0" right="30.0"/>
+                            </padding>
+                        </ButtonBar>
                     </children>
-                    <VBox.margin>
-                        <Insets bottom="20.0" left="10.0" right="10.0" top="20.0"/>
-                    </VBox.margin>
-                </HBox>
-                <AnchorPane fx:id="APaneBaseTanAndSpan"/>
-                <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0"/>
-                <HBox alignment="TOP_CENTER">
-                    <children>
-                        <Button fx:id="btCalculate" defaultButton="true" text="计算"/>
-                        <Button fx:id="btSaveParams" layoutX="44.0" layoutY="10.0" text="保存参数"/>
-                    </children>
-                </HBox>
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </VBox>
             </children>
-        </VBox>
+            <VBox.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </VBox.margin>
+        </HBox>
     </children>
-</HBox>
+</VBox>

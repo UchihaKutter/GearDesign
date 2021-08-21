@@ -56,9 +56,10 @@ public abstract class Parameter extends HBox {
      */
     void initStyle() {
         /**
-         * 设定CSS类选择器名
+         * 设定CSS类选择器名和ID选择器
          */
         getStyleClass().setAll(DEFAULT_STYLE_CLASS);
+        name.setId("ParamName");
         /**
          * 预设布局
          */

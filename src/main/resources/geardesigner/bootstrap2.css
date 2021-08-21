@@ -396,7 +396,7 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 .text-field {
-    -fx-pref-height: 20;
+    -fx-pref-height: 26;
 }
 
 .combo-box, .choice-box {
@@ -869,6 +869,28 @@ VBox > .split-menu-button.last > .arrow-button {
 
 .split-pane > .split-pane-divider:hover {
     -fx-background-color: #E0E0E0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Label                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.label {
+    -fx-font-size: 14;
+    -fx-font-family: "SimHei";
+}
+
+#tTitle {
+    -fx-font-size: 16;
+    -fx-font-family: "SimHei";
+    -fx-font-weight: bold;
+}
+
+#ParamName {
+    -fx-font-size: 14;
+    -fx-font-family: "fangsong";
 }
 
 /*******************************************************************************

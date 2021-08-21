@@ -10,7 +10,7 @@ public class TableSettings {
      * 输入参数数据列表设置
      */
     public static final String INPUT_PARAMS_PANE_NAME = "输入已知参数";
-    public static final String[] INPUT_PARAMS_COLUMNS = new String[]{"参数名", "度量单位", "参数值"};
+    public static final String[] INPUT_PARAMS_COLUMNS = new String[]{"参数名", "单位", "参数值"};
     public static final String[][] INPUT_PARAMS_NAME_UNIT
             = new String[][]{
             {"法向模数", null}, {"齿数(内齿为负)", null}, {"法向压力角", "°"},
@@ -20,7 +20,7 @@ public class TableSettings {
     /**
      * 任一园计算结果展示数据面板设置
      */
-    public static final String ANY_CIRCLE_PARAMS_PANE_NAME = null;
+    public static final String ANY_CIRCLE_PARAMS_PANE_NAME = "任一圆规格";
     public static final String[] ANY_CIRCLE_PARAMS_COLUMNS = new String[]{"参数名", "计算值", "单位"};
     public static final String[][] ANY_CIRCLE_PARAMS_NAME_UNIT
             = new String[][]{{"齿顶圆端面压力角", "°"}, {"分度圆处弧齿厚", "mm"}, {"任一圆处弧齿厚", "mm"}, {"任一园螺旋角", "°"}, {"任一圆处法向弦齿厚", "mm"}};

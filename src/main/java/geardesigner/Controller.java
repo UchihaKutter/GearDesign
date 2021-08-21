@@ -169,7 +169,8 @@ public class Controller {
     }
 
     private void setLayout() {
-
+        ButtonBar.setButtonData(btCalculate, ButtonBar.ButtonData.OK_DONE);
+        ButtonBar.setButtonData(btSaveParams, ButtonBar.ButtonData.RIGHT);
     }
 
     private @NotNull Specifications getAllSpecs() throws InputException {
