@@ -78,7 +78,7 @@ public strictfp class Gear {
     private void calGear() {
         d = specs.Mn * Math.abs(specs.Z) / Math.cos(specs.beta);
         da = calDa(specs);
-        calDf(specs);
+        df = calDf(specs);
         alphaT = Math.atan(Math.tan(specs.alphaN) / Math.cos(specs.beta));
         db = d * Math.cos(alphaT);
         Zp = Math.abs(specs.Z) * (Math.tan(alphaT) - alphaT) / (Math.tan(specs.alphaN) - specs.alphaN);

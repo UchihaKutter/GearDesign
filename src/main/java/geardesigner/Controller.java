@@ -274,11 +274,8 @@ public class Controller {
                     .setValue("任一圆处弧齿厚", anyCircle.getSa1())
                     .setValue("任一圆处法向弦齿厚", anyCircle.getSn1());
             //待办 2021/8/9: 单位转换
-            if (isRadius) {
-                tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
-            } else {
-                tableAnyCircle.setValue("任一园螺旋角", MathUtils.toDegrees(anyCircle.getBeta1()));
-            }
+            tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
+
         }
     }
 
@@ -305,11 +302,8 @@ public class Controller {
                     .setValue("公法线长度处直径", gear.getDWk())
                     .setValue("跨棒距测量点直径", gear.getDkm())
                     .setValue("跨棒距", gear.getM());
-            if (isRadius) {
-                tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(gear.alphaT));
-            } else {
-                tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(Math.toDegrees(gear.alphaT)));
-            }
+            //待办 2021/8/21: 单位转换
+            tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(gear.alphaT));
         }
     }
 
@@ -326,13 +320,9 @@ public class Controller {
                     .setValue("跨棒距下偏差", gear.getMx())
                     .setValue("公法线上偏差Ws", gear.getWs())
                     .setValue("公法线下偏差Wx", gear.getWx());
-            if (isRadius) {
-                tableDeviation.setValue("跨棒距上偏差am1", gear.getAlphaM1())
-                        .setValue("跨棒距下偏差am2", gear.getAlphaM2());
-            } else {
-                tableDeviation.setValue("跨棒距上偏差am1", Decimal.valueOf(Math.toDegrees(gear.getAlphaM1().doubleValue())))
-                        .setValue("跨棒距下偏差am2", MathUtils.toDegrees(gear.getAlphaM2()));
-            }
+            //待办 2021/8/21: 单位转换
+            tableDeviation.setValue("跨棒距上偏差am1", gear.getAlphaM1())
+                    .setValue("跨棒距下偏差am2", gear.getAlphaM2());
         }
     }
 
