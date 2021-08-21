@@ -54,13 +54,13 @@ public class OutputParamTable extends ParamTable {
     }
 
     @Override
-    void initStyle() {
+    void initLayout() {
         /**
-         * 设置列宽的默认值
+         * 设置列宽
          */
-        setCol0Width(100);
-        setCol1Width(130);
-        setCol2Width(50);
+        Col0Width.setValue(120);
+        Col1Width.setValue(120);
+        Col2Width.setValue(60);
     }
 
     /**

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" stylesheets="@ParamTable.css" type="javafx.scene.layout.StackPane"
+<fx:root xmlns:fx="http://javafx.com/fxml/1" stylesheets="@ParamTable.css" type="javafx.scene.layout.VBox"
+         alignment="TOP_CENTER"
          xmlns="http://javafx.com/javafx/16">
-    <VBox fx:id="vBox" alignment="TOP_CENTER" StackPane.alignment="CENTER">
-        <children>
-            <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Title"/>
-            <HBox alignment="CENTER_LEFT">
-                <children>
-                    <Label fx:id="lCol0" text="Column0"/>
-                    <Label fx:id="lCol1" layoutX="10.0" layoutY="10.0" text="Column1"/>
-                    <Label fx:id="lCol2" layoutX="10.0" layoutY="10.0" text="Column2"/>
-                </children>
-            </HBox>
-        </children>
-    </VBox>
+    <children>
+        <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Title"/>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Label fx:id="lCol0" text="Column0"/>
+                <Label fx:id="lCol1" layoutX="10.0" layoutY="10.0" text="Column1"/>
+                <Label fx:id="lCol2" layoutX="10.0" layoutY="10.0" text="Column2"/>
+            </children>
+        </HBox>
+    </children>
 </fx:root>

@@ -13,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -25,14 +24,11 @@ import java.util.Set;
 /**
  * @author SuperNote
  */
-public abstract class ParamTable extends StackPane {
+public abstract class ParamTable extends VBox {
     final ObservableMap<String, Parameter> table;
     final Property<Number> Col0Width;
     final Property<Number> Col1Width;
     final Property<Number> Col2Width;
-
-    @FXML
-    private VBox vBox;
 
     @FXML
     private Text tTitle;
@@ -62,6 +58,7 @@ public abstract class ParamTable extends StackPane {
         setBinds();
         setNames(paneName, colName);
         addParams(pcs);
+        initLayout();
         initStyle();
     }
 
@@ -89,14 +86,14 @@ public abstract class ParamTable extends StackPane {
     }
 
     private void setBinds() {
-        lCol0.prefWidthProperty().bindBidirectional(Col0Width);
-        lCol1.prefWidthProperty().bindBidirectional(Col1Width);
-        lCol2.prefWidthProperty().bindBidirectional(Col2Width);
+        lCol0.prefWidthProperty().bind(Col0Width);
+        lCol1.prefWidthProperty().bind(Col1Width);
+        lCol2.prefWidthProperty().bind(Col2Width);
     }
 
     private void addParams(Parameter[] pcs) {
         if (pcs != null) {
-            final ObservableList<Node> children = vBox.getChildren();
+            final ObservableList<Node> children = getChildren();
             for (Parameter p : pcs) {
                 if (p != null) {
                     final String name = p.getName();
@@ -112,6 +109,16 @@ public abstract class ParamTable extends StackPane {
     }
 
 
+    void initStyle() {
+        setStyle("-fx-spacing: 10;" +
+                "-fx-padding: 10 10 20 10;" +
+                "-fx-border-color: rgba(0, 0, 0, 0.33);" +
+                "-fx-border-style: dashed;" +
+                "-fx-border-width: 3;" +
+                "-fx-border-radius: 2;"
+        );
+    }
+
     /**
      * 为每一个加入表格的{@code Parameter}实例绑定组件宽度
      *
@@ -122,7 +129,7 @@ public abstract class ParamTable extends StackPane {
     /**
      * 重写该方法，以定义不同类型面板的排版样式。必须指定列宽的默认值
      */
-    abstract void initStyle();
+    abstract void initLayout();
 
 
     public Decimal getValue(String name) throws CodeException, InputException {
@@ -177,15 +184,15 @@ public abstract class ParamTable extends StackPane {
     }
 
     public void setCol0Width(double width) {
-        Col0Width.setValue(width);
+        lCol0.setMinWidth(width);
     }
 
     public void setCol1Width(double width) {
-        Col1Width.setValue(width);
+        lCol1.setMinWidth(width);
     }
 
     public void setCol2Width(double width) {
-        Col2Width.setValue(width);
+        lCol2.setMinWidth(width);
     }
 
 }

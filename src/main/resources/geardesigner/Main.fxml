@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16"
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" stylesheets="@bootstrap2.css"
       fx:controller="geardesigner.Controller">
     <children>
         <ToolBar prefHeight="30.0">
@@ -22,9 +23,8 @@
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                     <children>
-                                        <Label alignment="TOP_CENTER" text="任一园直径"/>
+                                        <Label alignment="TOP_CENTER" text="任一园直径(mm)"/>
                                         <TextField fx:id="tfDoubleAnyCircle"/>
-                                        <AnchorPane fx:id="APaneAnyCircleUnit"/>
                                         <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
                                     </children>
                                 </HBox>

@@ -52,13 +52,13 @@ public class InputParamTable extends ParamTable {
     }
 
     @Override
-    void initStyle() {
+    void initLayout() {
         /**
-         * 设置列宽的默认值
+         * 设置列宽
          */
-        setCol0Width(100);
-        setCol1Width(50);
-        setCol2Width(130);
+        Col0Width.setValue(120);
+        Col1Width.setValue(60);
+        Col2Width.setValue(120);
     }
 
     /**

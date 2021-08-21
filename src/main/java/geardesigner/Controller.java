@@ -10,6 +10,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.Contract;
@@ -35,9 +36,6 @@ public class Controller {
 
     @FXML
     private TextField tfDoubleAnyCircle;
-
-    @FXML
-    private AnchorPane APaneAnyCircleUnit;
 
     @FXML
     private Button btCalAnyCircle;
@@ -73,7 +71,6 @@ public class Controller {
 
     private Gear gear;
 
-
     public Controller() throws IOException, NoSuchMethodException {
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
@@ -87,6 +84,13 @@ public class Controller {
     @Contract(value = "!null,!null->!null", pure = true)
     private static Gear.AnyCircle calculateAnyCircle(Gear gear, Decimal diameter) {
         return gear.new AnyCircle(diameter).calculate();
+    }
+
+    private static final void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
+        AnchorPane.setLeftAnchor(childOfAnchorPane, 0.0);
+        AnchorPane.setRightAnchor(childOfAnchorPane, 0.0);
+        AnchorPane.setTopAnchor(childOfAnchorPane, 0.0);
+        AnchorPane.setBottomAnchor(childOfAnchorPane, 0.0);
     }
 
     @FXML
@@ -166,6 +170,13 @@ public class Controller {
          */
         cbPreservedDigit.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> preservedDigits.setValue(newValue));
+        /**
+         * 绑定列宽
+         */
+        setNoAnchorPaneGap(tableInputParams);
+        setNoAnchorPaneGap(tableAnyCircle);
+        setNoAnchorPaneGap(tableBaseTanAndSpan);
+        setNoAnchorPaneGap(tableDeviation);
     }
 
     private void setLayout() {
