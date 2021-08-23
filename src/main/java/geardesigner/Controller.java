@@ -275,7 +275,6 @@ public class Controller {
                     .setValue("任一圆处法向弦齿厚", anyCircle.getSn1());
             //待办 2021/8/9: 单位转换
             tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
-
         }
     }
 

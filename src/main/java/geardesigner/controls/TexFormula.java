@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  * @author SUPERSTATION
  */
 public class TexFormula {
-    public static final float DEFAULT_FONT_SIZE = 12;
+    public static final float DEFAULT_FONT_SIZE = 14;
     public static final int DEFAULT_STYLE = 0;
 
     private final String formulaPattern;

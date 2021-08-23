@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.units.BaseUnit;
 import javafx.beans.property.IntegerProperty;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,17 +25,17 @@ public class OutputParamTable extends ParamTable {
      *
      * @param paneName
      * @param colName
-     * @param pNameAndUnit
+     * @param pNameAndUnit 参数名和单位的数组，pNameAndUnit[i][0]必须是String，pNameAndUnit[i][1]必须是BaseUnit
      * @return
      * @throws IOException
      */
     public static OutputParamTable createTable(final String paneName, final String[] colName,
-                                               String[][] pNameAndUnit) throws IOException {
+                                               Object[][] pNameAndUnit) throws IOException {
         if (pNameAndUnit != null && pNameAndUnit.length > 0) {
             final Parameter[] pcs = new Parameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
-                    final OutputParameter pc = new OutputParameter(pNameAndUnit[i][0], pNameAndUnit[i][1]);
+                    final OutputParameter pc = new OutputParameter((String) pNameAndUnit[i][0], (BaseUnit) pNameAndUnit[i][1]);
                     pcs[i] = pc;
                 }
             }

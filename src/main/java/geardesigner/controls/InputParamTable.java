@@ -3,6 +3,7 @@ package geardesigner.controls;
 import geardesigner.CodeException;
 import geardesigner.Log;
 import geardesigner.beans.Decimal;
+import geardesigner.units.BaseUnit;
 import javafx.scene.control.TextFormatter;
 
 import java.io.IOException;
@@ -24,16 +25,16 @@ public class InputParamTable extends ParamTable {
      *
      * @param paneName
      * @param colName
-     * @param pNameAndUnit
+     * @param pNameAndUnit 参数名和单位的pair数组，pNameAndUnit[i][0]必须是String，pNameAndUnit[i][1]必须是BaseUnit
      * @return
      * @throws IOException
      */
-    public static InputParamTable createTable(final String paneName, final String[] colName, String[][] pNameAndUnit) throws IOException {
+    public static InputParamTable createTable(final String paneName, final String[] colName, Object[][] pNameAndUnit) throws IOException {
         if (pNameAndUnit != null && pNameAndUnit.length > 0) {
             final Parameter[] pcs = new Parameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
-                    pcs[i] = new InputParameter(pNameAndUnit[i][0], pNameAndUnit[i][1]);
+                    pcs[i] = new InputParameter((String) pNameAndUnit[i][0], (BaseUnit) pNameAndUnit[i][1]);
                 }
             }
             return new InputParamTable(paneName, colName, pcs);

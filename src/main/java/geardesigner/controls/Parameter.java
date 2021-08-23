@@ -2,12 +2,14 @@ package geardesigner.controls;
 
 import geardesigner.InputException;
 import geardesigner.beans.Decimal;
+import geardesigner.units.BaseUnit;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
@@ -27,7 +29,7 @@ public abstract class Parameter extends HBox {
     final StackPane symbolPane;
     private final Text name;
     private final ImageView symbol;
-    private TexFormula unit;
+    private BaseUnit unit;
 
     public Parameter(String name) {
         this(name, null);
@@ -37,7 +39,7 @@ public abstract class Parameter extends HBox {
      * @param name Parameter控件实例的名称
      * @param unit 应为Latex字符串
      */
-    public Parameter(String name, String unit) {
+    public Parameter(String name, BaseUnit unit) {
         this.name = new Text();
         this.name.setText(name);
 
@@ -46,7 +48,7 @@ public abstract class Parameter extends HBox {
         this.valuePane = new StackPane();
         this.symbolPane = new StackPane(this.symbol);
         if (unit != null) {
-            this.unit = new TexFormula(unit);
+            this.unit = unit;
         }
         initStyle();
     }
@@ -75,7 +77,7 @@ public abstract class Parameter extends HBox {
      */
     public void refresh() {
         if (unit != null) {
-            symbol.setImage(unit.getPatternImage());
+            symbol.setImage(new TexFormula(unit.getDisplay()).getPatternImage());
         }
     }
 
@@ -83,18 +85,19 @@ public abstract class Parameter extends HBox {
         return name.getText().trim();
     }
 
-    public final String getUnit() {
-        return unit == null ? null : unit.getFormula();
+    public final BaseUnit getUnit() {
+        return unit == null ? null : unit;
     }
 
     /**
-     * 修改单位（不刷新）
+     * 修改单位
      *
      * @param unit Latex格式字符串表示的数值单位
      */
-    public final void setUnit(String unit) {
+    public final void setUnit(@NotNull BaseUnit unit) {
         //待办 2021/8/5: 修改为绑定同步刷新的
-        this.unit = new TexFormula(unit);
+        this.unit = unit;
+        refresh();
     }
 
     /**
