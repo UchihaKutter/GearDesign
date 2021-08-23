@@ -10,16 +10,18 @@ public enum Angle implements ConvertibleUnit {
     /**
      * 定义设计中常用的角的大小单位度、弧度。以弧度作为基本单位
      */
-    RADIANS("弧度", "rad", null),
-    DEGREES("度", "°", null);
+    RADIANS("弧度", "rad", 1, null),
+    DEGREES("度", "°", Math.PI / 180, null);
 
     private final String name;
     private final String display;
+    private final double baseRadian;
     private final ValueRange range;
 
-    private Angle(String name, String display, ValueRange range) {
+    private Angle(final String name, final String display, final double baseRadian, ValueRange range) {
         this.name = name;
         this.display = display;
+        this.baseRadian = baseRadian;
         this.range = range;
     }
 
@@ -51,7 +53,7 @@ public enum Angle implements ConvertibleUnit {
      */
     @Override
     public double toBaseUnit(final double num) {
-        return 0;
+        return num*baseRadian;
     }
 
     /**
@@ -62,6 +64,6 @@ public enum Angle implements ConvertibleUnit {
      */
     @Override
     public double toCurrentUnit(final double base) {
-        return 0;
+        return base/baseRadian;
     }
 }
