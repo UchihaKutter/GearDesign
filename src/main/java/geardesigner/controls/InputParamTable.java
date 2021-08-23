@@ -2,7 +2,6 @@ package geardesigner.controls;
 
 import geardesigner.CodeException;
 import geardesigner.Log;
-import geardesigner.beans.Decimal;
 import geardesigner.units.ConvertibleUnit;
 import javafx.scene.control.TextFormatter;
 
@@ -87,7 +86,7 @@ public class InputParamTable extends ParamTable {
      * @param formatter TextFormatter
      * @throws CodeException
      */
-    public void setTextFormatter(String paramName, TextFormatter<Decimal> formatter) throws CodeException {
+    public void setTextFormatter(String paramName, TextFormatter<Double> formatter) throws CodeException {
         final Parameter parameter = table.get(paramName);
         if (parameter == null) {
             throw new CodeException("指定的参数名不存在");

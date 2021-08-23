@@ -1,6 +1,5 @@
 package geardesigner.controls;
 
-import geardesigner.beans.Decimal;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * @author SuperNote
  */
 
-public class OutputParameter extends Parameter {
+public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
     /**
      * 常量配置
      */
@@ -21,9 +20,9 @@ public class OutputParameter extends Parameter {
 
     private final Text field;
     private final IntegerProperty digit;
-    private Decimal value;
+    private Number value;
 
-    public OutputParameter(String name, Decimal value, ConvertibleUnit unit) {
+    public OutputParameter(String name, Double value, U unit) {
         super(name, unit);
         this.field = new Text();
         this.value = value;
@@ -37,7 +36,7 @@ public class OutputParameter extends Parameter {
         this(name, null, null);
     }
 
-    public OutputParameter(String name, ConvertibleUnit unit) {
+    public OutputParameter(String name, U unit) {
         this(name, null, unit);
     }
 
@@ -55,19 +54,33 @@ public class OutputParameter extends Parameter {
     }
 
     private void changed() {
-        field.setText(value == null ? null : value.toString(digit.intValue()));
+        field.setText(value == null ? null : DecimalFormatter.toString(value, digit.intValue()));
     }
 
-    //待办 2021/8/9:
+    /**
+     * 获取数值
+     *
+     * @return 当前参数框的基本单位值
+     */
     @Override
-    public @Nullable Decimal getValue() {
+    public @Nullable Number getValue() {
         return value;
     }
 
     @Override
-    public void setValue(@Nullable Decimal v) {
+    public void setValue(@Nullable Number v) {
         value = v;
         changed();
+    }
+
+    /**
+     * 获取当前参数框的物理值
+     *
+     * @return
+     */
+    public Number getPhysicalValue() {
+        final double v = value.doubleValue();
+        return unit == null ? v : unit.toCurrentUnit(v);
     }
 
     public int getDigit() {

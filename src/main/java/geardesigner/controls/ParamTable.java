@@ -3,7 +3,6 @@ package geardesigner.controls;
 import geardesigner.CodeException;
 import geardesigner.InputException;
 import geardesigner.Log;
-import geardesigner.beans.Decimal;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -132,7 +131,7 @@ public abstract class ParamTable extends VBox {
     abstract void initLayout();
 
 
-    public Decimal getValue(String name) throws CodeException, InputException {
+    public Number getValue(String name) throws CodeException, InputException {
         Parameter parameter = table.get(name);
         if (parameter != null) {
             return parameter.getValue();
@@ -140,7 +139,7 @@ public abstract class ParamTable extends VBox {
         throw new CodeException("没有这样的参数");
     }
 
-    public ParamTable setValue(String name, Decimal value) throws CodeException {
+    public ParamTable setValue(String name, Double value) throws CodeException {
         Parameter parameter = table.get(name);
         if (parameter != null) {
             parameter.setValue(value);
@@ -154,9 +153,9 @@ public abstract class ParamTable extends VBox {
      *
      * @return
      */
-    public Map<String, Decimal> getValues() throws InputException {
+    public Map<String, Number> getValues() throws InputException {
         final Set<Map.Entry<String, Parameter>> params = table.entrySet();
-        final Map<String, Decimal> cValues = new HashMap<>(params.size());
+        final Map<String, Number> cValues = new HashMap<>(params.size());
         for (Map.Entry<String, Parameter> p : params) {
             cValues.put(p.getKey(), p.getValue().getValue());
         }
@@ -169,10 +168,10 @@ public abstract class ParamTable extends VBox {
      *
      * @param values 新显示值的键值对
      */
-    public void setValues(Map<String, Decimal> values) throws CodeException {
+    public void setValues(Map<String, Number> values) throws CodeException {
         if (values != null) {
-            final Set<Map.Entry<String, Decimal>> es = values.entrySet();
-            for (Map.Entry<String, Decimal> e : es) {
+            final Set<Map.Entry<String, Number>> es = values.entrySet();
+            for (Map.Entry<String, Number> e : es) {
                 final Parameter p = table.get(e.getKey());
                 if (p != null) {
                     p.setValue(e.getValue());

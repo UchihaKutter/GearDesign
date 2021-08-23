@@ -53,7 +53,7 @@ public enum Angle implements ConvertibleUnit {
      */
     @Override
     public double toBaseUnit(final double num) {
-        return num*baseRadian;
+        return num * baseRadian;
     }
 
     /**
@@ -64,6 +64,6 @@ public enum Angle implements ConvertibleUnit {
      */
     @Override
     public double toCurrentUnit(final double base) {
-        return base/baseRadian;
+        return base / baseRadian;
     }
 }

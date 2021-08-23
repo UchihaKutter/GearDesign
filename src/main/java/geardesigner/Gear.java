@@ -1,6 +1,5 @@
 package geardesigner;
 
-import geardesigner.beans.Decimal;
 import geardesigner.beans.Specifications;
 
 /**
@@ -108,60 +107,60 @@ public strictfp class Gear {
         return df;
     }
 
-    public Decimal getWk() {
-        return Decimal.valueOf(baseTangent.Wk);
+    public Double getWk() {
+        return baseTangent.Wk;
     }
 
-    public Decimal getDWk() {
-        return Decimal.valueOf(baseTangent.dWk);
+    public Double getDWk() {
+        return baseTangent.dWk;
     }
 
-    public Decimal getDkm() {
-        return Decimal.valueOf(span.dkm);
+    public Double getDkm() {
+        return span.dkm;
     }
 
-    public Decimal getX1() {
-        return Decimal.valueOf(baseTangent.x1);
+    public Double getX1() {
+        return baseTangent.x1;
     }
 
-    public Decimal getM1() {
-        return Decimal.valueOf(baseTangent.M1);
+    public Double getM1() {
+        return baseTangent.M1;
     }
 
-    public Decimal getMs() {
-        return Decimal.valueOf(baseTangent.Ms);
+    public Double getMs() {
+        return baseTangent.Ms;
     }
 
-    public Decimal getX2() {
-        return Decimal.valueOf(baseTangent.x2);
+    public Double getX2() {
+        return baseTangent.x2;
     }
 
-    public Decimal getM2() {
-        return Decimal.valueOf(baseTangent.M2);
+    public Double getM2() {
+        return baseTangent.M2;
     }
 
-    public Decimal getMx() {
-        return Decimal.valueOf(baseTangent.Mx);
+    public Double getMx() {
+        return baseTangent.Mx;
     }
 
-    public Decimal getAlphaM1() {
-        return Decimal.valueOf(span.alphaM1);
+    public Double getAlphaM1() {
+        return span.alphaM1;
     }
 
-    public Decimal getWs() {
-        return Decimal.valueOf(span.Ws);
+    public Double getWs() {
+        return span.Ws;
     }
 
-    public Decimal getAlphaM2() {
-        return Decimal.valueOf(span.alphaM2);
+    public Double getAlphaM2() {
+        return span.alphaM2;
     }
 
-    public Decimal getWx() {
-        return Decimal.valueOf(span.Wx);
+    public Double getWx() {
+        return span.Wx;
     }
 
-    public Decimal getM() {
-        return Decimal.valueOf(span.M);
+    public Double getM() {
+        return span.M;
     }
 
     /**
@@ -446,7 +445,7 @@ public strictfp class Gear {
          */
         private double sn1;
 
-        public AnyCircle(Decimal da) {
+        public AnyCircle(Double da) {
             this.da1 = da.doubleValue();
         }
 
@@ -526,28 +525,28 @@ public strictfp class Gear {
             return this;
         }
 
-        public Decimal getDa1() {
-            return Decimal.valueOf(da1);
+        public Double getDa1() {
+            return da1;
         }
 
-        public Decimal getAlphaT1() {
-            return Decimal.valueOf(alphaT1);
+        public Double getAlphaT1() {
+            return alphaT1;
         }
 
-        public Decimal getS() {
-            return Decimal.valueOf(s);
+        public Double getS() {
+            return s;
         }
 
-        public Decimal getSa1() {
-            return Decimal.valueOf(sa1);
+        public Double getSa1() {
+            return sa1;
         }
 
-        public Decimal getBeta1() {
-            return Decimal.valueOf(beta1);
+        public Double getBeta1() {
+            return beta1;
         }
 
-        public Decimal getSn1() {
-            return Decimal.valueOf(sn1);
+        public Double getSn1() {
+            return sn1;
         }
     }
 }

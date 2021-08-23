@@ -1,6 +1,5 @@
 package geardesigner;
 
-import geardesigner.beans.Decimal;
 import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
 import geardesigner.controls.DecimalFormatter;
@@ -82,7 +81,7 @@ public class Controller {
      * @return 计算结果Gear.AnyCircle
      */
     @Contract(value = "!null,!null->!null", pure = true)
-    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Decimal diameter) {
+    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Double diameter) {
         return gear.new AnyCircle(diameter).calculate();
     }
 
@@ -185,7 +184,7 @@ public class Controller {
     }
 
     private @NotNull Specifications getAllSpecs() throws InputException {
-        final Map<String, Decimal> values = tableInputParams.getValues();
+        final Map<String, Number> values = tableInputParams.getValues();
         return new Specifications(values);
     }
 
@@ -240,7 +239,7 @@ public class Controller {
         final String dText = tfDoubleAnyCircle.getText().trim();
         Gear.AnyCircle anyCircle = null;
         if (!dText.isBlank() && checkAnyCircleInputs()) {
-            final Decimal diameter = Decimal.valueOf(dText);
+            final Double diameter = Double.valueOf(dText);
             anyCircle = calculateAnyCircle(gear, diameter);
         } else if (popup) {
             //todo"参数输入不全，无法计算任一圆";
@@ -291,18 +290,18 @@ public class Controller {
      */
     private void setTableBaseTanAndSpan(Gear gear) throws CodeException {
         if (gear != null) {
-            tableBaseTanAndSpan.setValue("分度圆直径", Decimal.valueOf(gear.d))
-                    .setValue("齿顶圆直径", Decimal.valueOf(gear.da))
-                    .setValue("齿根圆直径", Decimal.valueOf(gear.df))
-                    .setValue("基园", Decimal.valueOf(gear.db))
-                    .setValue("当量齿数", Decimal.valueOf(gear.Zp))
-                    .setValue("跨齿数", Decimal.valueOf(gear.k))
+            tableBaseTanAndSpan.setValue("分度圆直径", gear.d)
+                    .setValue("齿顶圆直径", gear.da)
+                    .setValue("齿根圆直径", gear.df)
+                    .setValue("基园", gear.db)
+                    .setValue("当量齿数", gear.Zp)
+                    .setValue("跨齿数", (double) gear.k)
                     .setValue("公法线长度", gear.getWk())
                     .setValue("公法线长度处直径", gear.getDWk())
                     .setValue("跨棒距测量点直径", gear.getDkm())
                     .setValue("跨棒距", gear.getM());
             //待办 2021/8/21: 单位转换
-            tableBaseTanAndSpan.setValue("端面压力角", Decimal.valueOf(gear.alphaT));
+            tableBaseTanAndSpan.setValue("端面压力角", gear.alphaT);
         }
     }
 

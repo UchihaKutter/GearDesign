@@ -63,7 +63,7 @@ public enum Length implements ConvertibleUnit {
      */
     @Override
     public double toBaseUnit(final double num) {
-        return num/1000*baseMicro;
+        return num / 1000 * baseMicro;
     }
 
     /**
@@ -74,6 +74,6 @@ public enum Length implements ConvertibleUnit {
      */
     @Override
     public double toCurrentUnit(final double base) {
-        return base*1000/baseMicro;
+        return base * 1000 / baseMicro;
     }
 }

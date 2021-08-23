@@ -1,7 +1,6 @@
 package geardesigner.controls;
 
 import geardesigner.InputException;
-import geardesigner.beans.Decimal;
 import geardesigner.units.ConvertibleUnit;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -12,12 +11,12 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author SUPERSTATION
  */
-public class InputParameter extends Parameter {
+public class InputParameter<U extends ConvertibleUnit> extends Parameter {
     private final TextField field;
 
-    public InputParameter(String name, Decimal initialValue, ConvertibleUnit unit) {
+    public InputParameter(String name, Number initialValue, U unit) {
         super(name, unit);
-        this.field = (initialValue == null) ? new TextField() : new TextField(initialValue.toString());
+        this.field = new TextField((initialValue == null) ? null : String.valueOf(initialValue));
         valuePane.getChildren().add(this.field);
     }
 
@@ -25,7 +24,7 @@ public class InputParameter extends Parameter {
         this(name, null, null);
     }
 
-    public InputParameter(String name, ConvertibleUnit unit) {
+    public InputParameter(String name, U unit) {
         this(name, null, unit);
     }
 
@@ -40,11 +39,13 @@ public class InputParameter extends Parameter {
     }
 
     /**
-     * @return null 或数值对象，
+     * 获取输入值
+     *
+     * @return null 或基本单位的数值
      * @throws
      */
     @Override
-    public @Nullable Decimal getValue() throws InputException {
+    public @Nullable Double getValue() throws InputException {
         final String vs = field.getText().trim();
         if (vs.isBlank()) {
             return null;
@@ -53,7 +54,8 @@ public class InputParameter extends Parameter {
              * 捕获输入不合法错误
              */
             try {
-                return Decimal.valueOf(vs);
+                final double v = Double.parseDouble(vs);
+                return unit == null ? v : unit.toBaseUnit(v);
             } catch (NumberFormatException e) {
                 throw new InputException("请输入正确的" + getName());
             }
@@ -61,14 +63,17 @@ public class InputParameter extends Parameter {
     }
 
     /**
+     * 为输入框设定值。注意：系统内值的处理，总是使用基本单位
+     *
      * @param v
      */
     @Override
-    public void setValue(final @Nullable Decimal v) {
-        /**
-         * 先禁用TextFormatter再启用，以支持输入任意值
-         */
-        field.setText(v == null ? null : String.valueOf(v.doubleValue()));
+    void setValue(final @Nullable Number v) {
+        if (v == null) {
+            field.setText(null);
+        } else {
+            field.setText(String.valueOf(unit == null ? v : unit.toCurrentUnit((Double) v)));
+        }
     }
 
     public void setPromptText(@Nullable final String str) {
@@ -80,7 +85,7 @@ public class InputParameter extends Parameter {
      *
      * @param formatter 不能和其他输入框共用格式化器实例
      */
-    public void setTextFormatter(TextFormatter<Decimal> formatter) {
+    public void setTextFormatter(TextFormatter<Double> formatter) {
         field.setTextFormatter(formatter);
     }
 }

@@ -4,6 +4,7 @@ import geardesigner.MathUtils;
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.function.UnaryOperator;
@@ -14,6 +15,19 @@ import java.util.function.UnaryOperator;
  * @author SUPERSTATION
  */
 public class DecimalFormatter<T extends Double> extends TextFormatter<T> {
+
+    /**
+     * 内置的格式化器
+     */
+    private static final DecimalFormat[] Formatter = new DecimalFormat[]{
+            new DecimalFormat("0"),
+            new DecimalFormat("0.#"),
+            new DecimalFormat("0.##"),
+            new DecimalFormat("0.###"),
+            new DecimalFormat("0.####"),
+            new DecimalFormat("0.#####"),
+            new DecimalFormat("0.######")
+    };
 
     /**
      * 使用指定的Converter和Filter创建Formatter,Converter必须指定 default value.
@@ -29,6 +43,13 @@ public class DecimalFormatter<T extends Double> extends TextFormatter<T> {
 
     DecimalFormatter() {
         this(null, null, new DecimalFilter());
+    }
+
+    public static String toString(Number num, int digit) {
+        if (digit < 0 || digit >= Formatter.length) {
+            throw new NumberFormatException("不支持的保留位数");
+        }
+        return Formatter[digit].format(num);
     }
 
     static class DecimalFilter implements UnaryOperator<Change> {

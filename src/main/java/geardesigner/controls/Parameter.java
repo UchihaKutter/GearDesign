@@ -1,7 +1,6 @@
 package geardesigner.controls;
 
 import geardesigner.InputException;
-import geardesigner.beans.Decimal;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author SUPERSTATION
  */
-public abstract class Parameter extends HBox {
+public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     /**
      * Stylesheet Handling
      */
@@ -29,7 +28,7 @@ public abstract class Parameter extends HBox {
     final StackPane symbolPane;
     private final Text name;
     private final ImageView symbol;
-    private ConvertibleUnit unit;
+    U unit;
 
     public Parameter(String name) {
         this(name, null);
@@ -39,7 +38,7 @@ public abstract class Parameter extends HBox {
      * @param name Parameter控件实例的名称
      * @param unit 应为Latex字符串
      */
-    public Parameter(String name, ConvertibleUnit unit) {
+    public Parameter(String name, U unit) {
         this.name = new Text();
         this.name.setText(name);
 
@@ -85,7 +84,7 @@ public abstract class Parameter extends HBox {
         return name.getText().trim();
     }
 
-    public final ConvertibleUnit getUnit() {
+    public final U getUnit() {
         return unit == null ? null : unit;
     }
 
@@ -94,7 +93,7 @@ public abstract class Parameter extends HBox {
      *
      * @param unit Latex格式字符串表示的数值单位
      */
-    public final void setUnit(@NotNull ConvertibleUnit unit) {
+    public final void setUnit(@NotNull U unit) {
         this.unit = unit;
         refresh();
     }
@@ -102,16 +101,18 @@ public abstract class Parameter extends HBox {
     /**
      * 获取Parameter的值。注意：系统内值的处理，总是使用基本单位
      *
-     * @return 返回 Parameter 面板实例当前的值
+     * @return 返回 Parameter 面板实例当前的基本单位值
      * @throws InputException 对输入框，可能会抛出输入不合法错误
      */
     @Nullable
-    public abstract Decimal getValue() throws InputException;
+    public abstract Number getValue() throws InputException;
 
     /**
-     * @param v 为 Parameter 面板实例设定新的值.注意：系统内值的处理，总是使用基本单位
+     * 注意：系统内值的处理，转换为基本单位
+     *
+     * @param v 为 Parameter 面板实例设定新的值
      */
-    public abstract void setValue(@Nullable Decimal v);
+    abstract void setValue(@Nullable Number v);
 
     public final void bindNamePreWidthProperty(Property<Number> width) {
         namePane.prefWidthProperty().bindBidirectional(width);

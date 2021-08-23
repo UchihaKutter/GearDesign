@@ -99,7 +99,7 @@ public strictfp class Specifications implements Serializable {
     }
 
 
-    public Specifications(@NotNull Map<String, Decimal> specs) throws InputException {
+    public Specifications(@NotNull Map<String, Number> specs) throws InputException {
         try {
             Mn = specs.get("法向模数").intValue();
             Z = specs.get("齿数(内齿为负)").intValue();
@@ -133,21 +133,21 @@ public strictfp class Specifications implements Serializable {
         return true;//// TODO: 2020/2/9 检查参数设置是否合法
     }
 
-    public @NotNull Map<String, Decimal> toValueMap() {
+    public @NotNull Map<String, Number> toValueMap() {
         return Map.ofEntries(
-                Map.entry("法向模数", Decimal.valueOf(Mn)),
-                Map.entry("齿数(内齿为负)", Decimal.valueOf(Z)),
-                Map.entry("法向压力角", Decimal.valueOf(alphaN)),
-                Map.entry("螺旋角", Decimal.valueOf(beta)),
-                Map.entry("法向变位系数", Decimal.valueOf(Xn)),
-                Map.entry("齿顶高系数", Decimal.valueOf(ha)),
-                Map.entry("齿根高系数", Decimal.valueOf(hf)),
-                Map.entry("顶隙系数", Decimal.valueOf(Cf)),
-                Map.entry("量棒直径", Decimal.valueOf(dp)),
-                Map.entry("公法线上偏差", Decimal.valueOf(Ws)),
-                Map.entry("公法线下偏差", Decimal.valueOf(Wx)),
-                Map.entry("跨棒距上偏差", Decimal.valueOf(Ms)),
-                Map.entry("跨棒距下偏差", Decimal.valueOf(Mx)));
+                Map.entry("法向模数", Mn),
+                Map.entry("齿数(内齿为负)", Z),
+                Map.entry("法向压力角", alphaN),
+                Map.entry("螺旋角", beta),
+                Map.entry("法向变位系数", Xn),
+                Map.entry("齿顶高系数", ha),
+                Map.entry("齿根高系数", hf),
+                Map.entry("顶隙系数", Cf),
+                Map.entry("量棒直径", dp),
+                Map.entry("公法线上偏差", Ws),
+                Map.entry("公法线下偏差", Wx),
+                Map.entry("跨棒距上偏差", Ms),
+                Map.entry("跨棒距下偏差", Mx));
     }
 
     @Override
