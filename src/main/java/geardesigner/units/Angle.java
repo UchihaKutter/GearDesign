@@ -6,7 +6,10 @@ package geardesigner.units;
  * @author SUPERSTATION
  */
 
-public enum Angle implements BaseUnit {
+public enum Angle implements ConvertibleUnit {
+    /**
+     * 定义设计中常用的角的大小单位度、弧度。以弧度作为基本单位
+     */
     RADIANS("弧度", "rad", null),
     DEGREES("度", "°", null);
 
@@ -38,5 +41,27 @@ public enum Angle implements BaseUnit {
     @Override
     public String getDisplay() {
         return display;
+    }
+
+    /**
+     * 将当前单位的数值，转换为同物理量对应基本单位的数值
+     *
+     * @param num 将当前单位的数值
+     * @return 基本单位的数值
+     */
+    @Override
+    public double toBaseUnit(final double num) {
+        return 0;
+    }
+
+    /**
+     * 将当前单位的数值，转换为当前单位的数值表示
+     *
+     * @param base 基本单位的数值
+     * @return 将当前单位的数值
+     */
+    @Override
+    public double toCurrentUnit(final double base) {
+        return 0;
     }
 }

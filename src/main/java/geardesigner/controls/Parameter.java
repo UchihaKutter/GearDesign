@@ -2,7 +2,7 @@ package geardesigner.controls;
 
 import geardesigner.InputException;
 import geardesigner.beans.Decimal;
-import geardesigner.units.BaseUnit;
+import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
@@ -29,7 +29,7 @@ public abstract class Parameter extends HBox {
     final StackPane symbolPane;
     private final Text name;
     private final ImageView symbol;
-    private BaseUnit unit;
+    private ConvertibleUnit unit;
 
     public Parameter(String name) {
         this(name, null);
@@ -39,7 +39,7 @@ public abstract class Parameter extends HBox {
      * @param name Parameter控件实例的名称
      * @param unit 应为Latex字符串
      */
-    public Parameter(String name, BaseUnit unit) {
+    public Parameter(String name, ConvertibleUnit unit) {
         this.name = new Text();
         this.name.setText(name);
 
@@ -85,7 +85,7 @@ public abstract class Parameter extends HBox {
         return name.getText().trim();
     }
 
-    public final BaseUnit getUnit() {
+    public final ConvertibleUnit getUnit() {
         return unit == null ? null : unit;
     }
 
@@ -94,13 +94,14 @@ public abstract class Parameter extends HBox {
      *
      * @param unit Latex格式字符串表示的数值单位
      */
-    public final void setUnit(@NotNull BaseUnit unit) {
-        //待办 2021/8/5: 修改为绑定同步刷新的
+    public final void setUnit(@NotNull ConvertibleUnit unit) {
         this.unit = unit;
         refresh();
     }
 
     /**
+     * 获取Parameter的值。注意：系统内值的处理，总是使用基本单位
+     *
      * @return 返回 Parameter 面板实例当前的值
      * @throws InputException 对输入框，可能会抛出输入不合法错误
      */
@@ -108,7 +109,7 @@ public abstract class Parameter extends HBox {
     public abstract Decimal getValue() throws InputException;
 
     /**
-     * @param v 为 Parameter 面板实例设定新的值
+     * @param v 为 Parameter 面板实例设定新的值.注意：系统内值的处理，总是使用基本单位
      */
     public abstract void setValue(@Nullable Decimal v);
 

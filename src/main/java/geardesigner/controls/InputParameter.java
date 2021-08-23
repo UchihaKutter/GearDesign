@@ -2,7 +2,7 @@ package geardesigner.controls;
 
 import geardesigner.InputException;
 import geardesigner.beans.Decimal;
-import geardesigner.units.BaseUnit;
+import geardesigner.units.ConvertibleUnit;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class InputParameter extends Parameter {
     private final TextField field;
 
-    public InputParameter(String name, Decimal initialValue, BaseUnit unit) {
+    public InputParameter(String name, Decimal initialValue, ConvertibleUnit unit) {
         super(name, unit);
         this.field = (initialValue == null) ? new TextField() : new TextField(initialValue.toString());
         valuePane.getChildren().add(this.field);
@@ -25,7 +25,7 @@ public class InputParameter extends Parameter {
         this(name, null, null);
     }
 
-    public InputParameter(String name, BaseUnit unit) {
+    public InputParameter(String name, ConvertibleUnit unit) {
         this(name, null, unit);
     }
 

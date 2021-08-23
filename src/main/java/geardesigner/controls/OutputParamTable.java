@@ -1,6 +1,6 @@
 package geardesigner.controls;
 
-import geardesigner.units.BaseUnit;
+import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class OutputParamTable extends ParamTable {
             final Parameter[] pcs = new Parameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
-                    final OutputParameter pc = new OutputParameter((String) pNameAndUnit[i][0], (BaseUnit) pNameAndUnit[i][1]);
+                    final OutputParameter pc = new OutputParameter((String) pNameAndUnit[i][0], (ConvertibleUnit) pNameAndUnit[i][1]);
                     pcs[i] = pc;
                 }
             }

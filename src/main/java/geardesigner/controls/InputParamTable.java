@@ -3,7 +3,7 @@ package geardesigner.controls;
 import geardesigner.CodeException;
 import geardesigner.Log;
 import geardesigner.beans.Decimal;
-import geardesigner.units.BaseUnit;
+import geardesigner.units.ConvertibleUnit;
 import javafx.scene.control.TextFormatter;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class InputParamTable extends ParamTable {
             final Parameter[] pcs = new Parameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
-                    pcs[i] = new InputParameter((String) pNameAndUnit[i][0], (BaseUnit) pNameAndUnit[i][1]);
+                    pcs[i] = new InputParameter((String) pNameAndUnit[i][0], (ConvertibleUnit) pNameAndUnit[i][1]);
                 }
             }
             return new InputParamTable(paneName, colName, pcs);

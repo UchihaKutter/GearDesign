@@ -1,7 +1,7 @@
 package geardesigner.controls;
 
 import geardesigner.beans.Decimal;
-import geardesigner.units.BaseUnit;
+import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -23,7 +23,7 @@ public class OutputParameter extends Parameter {
     private final IntegerProperty digit;
     private Decimal value;
 
-    public OutputParameter(String name, Decimal value, BaseUnit unit) {
+    public OutputParameter(String name, Decimal value, ConvertibleUnit unit) {
         super(name, unit);
         this.field = new Text();
         this.value = value;
@@ -37,7 +37,7 @@ public class OutputParameter extends Parameter {
         this(name, null, null);
     }
 
-    public OutputParameter(String name, BaseUnit unit) {
+    public OutputParameter(String name, ConvertibleUnit unit) {
         this(name, null, unit);
     }
 

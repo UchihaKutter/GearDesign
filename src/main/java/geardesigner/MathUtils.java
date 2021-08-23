@@ -1,6 +1,5 @@
 package geardesigner;
 
-import geardesigner.beans.Decimal;
 import org.apache.commons.math3.util.Precision;
 
 import java.util.regex.Pattern;
@@ -12,10 +11,6 @@ public final class MathUtils {
     private final static Pattern pNums = Pattern.compile("^-?\\d+(\\.\\d+)?([eE]-?\\d+)?$");
 
     private MathUtils() {
-    }
-
-    public static Decimal toDegrees(Decimal rad) {
-        return Decimal.valueOf(Math.toDegrees(rad.doubleValue()));
     }
 
     /**
