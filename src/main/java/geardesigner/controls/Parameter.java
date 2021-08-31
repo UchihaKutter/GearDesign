@@ -74,11 +74,17 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     /**
      * UI控件显示刷新
      */
-    public void refresh() {
+    void refresh() {
         if (unit != null) {
             symbol.setImage(new TexFormula(unit.getDisplay()).getPatternImage());
+            refreshDisplayValue();
         }
     }
+
+    /**
+     * 根据单位的改变，转换参数框中的显示数值
+     */
+    abstract void refreshDisplayValue();
 
     public final String getName() {
         return name.getText().trim();
@@ -91,9 +97,17 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     /**
      * 修改单位
      *
-     * @param unit Latex格式字符串表示的数值单位
+     * @param unit 可转换单位的枚举类型
      */
     public final void setUnit(@NotNull U unit) {
+        /**
+         * 先检查传入的Unit和已有Unit是否属于同一系列，否则拒绝修改
+         */
+        if (this.unit != null) {
+            if (!this.unit.getClass().isInstance(unit)) {
+                throw new ClassCastException("不同类型的度量单位不能相互转换");
+            }
+        }
         this.unit = unit;
         refresh();
     }
@@ -110,7 +124,7 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     /**
      * 注意：系统内值的处理，转换为基本单位
      *
-     * @param v 为 Parameter 面板实例设定新的值
+     * @param v 为 Parameter 面板实例设定新的值,应为基本单位值
      */
     abstract void setValue(@Nullable Number v);
 

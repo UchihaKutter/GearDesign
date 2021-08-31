@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 /**
  * @author SUPERSTATION
  */
@@ -14,7 +16,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        URL resource = getClass().getResource("Main.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(resource);
         Parent root = fxmlLoader.load();
         primaryStage.setTitle("齿轮设计计算器");
         primaryStage.setScene(new Scene(root));

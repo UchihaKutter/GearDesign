@@ -34,8 +34,15 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
         this.getChildren().addAll(namePane, symbolPane, valuePane);
     }
 
-    private void initListener() {
+    @Override
+    void refreshDisplayValue() {
 
+    }
+
+    private void initListener() {
+        /**
+         * 输入框变更度量单位时，对数值什么也不做
+         */
     }
 
     /**

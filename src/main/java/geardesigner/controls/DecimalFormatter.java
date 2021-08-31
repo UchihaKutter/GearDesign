@@ -3,6 +3,7 @@ package geardesigner.controls;
 import geardesigner.MathUtils;
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.Contract;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -45,7 +46,11 @@ public class DecimalFormatter<T extends Double> extends TextFormatter<T> {
         this(null, null, new DecimalFilter());
     }
 
+    @Contract(value = "null,_->null", pure = true)
     public static String toString(Number num, int digit) {
+        if (num==null){
+            return null;
+        }
         if (digit < 0 || digit >= Formatter.length) {
             throw new NumberFormatException("不支持的保留位数");
         }

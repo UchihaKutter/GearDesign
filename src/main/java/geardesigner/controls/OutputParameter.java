@@ -20,6 +20,9 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
 
     private final Text field;
     private final IntegerProperty digit;
+    /**
+     * 内部存储的数值，采用基本度量单位
+     */
     private Number value;
 
     public OutputParameter(String name, Double value, U unit) {
@@ -46,6 +49,11 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
         this.getChildren().addAll(namePane, valuePane, symbolPane);
     }
 
+    @Override
+    void refreshDisplayValue() {
+        changed();
+    }
+
     /**
      * 初始化监听器
      */
@@ -54,7 +62,7 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
     }
 
     private void changed() {
-        field.setText(value == null ? null : DecimalFormatter.toString(value, digit.intValue()));
+        field.setText(DecimalFormatter.toString(getPhysicalValue(), digit.intValue()));
     }
 
     /**
@@ -67,6 +75,9 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
         return value;
     }
 
+    /**
+     * @param v 为 Parameter 面板实例设定新的值，应为基本单位值
+     */
     @Override
     public void setValue(@Nullable Number v) {
         value = v;
@@ -78,9 +89,13 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
      *
      * @return
      */
+    @Nullable
     public Number getPhysicalValue() {
-        final double v = value.doubleValue();
-        return unit == null ? v : unit.toCurrentUnit(v);
+        if (value == null) {
+            return null;
+        } else {
+            return unit == null ? value : unit.toCurrentUnit(value.doubleValue());
+        }
     }
 
     public int getDigit() {
