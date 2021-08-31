@@ -4,7 +4,6 @@ import geardesigner.InputException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -27,7 +26,7 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     final StackPane valuePane;
     final StackPane symbolPane;
     private final Text name;
-    private final ImageView symbol;
+
     U unit;
 
     /**
@@ -37,21 +36,16 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     Parameter(String name, U unit) {
         this.name = new Text();
         this.name.setText(name);
-
-        this.symbol = new ImageView();
         this.namePane = new StackPane(this.name);
         this.valuePane = new StackPane();
-        this.symbolPane = new StackPane(this.symbol);
+        this.symbolPane = new StackPane();
         if (unit != null) {
             this.unit = unit;
         }
-        initStyle();
+        initCommonStyle();
     }
 
-    /**
-     * 派生类应重写该方法，修改组件的布局
-     */
-    void initStyle() {
+    private void initCommonStyle() {
         /**
          * 设定CSS类选择器名和ID选择器
          */
@@ -64,17 +58,17 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
         namePane.setAlignment(Pos.BOTTOM_LEFT);
         valuePane.setAlignment(Pos.BOTTOM_RIGHT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
-        refresh();
     }
+
+    /**
+     * 派生类应在构造方法赋值的末尾，调用该方法
+     */
+    abstract void initStyle();
 
     /**
      * UI控件显示刷新
      */
-    void refresh() {
-        if (unit != null) {
-            symbol.setImage(new TexFormula(unit.getDisplay()).getPatternImage());
-        }
-    }
+    abstract void refresh();
 
     public final String getName() {
         return name.getText().trim();

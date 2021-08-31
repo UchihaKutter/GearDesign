@@ -2,6 +2,8 @@ package geardesigner.controls;
 
 import geardesigner.InputException;
 import geardesigner.units.ConvertibleUnit;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +15,27 @@ import org.jetbrains.annotations.Nullable;
  */
 public class InputParameter<U extends ConvertibleUnit> extends Parameter {
     private final TextField field;
+    private final ChoiceBox<U> units;
 
     public InputParameter(String name, Number initialValue, U unit) {
         super(name, unit);
         this.field = new TextField((initialValue == null) ? null : String.valueOf(initialValue));
+        this.units = new ChoiceBox<>();
+        initStyle();
+
         valuePane.getChildren().add(this.field);
+        symbolPane.getChildren().add(this.units);
+        /**
+         * 填充候选单位
+         */
+        if (unit != null) {
+            final ConvertibleUnit[] enumConstants = unit.getClass().getEnumConstants();
+            final ObservableList<U> items = units.getItems();
+            for (ConvertibleUnit u : enumConstants) {
+                items.add((U) u);
+            }
+            units.setValue(unit);
+        }
     }
 
     public InputParameter(String name) {
@@ -30,14 +48,16 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
 
     @Override
     void initStyle() {
-        super.initStyle();
         this.getChildren().addAll(namePane, symbolPane, valuePane);
     }
 
+    @Override
+    void refresh() {
+
+    }
+
     private void initListener() {
-        /**
-         * 输入框变更度量单位时，对数值什么也不做
-         */
+
     }
 
     /**

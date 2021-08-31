@@ -4,6 +4,7 @@ import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
      */
     public static final int DEFAULT_SCALE_DIGIT = 3;
 
+    private final ImageView symbol;
     private final Text field;
     private final IntegerProperty digit;
     /**
@@ -27,10 +29,14 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
 
     public OutputParameter(String name, Double value, U unit) {
         super(name, unit);
+        this.symbol = new ImageView();
         this.field = new Text();
         this.value = value;
         this.digit = new SimpleIntegerProperty(DEFAULT_SCALE_DIGIT);
+
+        symbolPane.getChildren().add(this.symbol);
         valuePane.getChildren().add(this.field);
+        initStyle();
         initListener();
         changed();
     }
@@ -45,8 +51,8 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
 
     @Override
     void initStyle() {
-        super.initStyle();
         this.getChildren().addAll(namePane, valuePane, symbolPane);
+        refresh();
     }
 
     /**
@@ -54,7 +60,9 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
      */
     @Override
     void refresh() {
-        super.refresh();
+        if (unit != null) {
+            symbol.setImage(new TexFormula(unit.getDisplay()).getPatternImage());
+        }
         changed();
     }
 
