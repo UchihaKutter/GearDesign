@@ -2,6 +2,7 @@ package geardesigner.controls;
 
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -93,5 +94,19 @@ public class OutputParamTable extends ParamTable {
             }
         }
         digit = ip;
+    }
+
+    /**
+     * 批量切换参数值度量单位
+     *
+     * @param oldUnit
+     * @param newUnit
+     */
+    public void changeUnits(@NotNull final ConvertibleUnit oldUnit, @NotNull final ConvertibleUnit newUnit) {
+        if (oldUnit.getClass().isInstance(newUnit)) {
+            table.entrySet().parallelStream().filter(sp -> sp.getValue().getUnit() == oldUnit).forEach(sp -> sp.getValue().setUnit(newUnit));
+        } else {
+            throw new ClassCastException("不同类型的度量单位不能相互转换");
+        }
     }
 }

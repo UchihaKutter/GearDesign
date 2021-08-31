@@ -30,15 +30,11 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     private final ImageView symbol;
     U unit;
 
-    public Parameter(String name) {
-        this(name, null);
-    }
-
     /**
      * @param name Parameter控件实例的名称
      * @param unit 应为Latex字符串
      */
-    public Parameter(String name, U unit) {
+    Parameter(String name, U unit) {
         this.name = new Text();
         this.name.setText(name);
 
@@ -77,14 +73,8 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     void refresh() {
         if (unit != null) {
             symbol.setImage(new TexFormula(unit.getDisplay()).getPatternImage());
-            refreshDisplayValue();
         }
     }
-
-    /**
-     * 根据单位的改变，转换参数框中的显示数值
-     */
-    abstract void refreshDisplayValue();
 
     public final String getName() {
         return name.getText().trim();

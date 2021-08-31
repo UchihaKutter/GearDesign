@@ -26,7 +26,7 @@ public class TableSettings {
     public static final String ANY_CIRCLE_PARAMS_PANE_NAME = "任一圆规格";
     public static final String[] ANY_CIRCLE_PARAMS_COLUMNS = new String[]{"参数名", "计算值", "单位"};
     public static final Object[][] ANY_CIRCLE_PARAMS_NAME_UNIT
-            = new Object[][]{{"齿顶圆端面压力角", Angle.RADIANS}, {"分度圆处弧齿厚", Length.MILLIMETERS}, {"任一圆处弧齿厚", Length.MILLIMETERS},
+            = new Object[][]{{"齿顶圆端面压力角", Angle.RADIANS}, {"分度圆弧齿厚", Length.MILLIMETERS}, {"任一圆弧齿厚", Length.MILLIMETERS},
             {"任一园螺旋角", Length.MILLIMETERS}, {"任一圆法向弦齿厚", Length.MILLIMETERS}};
     /**
      * 公法线与跨帮距计算结果数据面板设置

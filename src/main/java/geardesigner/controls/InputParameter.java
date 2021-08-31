@@ -34,11 +34,6 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
         this.getChildren().addAll(namePane, symbolPane, valuePane);
     }
 
-    @Override
-    void refreshDisplayValue() {
-
-    }
-
     private void initListener() {
         /**
          * 输入框变更度量单位时，对数值什么也不做
@@ -49,7 +44,7 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
      * 获取输入值
      *
      * @return null 或基本单位的数值
-     * @throws
+     * @throws InputException
      */
     @Override
     public @Nullable Double getValue() throws InputException {

@@ -5,6 +5,7 @@ import geardesigner.beans.Specifications;
 import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
+import geardesigner.units.Angle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -66,7 +67,6 @@ public class Controller {
     private OutputParamTable tableDeviation;
 
     private IntegerProperty preservedDigits;
-    private boolean isRadius = false;
 
     private Gear gear;
 
@@ -85,7 +85,7 @@ public class Controller {
         return gear.new AnyCircle(diameter).calculate();
     }
 
-    private static final void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
+    private static void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
         AnchorPane.setLeftAnchor(childOfAnchorPane, 0.0);
         AnchorPane.setRightAnchor(childOfAnchorPane, 0.0);
         AnchorPane.setTopAnchor(childOfAnchorPane, 0.0);
@@ -100,8 +100,14 @@ public class Controller {
         APaneDeviation.getChildren().add(tableDeviation);
         btCalculate.setOnAction(event -> refreshGear());
         btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
-//        rbToDegree.setOnAction(event -> angleUnitSwitch());
-//        rbToRadius.setOnAction(event -> angleUnitSwitch());
+        /**
+         * 角度值切换
+         */
+        groupAngles.selectedToggleProperty().addListener((observableValue, oldToggle, newToggle) -> {
+            if (oldToggle != newToggle) {
+                refreshAngleDisplay();
+            }
+        });
         setLayout();
         initChoiceBox();
         initBindings();
@@ -208,6 +214,19 @@ public class Controller {
         }
     }
 
+    private void refreshAngleDisplay() {
+        final Toggle selectedToggle = groupAngles.getSelectedToggle();
+        if (selectedToggle.equals(rbToDegree)) {
+            tableAnyCircle.changeUnits(Angle.RADIANS, Angle.DEGREES);
+            tableBaseTanAndSpan.changeUnits(Angle.RADIANS, Angle.DEGREES);
+            tableDeviation.changeUnits(Angle.RADIANS, Angle.DEGREES);
+        } else if (selectedToggle.equals(rbToRadius)) {
+            tableAnyCircle.changeUnits(Angle.DEGREES, Angle.RADIANS);
+            tableBaseTanAndSpan.changeUnits(Angle.DEGREES, Angle.RADIANS);
+            tableDeviation.changeUnits(Angle.DEGREES, Angle.RADIANS);
+        }
+    }
+
     private void flushTables() {
         flushTableBaseTanAndSpan();
         flushTableDeviation();
@@ -263,17 +282,16 @@ public class Controller {
     private void setTableAnyCircle(Gear.AnyCircle anyCircle) throws CodeException {
         if (anyCircle == null) {
             tableAnyCircle.setValue("齿顶圆端面压力角", null)
-                    .setValue("分度圆处弧齿厚", null)
-                    .setValue("任一圆处弧齿厚", null)
-                    .setValue("任一圆处法向弦齿厚", null)
+                    .setValue("分度圆弧齿厚", null)
+                    .setValue("任一圆弧齿厚", null)
+                    .setValue("任一圆法向弦齿厚", null)
                     .setValue("任一园螺旋角", null);
         } else {
             tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
-                    .setValue("分度圆处弧齿厚", anyCircle.getS())
-                    .setValue("任一圆处弧齿厚", anyCircle.getSa1())
-                    .setValue("任一圆处法向弦齿厚", anyCircle.getSn1());
-            //待办 2021/8/9: 单位转换
-            tableAnyCircle.setValue("任一园螺旋角", anyCircle.getBeta1());
+                    .setValue("分度圆弧齿厚", anyCircle.getS())
+                    .setValue("任一圆弧齿厚", anyCircle.getSa1())
+                    .setValue("任一圆法向弦齿厚", anyCircle.getSn1())
+                    .setValue("任一园螺旋角", anyCircle.getBeta1());
         }
     }
 
@@ -299,9 +317,8 @@ public class Controller {
                     .setValue("公法线长度", gear.getWk())
                     .setValue("公法线长度处直径", gear.getDWk())
                     .setValue("跨棒距测量点直径", gear.getDkm())
-                    .setValue("跨棒距", gear.getM());
-            //待办 2021/8/21: 单位转换
-            tableBaseTanAndSpan.setValue("端面压力角", gear.alphaT);
+                    .setValue("跨棒距", gear.getM())
+                    .setValue("端面压力角", gear.alphaT);
         }
     }
 
@@ -317,18 +334,10 @@ public class Controller {
                     .setValue("跨棒距二", gear.getM2())
                     .setValue("跨棒距下偏差", gear.getMx())
                     .setValue("公法线上偏差Ws", gear.getWs())
-                    .setValue("公法线下偏差Wx", gear.getWx());
-            //待办 2021/8/21: 单位转换
-            tableDeviation.setValue("跨棒距上偏差am1", gear.getAlphaM1())
+                    .setValue("公法线下偏差Wx", gear.getWx())
+                    .setValue("跨棒距上偏差am1", gear.getAlphaM1())
                     .setValue("跨棒距下偏差am2", gear.getAlphaM2());
         }
     }
 
-//    private void angleUnitSwitch() {
-//        //待办 2021/8/6: 先检查待转换的参数是否完备
-//        isRadius = groupAngles.getSelectedToggle() == rbToRadius;
-//        setTableBaseTanAndSpan();
-//        setTableDeviation();
-//        setTableAnyCircle();
-//    }
 }

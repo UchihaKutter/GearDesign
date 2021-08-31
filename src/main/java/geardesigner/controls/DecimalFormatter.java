@@ -48,7 +48,7 @@ public class DecimalFormatter<T extends Double> extends TextFormatter<T> {
 
     @Contract(value = "null,_->null", pure = true)
     public static String toString(Number num, int digit) {
-        if (num==null){
+        if (num == null) {
             return null;
         }
         if (digit < 0 || digit >= Formatter.length) {

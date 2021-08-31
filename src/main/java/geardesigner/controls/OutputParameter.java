@@ -49,8 +49,12 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
         this.getChildren().addAll(namePane, valuePane, symbolPane);
     }
 
+    /**
+     * 重写refresh，根据单位的改变，转换参数框中的显示数值
+     */
     @Override
-    void refreshDisplayValue() {
+    void refresh() {
+        super.refresh();
         changed();
     }
 
@@ -62,7 +66,10 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
     }
 
     private void changed() {
-        field.setText(DecimalFormatter.toString(getPhysicalValue(), digit.intValue()));
+        Number physicalValue = getPhysicalValue();
+        if (physicalValue != null && digit != null) {
+            field.setText(DecimalFormatter.toString(physicalValue, digit.intValue()));
+        }
     }
 
     /**
