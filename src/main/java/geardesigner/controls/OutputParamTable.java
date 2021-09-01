@@ -52,6 +52,8 @@ public class OutputParamTable extends ParamTable {
             p.bindNamePreWidthProperty(Col0Width);
             p.bindValuePreWidthProperty(Col1Width);
             p.bindSymbolPreWidthProperty(Col2Width);
+
+            p.bindRowPreHeightProperty(RowHeight);
         }
     }
 
@@ -63,6 +65,10 @@ public class OutputParamTable extends ParamTable {
         Col0Width.setValue(120);
         Col1Width.setValue(120);
         Col2Width.setValue(60);
+        /**
+         * 设置行高
+         */
+        RowHeight.setValue(20);
     }
 
     /**
@@ -99,8 +105,8 @@ public class OutputParamTable extends ParamTable {
     /**
      * 批量切换参数值度量单位
      *
-     * @param oldUnit
-     * @param newUnit
+     * @param oldUnit ConvertibleUnit
+     * @param newUnit ConvertibleUnit
      */
     public void changeUnits(@NotNull final ConvertibleUnit oldUnit, @NotNull final ConvertibleUnit newUnit) {
         if (oldUnit.getClass().isInstance(newUnit)) {

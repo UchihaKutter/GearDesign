@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" stylesheets="@bootstrap2.css"
+<VBox xmlns:fx="http://javafx.com/fxml/1" stylesheets="@bootstrap2.css" xmlns="http://javafx.com/javafx/16"
       fx:controller="geardesigner.Controller">
     <children>
         <ToolBar prefHeight="30.0">
@@ -29,6 +28,9 @@
                                     </children>
                                 </HBox>
                             </children>
+                            <padding>
+                                <Insets bottom="10.0" top="10.0"/>
+                            </padding>
                         </VBox>
                         <AnchorPane fx:id="APaneAnyCircle"/>
                     </children>

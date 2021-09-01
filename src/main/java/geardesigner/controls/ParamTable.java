@@ -29,6 +29,8 @@ public abstract class ParamTable extends VBox {
     final Property<Number> Col1Width;
     final Property<Number> Col2Width;
 
+    final Property<Number> RowHeight;
+
     @FXML
     private Text tTitle;
 
@@ -48,11 +50,12 @@ public abstract class ParamTable extends VBox {
         fxmlLoader.setController(this);
         fxmlLoader.load();
         /**
-         * 初始化宽度可变对象
+         * 初始化宽/高度可变对象
          */
         Col0Width = new SimpleDoubleProperty();
         Col1Width = new SimpleDoubleProperty();
         Col2Width = new SimpleDoubleProperty();
+        RowHeight = new SimpleDoubleProperty();
         table = FXCollections.observableMap(new HashMap<>(pcs.length));
         setBinds();
         setNames(paneName, colName);
@@ -151,7 +154,7 @@ public abstract class ParamTable extends VBox {
     /**
      * 批量获取数据面板当前显示值。值可能不存在
      *
-     * @return
+     * @return 当前数据面板的显示值
      */
     public Map<String, Number> getValues() throws InputException {
         final Set<Map.Entry<String, Parameter>> params = table.entrySet();

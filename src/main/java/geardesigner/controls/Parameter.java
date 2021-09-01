@@ -124,6 +124,10 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
         valuePane.prefWidthProperty().bindBidirectional(width);
     }
 
+    public final void bindRowPreHeightProperty(Property<Number> height) {
+        this.prefHeightProperty().bind(height);
+    }
+
     @Override
     public String toString() {
         return "Parameter{" + "name=" + name.getText() + '}';

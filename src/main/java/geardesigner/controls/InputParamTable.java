@@ -25,8 +25,8 @@ public class InputParamTable extends ParamTable {
      * @param paneName
      * @param colName
      * @param pNameAndUnit 参数名和单位的pair数组，pNameAndUnit[i][0]必须是String，pNameAndUnit[i][1]必须是BaseUnit
-     * @return
-     * @throws IOException
+     * @return 新的InputParamTable实例
+     * @throws IOException ParamTable.fxml读取错误
      */
     public static InputParamTable createTable(final String paneName, final String[] colName, Object[][] pNameAndUnit) throws IOException {
         if (pNameAndUnit != null && pNameAndUnit.length > 0) {
@@ -48,6 +48,8 @@ public class InputParamTable extends ParamTable {
             p.bindNamePreWidthProperty(Col0Width);
             p.bindSymbolPreWidthProperty(Col1Width);
             p.bindValuePreWidthProperty(Col2Width);
+
+            p.bindRowPreHeightProperty(RowHeight);
         }
     }
 
@@ -84,7 +86,7 @@ public class InputParamTable extends ParamTable {
      *
      * @param paramName 参数控件名
      * @param formatter TextFormatter
-     * @throws CodeException
+     * @throws CodeException 编码错误
      */
     public void setTextFormatter(String paramName, TextFormatter<Double> formatter) throws CodeException {
         final Parameter parameter = table.get(paramName);
@@ -102,8 +104,8 @@ public class InputParamTable extends ParamTable {
     /**
      * 为所有文本框设置同种TextFormatter
      *
-     * @param cls
-     * @throws NoSuchMethodException
+     * @param cls TextFormatter的Class
+     * @throws NoSuchMethodException 编码错误
      */
     public void setTextFormatters(Class<? extends TextFormatter> cls) throws NoSuchMethodException {
         if (cls != null) {

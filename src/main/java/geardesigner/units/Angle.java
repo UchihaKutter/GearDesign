@@ -18,7 +18,7 @@ public enum Angle implements ConvertibleUnit {
     private final double baseRadian;
     private final ValueRange range;
 
-    private Angle(final String name, final String display, final double baseRadian, ValueRange range) {
+    Angle(final String name, final String display, final double baseRadian, ValueRange range) {
         this.name = name;
         this.display = display;
         this.baseRadian = baseRadian;
@@ -28,7 +28,7 @@ public enum Angle implements ConvertibleUnit {
     /**
      * 获取量纲单位的中文名称
      *
-     * @return
+     * @return 中文名称
      */
     @Override
     public String getName() {
@@ -38,7 +38,7 @@ public enum Angle implements ConvertibleUnit {
     /**
      * 获取量纲单位的latex表示
      *
-     * @return
+     * @return latex字符串
      */
     @Override
     public String getDisplay() {
