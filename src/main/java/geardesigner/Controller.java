@@ -98,7 +98,7 @@ public class Controller {
         APaneAnyCircle.getChildren().add(tableAnyCircle);
         APaneBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
         APaneDeviation.getChildren().add(tableDeviation);
-        btCalculate.setOnAction(event -> refreshGear());
+        btCalculate.setOnAction(event -> calGear());
         btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
         /**
          * 角度值切换
@@ -197,7 +197,7 @@ public class Controller {
     /**
      * 执行齿轮计算
      */
-    private void refreshGear() {
+    private void calGear() {
         try {
             Specifications specs = getAllSpecs();
             gear = new Gear(specs);
@@ -209,7 +209,7 @@ public class Controller {
             Services.get().RecordBase().submitRecord(new Record(specs));
             flushTables();
         } catch (InputException e) {
-            //待办 2021/8/9: 警告弹窗
+            //TODO 2021/8/9: 警告弹窗
             Log.warning("参数输入错误", e);
         }
     }
@@ -295,7 +295,7 @@ public class Controller {
         }
     }
 
-    //待办 2021/8/9: 执行计算前先检查参数是否齐备,不包含输入项”任一园直径“
+    //TODO 2021/8/9: 执行计算前先检查参数是否齐备,不包含输入项”任一园直径“
     private boolean checkAnyCircleInputs() {
         if (gear == null) {
             return false;
