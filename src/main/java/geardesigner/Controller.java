@@ -2,6 +2,7 @@ package geardesigner;
 
 import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
+import geardesigner.controls.Alerts;
 import geardesigner.controls.DecimalFormatter;
 import geardesigner.controls.InputParamTable;
 import geardesigner.controls.OutputParamTable;
@@ -209,7 +210,7 @@ public class Controller {
             Services.get().RecordBase().submitRecord(new Record(specs));
             flushTables();
         } catch (InputException e) {
-            //TODO 2021/8/9: 警告弹窗
+            Alerts.warning(tableInputParams.getScene().getWindow(), "请输入完整有效的设计参数");
             Log.warning("参数输入错误", e);
         }
     }
@@ -261,7 +262,7 @@ public class Controller {
             final Double diameter = Double.valueOf(dText);
             anyCircle = calculateAnyCircle(gear, diameter);
         } else if (popup) {
-            //todo"参数输入不全，无法计算任一圆";
+            Alerts.warning(tableAnyCircle.getScene().getWindow(), "请输入有效的任一园直径");
         }
         /**
          * 捕获编程错误
