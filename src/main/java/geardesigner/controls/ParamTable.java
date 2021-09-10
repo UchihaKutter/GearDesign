@@ -1,8 +1,8 @@
 package geardesigner.controls;
 
-import geardesigner.CodeException;
-import geardesigner.InputException;
 import geardesigner.Log;
+import geardesigner.beans.CodeException;
+import geardesigner.beans.InputException;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;

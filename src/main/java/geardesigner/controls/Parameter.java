@@ -1,6 +1,6 @@
 package geardesigner.controls;
 
-import geardesigner.InputException;
+import geardesigner.beans.InputException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.Property;
 import javafx.geometry.Pos;

@@ -1,7 +1,7 @@
 package geardesigner.controls;
 
-import geardesigner.CodeException;
 import geardesigner.Log;
+import geardesigner.beans.CodeException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.scene.control.TextFormatter;
 

@@ -1,6 +1,5 @@
 package geardesigner.beans;
 
-import geardesigner.InputException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

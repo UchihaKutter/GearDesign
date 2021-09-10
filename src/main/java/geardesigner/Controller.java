@@ -1,5 +1,7 @@
 package geardesigner;
 
+import geardesigner.beans.CodeException;
+import geardesigner.beans.InputException;
 import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
 import geardesigner.controls.Alerts;
