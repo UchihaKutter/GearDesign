@@ -27,7 +27,7 @@ public interface RecordBase {
      * @param date 不考虑时区的日期对象
      * @return {@code List<Record>}记录的列表
      */
-    @NotNull List<Record> retrievalRecords(@NotNull LocalDate date);
+    @NotNull List<Record> getRecords(@NotNull LocalDate date);
 
     /**
      * 获取最新提交的一个计算记录
@@ -50,7 +50,7 @@ public interface RecordBase {
      *
      * @return {@code List<Record>}全部记录的时间倒序列表
      */
-    @NotNull List<Record> getRecords();
+    @NotNull List<Record> getRecentRecords();
 
     /**
      * 清除库中所有记录

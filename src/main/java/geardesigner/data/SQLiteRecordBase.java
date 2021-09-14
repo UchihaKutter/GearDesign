@@ -68,7 +68,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
             /**
              * 运行时锁
              */
-            synchronized (this.getClass()) {
+            synchronized (SQLiteRecordBase.class) {
                 if (INSTANCE == null) {
                     try {
                         INSTANCE = getConnection();
@@ -90,7 +90,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
             /**
              * 运行时锁
              */
-            synchronized (this.getClass()) {
+            synchronized (SQLiteRecordBase.class) {
                 if (INSTANCE != null) {
                     INSTANCE.close();
                     INSTANCE = null;
@@ -131,7 +131,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      */
 
     @Nullable
-    private final Record recordParser(ResultSet rs) throws SQLException {
+    private Record recordParser(ResultSet rs) throws SQLException {
         final String specString = rs.getString(1);
         final int yr = rs.getInt(2);
         final int mn = rs.getInt(3);
@@ -287,7 +287,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code List<Record>}记录的列表
      */
     @Override
-    public @NotNull List<Record> retrievalRecords(@NotNull final LocalDate date) {
+    public @NotNull List<Record> getRecords(@NotNull final LocalDate date) {
         return retrieve(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
     }
 
@@ -347,7 +347,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
      * @return {@code List<Record>}全部记录的时间倒序列表
      */
     @Override
-    public @NotNull List<Record> getRecords() {
+    public @NotNull List<Record> getRecentRecords() {
         return retrieve(LocalDate.now().getYear(), null, null);
     }
 
