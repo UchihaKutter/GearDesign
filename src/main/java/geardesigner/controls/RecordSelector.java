@@ -1,124 +1,63 @@
 package geardesigner.controls;
 
+import geardesigner.Log;
 import geardesigner.Services;
 import geardesigner.beans.Record;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
+/**
+ * 历史记录选择器的抽象
+ *
+ * @author SUPERTOP
+ */
 public class RecordSelector {
-    @FXML
-    private TableView<Record> tvCalRecords;
+    private final Parent root;
+    private final Scene scene;
+    private final Stage stage;
+    private final RecordSelectorController controller;
 
-    @FXML
-    private TableColumn colNo;
-
-    @FXML
-    private TableColumn<Record, LocalDate> colDate;
-
-    @FXML
-    private TableColumn<Record, LocalTime> colTime;
-
-    @FXML
-    private TableColumn<Record, String> colParams;
-
-    @FXML
-    private DatePicker dpCalDate;
-
-    @FXML
-    private Button btCancel;
-
-    @FXML
-    private Button btAccept;
-
-    private ObservableList<Record> items;
-    private Record selected;
-
-    public RecordSelector() {
-        items = FXCollections.observableArrayList();
-        selected = null;
+    public RecordSelector(Window owner) throws IOException {
+        URL resource = getClass().getClassLoader().getResource("geardesigner/controls/RecordSelector.fxml");
+        final FXMLLoader fxmlLoader = new FXMLLoader(resource);
+        root = fxmlLoader.load();
+        scene = new Scene(root);
+        stage = initStage(owner, scene);
+        controller = fxmlLoader.getController();
+        Log.info("创建了新的历史记录选择器实例");
     }
 
-    @FXML
-    void initialize() {
-        initTable();
-        initDatePicker();
-        initButton();
-
-        /**
-         * 初始化的数据填充
-         */
-        final List<Record> initialRecords = Services.get().RecordBase().getRecentRecords();
-        setItems(initialRecords);
-    }
-
-    private void initTable() {
-        tvCalRecords.setItems(items);
-        colNo.setCellFactory(new SerialNumCellFactory());
-        colDate.setCellValueFactory(i -> new ReadOnlyObjectWrapper<>(i.getValue().getTimestamp().toLocalDate()));
-        colTime.setCellValueFactory(i -> new ReadOnlyObjectWrapper<>(i.getValue().getTimestamp().toLocalTime()));
-        colParams.setCellValueFactory(i -> new ReadOnlyStringWrapper(i.getValue().getSpecs().toString()));
-    }
-
-    private void initDatePicker() {
-        dpCalDate.setOnHidden(e -> setDateFilter());
-    }
-
-    private void setDateFilter() {
-        final LocalDate date = dpCalDate.getValue();
-        if (date != null) {
-            final List<Record> records = Services.get().RecordBase().getRecords(date);
-            setItems(records);
-        }
-    }
-
-    private void setItems(List<Record> records) {
-        items.clear();
-        items.addAll(records);
-    }
-
-    private void initButton() {
-        btCancel.setOnAction(event -> btaCancel());
-        btAccept.setOnAction(e -> btaAccept());
-        /**
-         * 未选中日期时，确定键不可用
-         */
-        tvCalRecords.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                btAccept.setDisable(true);
-            } else {
-                btAccept.setDisable(false);
-            }
-        });
-    }
-
-    private void btaCancel() {
-        btCancel.getScene().getWindow().hide();
-    }
-
-    private void btaAccept() {
-        selected = tvCalRecords.getSelectionModel().getSelectedItem();
-        tvCalRecords.getScene().getWindow().hide();
+    static Stage initStage(@NotNull Window owner, @NotNull Scene scene) {
+        final Stage newStage = new Stage();
+        newStage.setTitle("选择一个历史记录...");
+        newStage.setScene(scene);
+        newStage.sizeToScene();
+        newStage.setResizable(false);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.initOwner(owner);
+        return newStage;
     }
 
     /**
-     * 获取选中项
+     * 初始化数据填充，并显示历史记录选择器。选择结束后，返回一条记录或null
      *
-     * @return 一条历史记录，或null表示未指定记录
+     * @return 一条{@code Record}或null
      */
-    @Nullable
-    public Record result() {
-        return selected;
+    public @Nullable Record showAndWait() {
+        final List<Record> initialRecords = Services.get().RecordBase().getRecentRecords();
+        controller.reset();
+        controller.setItems(initialRecords);
+        stage.showAndWait();
+        return controller.result();
     }
 }

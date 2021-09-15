@@ -10,20 +10,14 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Map;
 
 import static geardesigner.TableSettings.*;
@@ -75,12 +69,17 @@ public class Controller {
     private OutputParamTable tableAnyCircle;
     private OutputParamTable tableBaseTanAndSpan;
     private OutputParamTable tableDeviation;
+    /**
+     * 因为selector需要指定Owner，所以必须使用懒加载
+     */
+    private RecordSelector selector;
 
     private IntegerProperty preservedDigits;
 
     private Gear gear;
 
     public Controller() throws IOException, NoSuchMethodException {
+        selector = null;
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
     }
@@ -202,26 +201,15 @@ public class Controller {
      * 事件处理器
      */
     private void btaSelectRecord() {
-        //TODO 2021/9/14:可复用的选择面板
-        URL resource = getClass().getResource("controls/RecordSelector.fxml");
-        final FXMLLoader fxmlLoader = new FXMLLoader(resource);
-        try {
-            final Parent selectorRoot = fxmlLoader.load();
-            final Scene selectorScene = new Scene(selectorRoot);
-            final Stage recordSelector = new Stage();
-            recordSelector.setTitle("选择一个历史记录...");
-            recordSelector.setScene(selectorScene);
-            recordSelector.sizeToScene();
-            recordSelector.setResizable(false);
-            recordSelector.initModality(Modality.APPLICATION_MODAL);
-            recordSelector.initOwner(btSelectRecord.getScene().getWindow());
-            recordSelector.showAndWait();
-        } catch (IOException e) {
-            Log.error(e);
+        if (selector == null) {
+            try {
+                selector = new RecordSelector(btSelectRecord.getScene().getWindow());
+            } catch (IOException e) {
+                Log.error(e);
+            }
         }
-        final RecordSelector controller = fxmlLoader.getController();
-        final Record result = controller.result();
-        loadRecord(result, "加载记录的时间戳为");
+        final Record record = selector.showAndWait();
+        loadRecord(record, "加载记录的时间戳为");
     }
 
     /**
