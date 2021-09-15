@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" spacing="20.0" stylesheets="@../bootstrap2.css"
+      xmlns="http://javafx.com/javafx/16" fx:controller="geardesigner.controls.RecordSelector">
+    <children>
+        <TableView fx:id="tvCalRecords">
+            <columns>
+                <TableColumn fx:id="colNo" editable="false" prefWidth="40.0" resizable="false" text="序号"/>
+                <TableColumn fx:id="colDate" editable="false" prefWidth="120.0" resizable="false" text="日期"/>
+                <TableColumn fx:id="colTime" editable="false" prefWidth="120.0" resizable="false" text="时间"/>
+                <TableColumn fx:id="colParams" editable="false" prefWidth="240.0" resizable="false" text="计算参数"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+        <AnchorPane AnchorPane.bottomAnchor="0.0">
+            <children>
+                <DatePicker fx:id="dpCalDate" editable="false" promptText="选择计算日期" showWeekNumbers="true"
+                            AnchorPane.leftAnchor="0.0"/>
+                <ButtonBar buttonMinWidth="80.0" AnchorPane.rightAnchor="0.0">
+                    <buttons>
+                        <Button fx:id="btCancel" cancelButton="true" mnemonicParsing="false" text="取消"/>
+                        <Button fx:id="btAccept" defaultButton="true" mnemonicParsing="false" text="确定"/>
+                    </buttons>
+                </ButtonBar>
+            </children>
+        </AnchorPane>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="36.0" right="36.0" top="36.0"/>
+    </padding>
+</VBox>

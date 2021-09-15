@@ -4,22 +4,26 @@ import geardesigner.beans.CodeException;
 import geardesigner.beans.InputException;
 import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
-import geardesigner.controls.Alerts;
-import geardesigner.controls.DecimalFormatter;
-import geardesigner.controls.InputParamTable;
-import geardesigner.controls.OutputParamTable;
+import geardesigner.controls.*;
 import geardesigner.units.Angle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import static geardesigner.TableSettings.*;
@@ -64,6 +68,9 @@ public class Controller {
     @FXML
     private Button btSaveParams;
 
+    @FXML
+    private Button btSelectRecord;
+
     private InputParamTable tableInputParams;
     private OutputParamTable tableAnyCircle;
     private OutputParamTable tableBaseTanAndSpan;
@@ -103,6 +110,7 @@ public class Controller {
         APaneDeviation.getChildren().add(tableDeviation);
         btCalculate.setOnAction(event -> calGear());
         btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
+        btSelectRecord.setOnAction(event -> btaSelectRecord());
         /**
          * 角度值切换
          */
@@ -143,14 +151,7 @@ public class Controller {
          * 读取历史记录并恢复上一次的记录
          */
         final Record lastRecord = Services.get().RecordBase().getLastRecord();
-        if (lastRecord != null) {
-            Log.info("上一次的记录时间为" + lastRecord.getTimestamp().toString());
-            try {
-                tableInputParams.setValues(lastRecord.getSpecs().toValueMap());
-            } catch (CodeException e) {
-                Log.error(e);
-            }
-        }
+        loadRecord(lastRecord, "上一次的记录时间为");
     }
 
     private void initChoiceBox() {
@@ -198,6 +199,32 @@ public class Controller {
     }
 
     /**
+     * 事件处理器
+     */
+    private void btaSelectRecord() {
+        //TODO 2021/9/14:可复用的选择面板
+        URL resource = getClass().getResource("controls/RecordSelector.fxml");
+        final FXMLLoader fxmlLoader = new FXMLLoader(resource);
+        try {
+            final Parent selectorRoot = fxmlLoader.load();
+            final Scene selectorScene = new Scene(selectorRoot);
+            final Stage recordSelector = new Stage();
+            recordSelector.setTitle("选择一个历史记录...");
+            recordSelector.setScene(selectorScene);
+            recordSelector.sizeToScene();
+            recordSelector.setResizable(false);
+            recordSelector.initModality(Modality.APPLICATION_MODAL);
+            recordSelector.initOwner(btSelectRecord.getScene().getWindow());
+            recordSelector.showAndWait();
+        } catch (IOException e) {
+            Log.error(e);
+        }
+        final RecordSelector controller = fxmlLoader.getController();
+        final Record result = controller.result();
+        loadRecord(result, "加载记录的时间戳为");
+    }
+
+    /**
      * 执行齿轮计算
      */
     private void calGear() {
@@ -214,6 +241,23 @@ public class Controller {
         } catch (InputException e) {
             Alerts.warning(tableInputParams.getScene().getWindow(), "请输入完整有效的设计参数");
             Log.warning("参数输入错误", e);
+        }
+    }
+
+    /**
+     * 加载历史记录到输入面板
+     *
+     * @param record 指定的历史记录，null则不执行动作
+     * @param info   加载时的日志抬头
+     */
+    private void loadRecord(@Nullable Record record, @NotNull String info) {
+        if (record != null) {
+            Log.info(info + record.getTimestamp().toString());
+            try {
+                tableInputParams.setValues(record.getSpecs().toValueMap());
+            } catch (CodeException e) {
+                Log.error(e);
+            }
         }
     }
 

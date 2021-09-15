@@ -9,7 +9,7 @@
     <children>
         <ToolBar prefHeight="30.0">
             <items>
-                <Button mnemonicParsing="false" text="Button"/>
+                <Button fx:id="btSelectRecord" mnemonicParsing="false" text="历史记录"/>
             </items>
         </ToolBar>
         <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
