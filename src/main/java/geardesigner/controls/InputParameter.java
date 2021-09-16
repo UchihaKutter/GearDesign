@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class InputParameter<U extends ConvertibleUnit> extends Parameter {
     private static final StringConverter ConvertibleUnitStringConverter = new StringConverter() {
-
         @Override
         public String toString(Object o) {
             if (o instanceof ConvertibleUnit) {
@@ -67,6 +66,7 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
     @Override
     void initStyle() {
         this.units.setConverter(ConvertibleUnitStringConverter);
+        this.units.setFocusTraversable(false);
         this.getChildren().addAll(namePane, symbolPane, valuePane);
     }
 
