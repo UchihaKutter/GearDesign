@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * 历史记录选择器的抽象
+ * 历史记录选择对话框的抽象
  *
  * @author SUPERTOP
  */
@@ -34,7 +34,7 @@ public class RecordSelector {
         scene = new Scene(root);
         stage = initStage(owner, scene);
         controller = fxmlLoader.getController();
-        Log.info("创建了新的历史记录选择器实例");
+        Log.info("创建了新的历史记录选择对话框实例");
     }
 
     static Stage initStage(@NotNull Window owner, @NotNull Scene scene) {
@@ -49,7 +49,7 @@ public class RecordSelector {
     }
 
     /**
-     * 初始化数据填充，并显示历史记录选择器。选择结束后，返回一条记录或null
+     * 初始化数据填充，并显示历史记录选择对话框。选择结束后，返回一条记录或null
      *
      * @return 一条{@code Record}或null
      */

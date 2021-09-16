@@ -207,7 +207,7 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
                 Log.info("删除记录成功");
                 return true;
             }
-            Log.info("删除记录失败，未修改数据表");//待办 2021/8/19: 是否符合预期
+            Log.info("删除记录失败，未修改数据表");//TODO 2021/9/16:是否符合预期
         } catch (SQLException e) {
             Log.error("删除记录失败", e);
         }
@@ -307,7 +307,6 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
                     return record;
                 }
             }
-
         } catch (SQLException e) {
             Log.error("获取记录失败", e);
         }
@@ -349,6 +348,25 @@ public class SQLiteRecordBase extends SQLiteDatabase implements RecordBase {
     @Override
     public @NotNull List<Record> getRecentRecords() {
         return retrieve(LocalDate.now().getYear(), null, null);
+    }
+
+    @Override
+    public @NotNull List<LocalDate> getRecordDates() {
+        final List<LocalDate> rs = new ArrayList<>();
+        final String sql = "SELECT YEAR,MONTH,DAY FROM " + TABLE_NAME + " GROUP BY YEAR,MONTH,DAY";
+        try (Statement s = connect().createStatement()) {
+            final ResultSet resultSet = s.executeQuery(sql);
+            while (resultSet.next()) {
+                final int y = resultSet.getInt(1);
+                final int m = resultSet.getInt(2);
+                final int d = resultSet.getInt(3);
+                rs.add(LocalDate.of(y, m, d));
+            }
+        } catch (SQLException e) {
+            Log.error("获取日期失败", e);
+        }
+        Log.info("获取的有记录日期：" + rs.size());
+        return Collections.unmodifiableList(rs);
     }
 
     /**

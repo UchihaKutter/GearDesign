@@ -53,6 +53,13 @@ public interface RecordBase {
     @NotNull List<Record> getRecentRecords();
 
     /**
+     * 获取数据库中所有的有记录日期
+     *
+     * @return {@code List<LocalDate>} 所有有记录日期的列表
+     */
+    @NotNull List<LocalDate> getRecordDates();
+
+    /**
      * 清除库中所有记录
      *
      * @return 成功-true，失败（部分删除或未删除）

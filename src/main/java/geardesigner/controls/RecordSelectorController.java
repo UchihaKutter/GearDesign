@@ -6,16 +6,18 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 
 /**
- * 历史记录选择器的控制器
+ * 历史记录选择对话框的控制器
  *
  * @author SUPERTOP
  */
@@ -47,9 +49,15 @@ public class RecordSelectorController {
     private ObservableList<Record> items;
     private Record selected;
 
+    /**
+     * 日期过滤器的调用
+     */
+    private ObservableSet<LocalDate> AccentDates;
+
     public RecordSelectorController() {
         items = FXCollections.observableArrayList();
         selected = null;
+        AccentDates = FXCollections.observableSet(new HashSet<>());
     }
 
     @FXML
@@ -69,17 +77,30 @@ public class RecordSelectorController {
     }
 
     private void initDatePicker() {
+        dpCalDate.setDayCellFactory(dp -> new AccentDateCell(AccentDates));
         dpCalDate.setOnHidden(e -> setDateFilter());
+        /**
+         * 设置初始的日期高亮
+         */
+        final List<LocalDate> recordDates = Services.get().RecordBase().getRecordDates();
+        AccentDates.addAll(recordDates);
     }
 
     void reset() {
         selected = null;
-        dpCalDate.setValue(LocalDate.now());
+        dpCalDate.setValue(null);
+        /**
+         * 刷新日期高亮
+         */
+        AccentDates.clear();
+        final List<LocalDate> recordDates = Services.get().RecordBase().getRecordDates();
+        AccentDates.addAll(recordDates);
     }
 
     void setItems(List<Record> records) {
         items.clear();
         items.addAll(records);
+
     }
 
     private void setDateFilter() {
