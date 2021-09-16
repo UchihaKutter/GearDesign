@@ -60,9 +60,6 @@ public class Controller {
     private Button btCalculate;
 
     @FXML
-    private Button btSaveParams;
-
-    @FXML
     private Button btSelectRecord;
 
     private InputParamTable tableInputParams;
@@ -188,8 +185,6 @@ public class Controller {
     }
 
     private void setLayout() {
-        ButtonBar.setButtonData(btCalculate, ButtonBar.ButtonData.OK_DONE);
-        ButtonBar.setButtonData(btSaveParams, ButtonBar.ButtonData.RIGHT);
     }
 
     private @NotNull Specifications getAllSpecs() throws InputException {

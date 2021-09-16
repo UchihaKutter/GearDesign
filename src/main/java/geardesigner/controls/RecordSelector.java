@@ -28,7 +28,7 @@ public class RecordSelector {
     private final RecordSelectorController controller;
 
     public RecordSelector(Window owner) throws IOException {
-        URL resource = getClass().getClassLoader().getResource("geardesigner/controls/RecordSelector.fxml");
+        URL resource = getClass().getResource("RecordSelector.fxml");
         final FXMLLoader fxmlLoader = new FXMLLoader(resource);
         root = fxmlLoader.load();
         scene = new Scene(root);

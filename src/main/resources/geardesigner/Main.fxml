@@ -61,7 +61,6 @@
                         <ButtonBar buttonMinWidth="80.0">
                             <buttons>
                                 <Button fx:id="btCalculate" defaultButton="true" text="计算"/>
-                                <Button fx:id="btSaveParams" text="保存参数"/>
                             </buttons>
                             <padding>
                                 <Insets left="30.0" right="30.0"/>
