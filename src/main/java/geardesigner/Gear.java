@@ -7,7 +7,7 @@ import geardesigner.beans.Specifications;
  *
  * @author SuperNote
  */
-public strictfp class Gear {
+public class Gear {
     /**
      * 设计规格
      */
@@ -196,7 +196,7 @@ public strictfp class Gear {
      *
      * @author SuperNote
      */
-    private strictfp class BaseTangent {
+    private class BaseTangent {
         /**
          * 公法线长度
          */
@@ -325,7 +325,7 @@ public strictfp class Gear {
      *
      * @author SuperNote
      */
-    private strictfp class Span {
+    private class Span {
         /**
          * 跨棒距测量点直径
          */
@@ -419,7 +419,7 @@ public strictfp class Gear {
     /**
      * 任一圆齿厚计算，非惰性
      */
-    public strictfp class AnyCircle {
+    public class AnyCircle {
         /**
          * 任一圆直径
          */

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.beans.ConstructorProperties;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -13,7 +14,8 @@ import java.util.Map;
  *
  * @author SuperNote
  */
-public strictfp class Specifications implements Serializable {
+public class Specifications implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5572715615929878142L;
     /**
      * 法向模数

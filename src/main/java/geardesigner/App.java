@@ -17,10 +17,6 @@ import java.util.List;
  */
 public class App extends Application {
 
-    public static void main(String[] args) {
-        Application.launch(App.class, args);
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getResource("Main.fxml");
@@ -37,7 +33,7 @@ public class App extends Application {
     }
 
     private @NotNull @Unmodifiable List<Image> loadIcons() {
-        final Class clz = getClass();
+        final Class<?> clz = getClass();
         final Image size32 = new Image(clz.getResourceAsStream("icon/32x32.png"));
         final Image size64 = new Image(clz.getResourceAsStream("icon/64x64.png"));
         final Image size128 = new Image(clz.getResourceAsStream("icon/128x128.png"));
