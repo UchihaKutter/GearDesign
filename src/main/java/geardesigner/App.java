@@ -26,8 +26,6 @@ public class App extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.sizeToScene();
         primaryStage.setResizable(false);
-//        Image iconForLinux = new Image(getClass().getResourceAsStream(""));
-//        Image iconForWindows = new Image(getClass().getResourceAsStream(""));
         primaryStage.getIcons().addAll(loadIcons());
         primaryStage.show();
     }

@@ -1,7 +1,7 @@
 package geardesigner;
 
-import org.apache.commons.math3.util.Precision;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.regex.Pattern;
 
 /**
@@ -24,7 +24,17 @@ public final class MathUtils {
         /**
          *借用BigDecimal类实现
          */
-        return Precision.round(v, digit);
+        try {
+            final double rounded = new BigDecimal(v).setScale(digit, RoundingMode.HALF_UP).doubleValue();
+            // MATH-1089: negative values rounded to zero should result in negative zero
+            return rounded == 0d ? 0d * v : rounded;
+        } catch (NumberFormatException ex) {
+            if (Double.isInfinite(v)) {
+                return v;
+            } else {
+                return Double.NaN;
+            }
+        }
     }
 
     public static boolean isDecimal(String s) {

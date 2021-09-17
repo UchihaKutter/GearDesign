@@ -9,7 +9,6 @@ module GearDesign {
     requires java.sql;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires commons.math3;
 
     opens geardesigner;
     opens geardesigner.controls to javafx.fxml;
