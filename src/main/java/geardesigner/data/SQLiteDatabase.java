@@ -1,5 +1,6 @@
 package geardesigner.data;
 
+import geardesigner.Config;
 import geardesigner.Log;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public abstract class SQLiteDatabase implements AutoCloseable {
      */
     private static final String DB_PREFIX = "jdbc:sqlite:";
 
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = Config.get("SQLiteDatabase.COMPRESSION_BUFFER_SIZE");
 
     /**
      * 数据库文件名

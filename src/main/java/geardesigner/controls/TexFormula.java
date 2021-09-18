@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Config;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.scilab.forge.jlatexmath.TeXFormula;
@@ -13,7 +14,7 @@ import java.awt.image.BufferedImage;
  * @author SUPERSTATION
  */
 public class TexFormula {
-    public static final float DEFAULT_FONT_SIZE = 14;
+    public static final float FONT_SIZE = Config.get("TexFormula.FONT_SIZE");
     public static final int DEFAULT_STYLE = 0;
 
     private final String formulaPattern;
@@ -36,7 +37,7 @@ public class TexFormula {
      */
     public TexFormula(String p) {
         formulaPattern = p;
-        fontSize = DEFAULT_FONT_SIZE;
+        fontSize = FONT_SIZE;
         style = DEFAULT_STYLE;
     }
 

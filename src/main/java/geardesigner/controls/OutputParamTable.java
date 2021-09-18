@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Config;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.IntegerProperty;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,10 @@ import java.util.Set;
  * @author SUPERSTATION
  */
 public class OutputParamTable extends ParamTable {
+    private static final Number INIT_COL0_WIDTH = Config.get("OutputParamTable.INIT_COL0_WIDTH");
+    private static final Number INIT_COL1_WIDTH = Config.get("OutputParamTable.INIT_COL1_WIDTH");
+    private static final Number INIT_COL2_WIDTH = Config.get("OutputParamTable.INIT_COL2_WIDTH");
+    private static final Number INIT_ROW_HEIGHT = Config.get("OutputParamTable.INIT_ROW_HEIGHT");
     private IntegerProperty digit;
 
     OutputParamTable(final String paneName, final String[] colName, final Parameter[] pcs) throws IOException {
@@ -61,13 +66,13 @@ public class OutputParamTable extends ParamTable {
         /**
          * 设置列宽
          */
-        Col0Width.setValue(110);
-        Col1Width.setValue(80);
-        Col2Width.setValue(30);
+        Col0Width.setValue(INIT_COL0_WIDTH);
+        Col1Width.setValue(INIT_COL1_WIDTH);
+        Col2Width.setValue(INIT_COL2_WIDTH);
         /**
          * 设置行高
          */
-        RowHeight.setValue(20);
+        RowHeight.setValue(INIT_ROW_HEIGHT);
     }
 
     /**

@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Config;
 import geardesigner.Log;
 import geardesigner.beans.CodeException;
 import geardesigner.units.ConvertibleUnit;
@@ -15,6 +16,10 @@ import java.lang.reflect.InvocationTargetException;
  * @author SUPERSTATION
  */
 public class InputParamTable extends ParamTable {
+    private static final Number INIT_COL0_WIDTH = Config.get("InputParamTable.INIT_COL0_WIDTH");
+    private static final Number INIT_COL1_WIDTH = Config.get("InputParamTable.INIT_COL1_WIDTH");
+    private static final Number INIT_COL2_WIDTH = Config.get("InputParamTable.INIT_COL2_WIDTH");
+
     InputParamTable(final String paneName, final String[] colName, final Parameter[] pcs) throws IOException {
         super(paneName, colName, pcs);
     }
@@ -58,9 +63,9 @@ public class InputParamTable extends ParamTable {
         /**
          * 设置列宽
          */
-        Col0Width.setValue(100);
-        Col1Width.setValue(60);
-        Col2Width.setValue(100);
+        Col0Width.setValue(INIT_COL0_WIDTH);
+        Col1Width.setValue(INIT_COL1_WIDTH);
+        Col2Width.setValue(INIT_COL2_WIDTH);
     }
 
     /**

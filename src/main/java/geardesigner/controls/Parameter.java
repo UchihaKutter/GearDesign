@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Config;
 import geardesigner.beans.InputException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.beans.property.Property;
@@ -17,10 +18,10 @@ import org.jetbrains.annotations.Nullable;
  * @author SUPERSTATION
  */
 public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
+    private static final Double SPACING = Config.get("Parameter.SPACING");
     /**
      * Stylesheet Handling
      */
-
     private static final String DEFAULT_STYLE_CLASS = "Parameter";
     final StackPane namePane;
     final StackPane valuePane;
@@ -58,7 +59,7 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
         namePane.setAlignment(Pos.BOTTOM_LEFT);
         valuePane.setAlignment(Pos.BOTTOM_RIGHT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
-        this.setSpacing(12);
+        this.setSpacing(SPACING);
     }
 
     /**

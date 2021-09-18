@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Config;
 import geardesigner.Log;
 import geardesigner.beans.CodeException;
 import geardesigner.beans.InputException;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -24,6 +26,9 @@ import java.util.Set;
  * @author SuperNote
  */
 public abstract class ParamTable extends VBox {
+    private static final Double SPACING = Config.get("ParamTable.SPACING");
+    private static final Insets PADDING = Config.get("ParamTable.PADDING");
+
     final ObservableMap<String, Parameter> table;
     final Property<Number> Col0Width;
     final Property<Number> Col1Width;
@@ -112,9 +117,9 @@ public abstract class ParamTable extends VBox {
 
 
     void initStyle() {
-        setStyle("-fx-spacing: 6;" +
-                "-fx-padding: 6 6 12 6;" +
-                "-fx-border-color: rgba(0, 0, 0, 0.33);" +
+        setSpacing(SPACING);
+        setPadding(PADDING);
+        setStyle("-fx-border-color: rgba(0, 0, 0, 0.33);" +
                 "-fx-border-style: dashed;" +
                 "-fx-border-width: 3;" +
                 "-fx-border-radius: 2;"
