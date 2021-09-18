@@ -58,6 +58,7 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
         namePane.setAlignment(Pos.BOTTOM_LEFT);
         valuePane.setAlignment(Pos.BOTTOM_RIGHT);
         symbolPane.setAlignment(Pos.BOTTOM_LEFT);
+        this.setSpacing(12);
     }
 
     /**

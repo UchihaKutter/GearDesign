@@ -291,7 +291,7 @@ public class Controller {
             final Double diameter = Double.valueOf(dText);
             anyCircle = calculateAnyCircle(gear, diameter);
         } else if (popup) {
-            Alerts.warning(tableAnyCircle.getScene().getWindow(), "请输入有效的任一园直径");
+            Alerts.warning(tableAnyCircle.getScene().getWindow(), "请输入有效的任一圆直径");
         }
         /**
          * 捕获编程错误
@@ -315,13 +315,13 @@ public class Controller {
                     .setValue("分度圆弧齿厚", null)
                     .setValue("任一圆弧齿厚", null)
                     .setValue("任一圆法向弦齿厚", null)
-                    .setValue("任一园螺旋角", null);
+                    .setValue("任一圆螺旋角", null);
         } else {
             tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
                     .setValue("分度圆弧齿厚", anyCircle.getS())
                     .setValue("任一圆弧齿厚", anyCircle.getSa1())
                     .setValue("任一圆法向弦齿厚", anyCircle.getSn1())
-                    .setValue("任一园螺旋角", anyCircle.getBeta1());
+                    .setValue("任一圆螺旋角", anyCircle.getBeta1());
         }
     }
 
@@ -341,7 +341,7 @@ public class Controller {
             tableBaseTanAndSpan.setValue("分度圆直径", gear.d)
                     .setValue("齿顶圆直径", gear.da)
                     .setValue("齿根圆直径", gear.df)
-                    .setValue("基园", gear.db)
+                    .setValue("基圆", gear.db)
                     .setValue("当量齿数", gear.Zp)
                     .setValue("跨齿数", (double) gear.k)
                     .setValue("公法线长度", gear.getWk())

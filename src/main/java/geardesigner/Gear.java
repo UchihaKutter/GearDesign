@@ -446,7 +446,7 @@ public class Gear {
         private double sn1;
 
         public AnyCircle(Double da) {
-            this.da1 = da.doubleValue();
+            this.da1 = da;
         }
 
         /**
@@ -493,7 +493,7 @@ public class Gear {
         }
 
         /**
-         * 任一园螺旋角
+         * 任一圆螺旋角
          *
          * @param beta0   螺旋角
          * @param alphaT  端面压力角
@@ -508,7 +508,7 @@ public class Gear {
          * 任一圆处法向弦齿厚
          *
          * @param sa1   任一圆处弧齿厚
-         * @param beta1 任一园螺旋角
+         * @param beta1 任一圆螺旋角
          * @return
          */
         private double calSn(double sa1, double beta1) {

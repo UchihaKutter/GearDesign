@@ -52,7 +52,6 @@ public class OutputParamTable extends ParamTable {
             p.bindNamePreWidthProperty(Col0Width);
             p.bindValuePreWidthProperty(Col1Width);
             p.bindSymbolPreWidthProperty(Col2Width);
-
             p.bindRowPreHeightProperty(RowHeight);
         }
     }
@@ -62,9 +61,9 @@ public class OutputParamTable extends ParamTable {
         /**
          * 设置列宽
          */
-        Col0Width.setValue(120);
-        Col1Width.setValue(120);
-        Col2Width.setValue(60);
+        Col0Width.setValue(110);
+        Col1Width.setValue(80);
+        Col2Width.setValue(30);
         /**
          * 设置行高
          */

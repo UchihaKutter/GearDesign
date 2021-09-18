@@ -58,9 +58,9 @@ public class InputParamTable extends ParamTable {
         /**
          * 设置列宽
          */
-        Col0Width.setValue(120);
+        Col0Width.setValue(100);
         Col1Width.setValue(60);
-        Col2Width.setValue(120);
+        Col2Width.setValue(100);
     }
 
     /**

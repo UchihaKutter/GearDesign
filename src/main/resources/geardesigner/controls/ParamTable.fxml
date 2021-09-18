@@ -4,16 +4,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" stylesheets="@ParamTable.css" type="javafx.scene.layout.VBox"
-         alignment="TOP_CENTER"
-         xmlns="http://javafx.com/javafx/11">
+<fx:root xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" stylesheets="@ParamTable.css"
+         type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/16">
     <children>
         <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Title"/>
-        <HBox alignment="CENTER_LEFT">
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
             <children>
                 <Label fx:id="lCol0" text="Column0"/>
-                <Label fx:id="lCol1" layoutX="10.0" layoutY="10.0" text="Column1"/>
-                <Label fx:id="lCol2" layoutX="10.0" layoutY="10.0" text="Column2"/>
+                <Label fx:id="lCol1" text="Column1"/>
+                <Label fx:id="lCol2" text="Column2"/>
             </children>
         </HBox>
     </children>
