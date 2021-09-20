@@ -36,6 +36,8 @@ public class App extends Application {
         final Image size64 = new Image(clz.getResourceAsStream("icon/64x64.png"));
         final Image size128 = new Image(clz.getResourceAsStream("icon/128x128.png"));
         final Image size256 = new Image(clz.getResourceAsStream("icon/256x256.png"));
-        return List.of(size32, size64, size128, size256);
+        final Image size512 = new Image(clz.getResourceAsStream("icon/512x512.png"));
+        final Image size768 = new Image(clz.getResourceAsStream("icon/768x768.png"));
+        return List.of(size768, size512, size256, size128, size64, size32);
     }
 }
