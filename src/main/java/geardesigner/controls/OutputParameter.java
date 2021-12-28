@@ -75,7 +75,9 @@ public class OutputParameter<U extends ConvertibleUnit> extends Parameter {
 
     private void changed() {
         Number physicalValue = getPhysicalValue();
-        if (physicalValue != null && digit != null) {
+        if (physicalValue == null) {
+            field.setText(null);
+        } else if (digit != null) {
             field.setText(DecimalFormatter.toString(physicalValue, digit.intValue()));
         }
     }

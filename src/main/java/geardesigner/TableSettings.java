@@ -27,7 +27,7 @@ public class TableSettings {
     public static final String[] ANY_CIRCLE_PARAMS_COLUMNS = new String[]{"参数名", "计算值", null};
     public static final Object[][] ANY_CIRCLE_PARAMS_NAME_UNIT
             = new Object[][]{{"齿顶圆端面压力角", Angle.DEGREES}, {"分度圆弧齿厚", Length.MILLIMETERS}, {"任一圆弧齿厚", Length.MILLIMETERS},
-            {"任一圆螺旋角", Length.MILLIMETERS}, {"任一圆法向弦齿厚", Length.MILLIMETERS}};
+            {"任一圆螺旋角", Angle.DEGREES}, {"任一圆法向弦齿厚", Length.MILLIMETERS}};
     /**
      * 公法线与跨帮距计算结果数据面板设置
      */

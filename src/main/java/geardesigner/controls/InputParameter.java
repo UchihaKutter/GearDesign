@@ -35,7 +35,7 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
 
     public InputParameter(@NotNull String name, @Nullable Number initialValue, @Nullable U unit) {
         super(name, unit);
-        this.field = new TextField((initialValue == null) ? null : String.valueOf(initialValue));
+        this.field = new TextField((initialValue == null) ? "" : String.valueOf(initialValue));
         this.units = new ChoiceBox<>();
         initStyle();
         initListener();
@@ -113,7 +113,7 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
     @Override
     void setValue(final @Nullable Number v) {
         if (v == null) {
-            field.setText(null);
+            field.setText("");
         } else {
             field.setText(String.valueOf(unit == null ? v : unit.toCurrentUnit((Double) v)));
         }

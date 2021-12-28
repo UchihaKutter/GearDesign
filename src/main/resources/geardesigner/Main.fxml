@@ -17,26 +17,6 @@
             <children>
                 <VBox alignment="TOP_CENTER" spacing="20.0">
                     <children>
-                        <AnchorPane fx:id="APaneInputParams"/>
-                        <VBox alignment="TOP_CENTER">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                    <children>
-                                        <Label alignment="TOP_CENTER" text="任一圆直径(mm)"/>
-                                        <TextField fx:id="tfDoubleAnyCircle" prefWidth="120.0"/>
-                                        <Button fx:id="btCalAnyCircle" text="计算任一圆"/>
-                                    </children>
-                                </HBox>
-                            </children>
-                            <padding>
-                                <Insets bottom="10.0" top="10.0"/>
-                            </padding>
-                        </VBox>
-                        <AnchorPane fx:id="APaneAnyCircle"/>
-                    </children>
-                </VBox>
-                <VBox alignment="TOP_CENTER" spacing="20.0">
-                    <children>
                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
                                 <RadioButton fx:id="rbToDegree" selected="true" text="角度制">
@@ -56,16 +36,22 @@
                                 <Insets/>
                             </VBox.margin>
                         </HBox>
-                        <AnchorPane fx:id="APaneBaseTanAndSpan"/>
-                        <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0"/>
+                        <AnchorPane fx:id="APaneInputParams"/>
                         <ButtonBar buttonMinWidth="80.0">
                             <buttons>
+                                <Button fx:id="btAnyCircle" layoutX="163.0" layoutY="10.0" text="任一圆"/>
                                 <Button fx:id="btCalculate" defaultButton="true" text="计算"/>
                             </buttons>
                             <padding>
                                 <Insets left="30.0" right="30.0"/>
                             </padding>
                         </ButtonBar>
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_CENTER" spacing="20.0">
+                    <children>
+                        <AnchorPane fx:id="APaneBaseTanAndSpan"/>
+                        <AnchorPane fx:id="APaneDeviation" layoutX="10.0" layoutY="50.0"/>
                     </children>
                     <HBox.margin>
                         <Insets/>

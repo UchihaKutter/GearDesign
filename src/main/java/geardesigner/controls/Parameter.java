@@ -110,7 +110,7 @@ public abstract class Parameter<U extends ConvertibleUnit> extends HBox {
     /**
      * 注意：系统内值的处理，转换为基本单位
      *
-     * @param v 为 Parameter 面板实例设定新的值,应为基本单位值
+     * @param v 为 Parameter 面板实例设定新的值,应为基本单位值，不响应Null值
      */
     abstract void setValue(@Nullable Number v);
 

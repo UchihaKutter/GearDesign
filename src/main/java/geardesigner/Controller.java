@@ -6,89 +6,73 @@ import geardesigner.beans.Record;
 import geardesigner.beans.Specifications;
 import geardesigner.controls.*;
 import geardesigner.units.Angle;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
-import org.jetbrains.annotations.Contract;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import static geardesigner.TableSettings.*;
 
 public class Controller {
+    private final IntegerProperty preservedDigits;
+    private final ObjectProperty<Angle> angleUnit;
+    private final BooleanProperty accessibleAnyCircle;
     @FXML
     private AnchorPane APaneInputParams;
-
-    @FXML
-    private AnchorPane APaneAnyCircle;
-
     @FXML
     private AnchorPane APaneBaseTanAndSpan;
-
     @FXML
     private AnchorPane APaneDeviation;
-
-    @FXML
-    private TextField tfDoubleAnyCircle;
-
-    @FXML
-    private Button btCalAnyCircle;
-
     @FXML
     private RadioButton rbToDegree;
-
     @FXML
     private RadioButton rbToRadius;
-
     @FXML
     private ToggleGroup groupAngles;
-
     @FXML
     private ChoiceBox<Integer> cbPreservedDigit;
-
     @FXML
     /**
      * 重算所有值
      */
     private Button btCalculate;
-
     @FXML
     private Button btSelectRecord;
-
+    @FXML
+    private Button btAnyCircle;
     private InputParamTable tableInputParams;
-    private OutputParamTable tableAnyCircle;
     private OutputParamTable tableBaseTanAndSpan;
     private OutputParamTable tableDeviation;
     /**
      * 因为selector需要指定Owner，所以必须使用懒加载
      */
     private RecordSelector selector;
-
-    private IntegerProperty preservedDigits;
-
+    private AnyCircleController anyCircleController;
+    private Stage anyCircleStage;
     private Gear gear;
 
     public Controller() throws IOException, NoSuchMethodException {
         selector = null;
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
-    }
-
-    /**
-     * 计算任一圆参数
-     *
-     * @return 计算结果Gear.AnyCircle
-     */
-    @Contract(value = "!null,!null->!null", pure = true)
-    private static Gear.AnyCircle calculateAnyCircle(Gear gear, Double diameter) {
-        return gear.new AnyCircle(diameter).calculate();
+        angleUnit = new SimpleObjectProperty<>(Angle.DEGREES);
+        accessibleAnyCircle = new SimpleBooleanProperty(true);
     }
 
     private static void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
@@ -101,18 +85,21 @@ public class Controller {
     @FXML
     void initialize() {
         APaneInputParams.getChildren().add(tableInputParams);
-        APaneAnyCircle.getChildren().add(tableAnyCircle);
         APaneBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
         APaneDeviation.getChildren().add(tableDeviation);
         btCalculate.setOnAction(event -> calGear());
-        btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
         btSelectRecord.setOnAction(event -> btaSelectRecord());
+        btAnyCircle.setOnAction(actionEvent -> btaAnyCircle());
         /**
          * 角度值切换
          */
         groupAngles.selectedToggleProperty().addListener((observableValue, oldToggle, newToggle) -> {
             if (oldToggle != newToggle) {
-                refreshAngleDisplay();
+                if (newToggle.equals(rbToDegree)) {
+                    angleUnit.set(Angle.DEGREES);
+                } else if (newToggle.equals(rbToRadius)) {
+                    angleUnit.set(Angle.RADIANS);
+                }
             }
         });
         setLayout();
@@ -125,10 +112,6 @@ public class Controller {
                 INPUT_PARAMS_PANE_NAME,
                 INPUT_PARAMS_COLUMNS,
                 INPUT_PARAMS_NAME_UNIT);
-        tableAnyCircle = OutputParamTable.createTable(
-                ANY_CIRCLE_PARAMS_PANE_NAME,
-                ANY_CIRCLE_PARAMS_COLUMNS,
-                ANY_CIRCLE_PARAMS_NAME_UNIT);
         tableBaseTanAndSpan = OutputParamTable.createTable(
                 BASE_TAN_AND_SPAN_PARAMS_PANE_NAME,
                 BASE_TAN_AND_SPAN_PARAMS_COLUMNS,
@@ -169,17 +152,17 @@ public class Controller {
     private void initBindings() {
         tableBaseTanAndSpan.bindDigitProperty(preservedDigits);
         tableDeviation.bindDigitProperty(preservedDigits);
-        tableAnyCircle.bindDigitProperty(preservedDigits);
         /**
          * 添加Listener，同步修改一个其他的Property
          */
         cbPreservedDigit.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> preservedDigits.setValue(newValue));
+        btAnyCircle.disableProperty().bind(accessibleAnyCircle.not());
+        angleUnit.addListener((observable, oldValue, newValue) -> refreshAngleDisplay(oldValue, newValue));
         /**
          * 绑定列宽
          */
         setNoAnchorPaneGap(tableInputParams);
-        setNoAnchorPaneGap(tableAnyCircle);
         setNoAnchorPaneGap(tableBaseTanAndSpan);
         setNoAnchorPaneGap(tableDeviation);
     }
@@ -205,6 +188,22 @@ public class Controller {
         }
         final Record record = selector.showAndWait();
         loadRecord(record, "加载记录的时间戳为");
+    }
+
+    private void btaAnyCircle() {
+        if (gear != null) {
+            if (anyCircleStage == null) {
+                initAnyCircle(btAnyCircle.getScene());
+            }
+            try {
+                anyCircleController.run(angleUnit.get(), preservedDigits.get(), gear);
+            } catch (CodeException e) {
+                Log.error(e);
+            }
+            anyCircleStage.showAndWait();
+        } else {
+            Alerts.warning(btAnyCircle.getScene().getWindow(), "请先计算有效的基本参数");
+        }
     }
 
     /**
@@ -244,23 +243,16 @@ public class Controller {
         }
     }
 
-    private void refreshAngleDisplay() {
-        final Toggle selectedToggle = groupAngles.getSelectedToggle();
-        if (selectedToggle.equals(rbToDegree)) {
-            tableAnyCircle.changeUnits(Angle.RADIANS, Angle.DEGREES);
-            tableBaseTanAndSpan.changeUnits(Angle.RADIANS, Angle.DEGREES);
-            tableDeviation.changeUnits(Angle.RADIANS, Angle.DEGREES);
-        } else if (selectedToggle.equals(rbToRadius)) {
-            tableAnyCircle.changeUnits(Angle.DEGREES, Angle.RADIANS);
-            tableBaseTanAndSpan.changeUnits(Angle.DEGREES, Angle.RADIANS);
-            tableDeviation.changeUnits(Angle.DEGREES, Angle.RADIANS);
+    private void refreshAngleDisplay(Angle oldUnit, Angle newUnit) {
+        if (newUnit != oldUnit) {
+            tableBaseTanAndSpan.changeUnits(oldUnit, newUnit);
+            tableDeviation.changeUnits(oldUnit, newUnit);
         }
     }
 
     private void flushTables() {
         flushTableBaseTanAndSpan();
         flushTableDeviation();
-        flushAnyCircle(false);
     }
 
     private void flushTableBaseTanAndSpan() {
@@ -277,60 +269,6 @@ public class Controller {
         } catch (CodeException e) {
             Log.error(e);
         }
-    }
-
-    /**
-     * 刷新任一圆面板
-     *
-     * @param popup 当输入无法运行计算时，是否弹窗提示
-     */
-    private void flushAnyCircle(final boolean popup) {
-        final String dText = tfDoubleAnyCircle.getText().trim();
-        Gear.AnyCircle anyCircle = null;
-        if (!dText.isBlank() && checkAnyCircleInputs()) {
-            final Double diameter = Double.valueOf(dText);
-            anyCircle = calculateAnyCircle(gear, diameter);
-        } else if (popup) {
-            Alerts.warning(tableAnyCircle.getScene().getWindow(), "请输入有效的任一圆直径");
-        }
-        /**
-         * 捕获编程错误
-         */
-        try {
-            setTableAnyCircle(anyCircle);
-        } catch (CodeException e) {
-            Log.error(e);
-        }
-    }
-
-    /**
-     * 设置任一圆数据面板值
-     *
-     * @param anyCircle 计算过的AnyCircle，如果是null，则清空面板
-     * @throws CodeException
-     */
-    private void setTableAnyCircle(Gear.AnyCircle anyCircle) throws CodeException {
-        if (anyCircle == null) {
-            tableAnyCircle.setValue("齿顶圆端面压力角", null)
-                    .setValue("分度圆弧齿厚", null)
-                    .setValue("任一圆弧齿厚", null)
-                    .setValue("任一圆法向弦齿厚", null)
-                    .setValue("任一圆螺旋角", null);
-        } else {
-            tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
-                    .setValue("分度圆弧齿厚", anyCircle.getS())
-                    .setValue("任一圆弧齿厚", anyCircle.getSa1())
-                    .setValue("任一圆法向弦齿厚", anyCircle.getSn1())
-                    .setValue("任一圆螺旋角", anyCircle.getBeta1());
-        }
-    }
-
-    //TODO 2021/8/9: 执行计算前先检查参数是否齐备,不包含输入项”任一园直径“
-    private boolean checkAnyCircleInputs() {
-        if (gear == null) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -370,4 +308,29 @@ public class Controller {
         }
     }
 
+    /**
+     * 初始化任一圆计算面板
+     */
+    private void initAnyCircle(Scene parentScene) {
+        if (parentScene != null) {
+            URL fxml = getClass().getResource("AnyCircle.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxml);
+            Parent root;
+            try {
+                root = fxmlLoader.load();
+                final Scene scene = new Scene(root);
+                anyCircleStage = new Stage();
+                anyCircleStage.initModality(Modality.WINDOW_MODAL);
+                anyCircleStage.setTitle("计算任一圆...");
+                anyCircleStage.setScene(scene);
+                anyCircleStage.sizeToScene();
+                anyCircleStage.setResizable(false);
+                anyCircleStage.getIcons().addAll(((Stage) parentScene.getWindow()).getIcons());
+                anyCircleStage.initOwner(parentScene.getWindow());
+                anyCircleController = fxmlLoader.getController();
+            } catch (IOException e) {
+                Log.error("初始化任一圆面板失败", e);
+            }
+        }
+    }
 }
