@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Changeable;
 import geardesigner.Config;
 import geardesigner.Log;
 import geardesigner.beans.CodeException;
@@ -9,18 +10,19 @@ import javafx.scene.control.TextFormatter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Consumer;
 
 /**
  * 输入参数的数据面板
  *
  * @author SUPERSTATION
  */
-public class InputParamTable extends ParamTable {
+public class InputParamTable extends ParamTable<InputParameter> implements Changeable {
     private static final Number INIT_COL0_WIDTH = Config.get("InputParamTable.INIT_COL0_WIDTH");
     private static final Number INIT_COL1_WIDTH = Config.get("InputParamTable.INIT_COL1_WIDTH");
     private static final Number INIT_COL2_WIDTH = Config.get("InputParamTable.INIT_COL2_WIDTH");
 
-    InputParamTable(final String paneName, final String[] colName, final Parameter[] pcs) throws IOException {
+    InputParamTable(final String paneName, final String[] colName, final InputParameter[] pcs) throws IOException {
         super(paneName, colName, pcs);
     }
 
@@ -35,7 +37,7 @@ public class InputParamTable extends ParamTable {
      */
     public static InputParamTable createTable(final String paneName, final String[] colName, Object[][] pNameAndUnit) throws IOException {
         if (pNameAndUnit != null && pNameAndUnit.length > 0) {
-            final Parameter[] pcs = new Parameter[pNameAndUnit.length];
+            final InputParameter[] pcs = new InputParameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
                     pcs[i] = new InputParameter((String) pNameAndUnit[i][0], (ConvertibleUnit) pNameAndUnit[i][1]);
@@ -48,12 +50,11 @@ public class InputParamTable extends ParamTable {
     }
 
     @Override
-    final void rowSizeBinding(final Parameter p) {
+    final void rowSizeBinding(final InputParameter p) {
         if (p != null) {
             p.bindNamePreWidthProperty(Col0Width);
             p.bindSymbolPreWidthProperty(Col1Width);
             p.bindValuePreWidthProperty(Col2Width);
-
             p.bindRowPreHeightProperty(RowHeight);
         }
     }
@@ -75,15 +76,11 @@ public class InputParamTable extends ParamTable {
      * @param promptText 预设文本
      */
     public void setPromptText(String paramName, String promptText) throws CodeException {
-        final Parameter parameter = table.get(paramName);
+        final InputParameter parameter = table.get(paramName);
         if (parameter == null) {
             throw new CodeException("指定的参数名不存在");
         }
-        if (parameter instanceof InputParameter) {
-            ((InputParameter) parameter).setPromptText(promptText);
-        } else {
-            throw new CodeException("Parameter控件不是预期的类型");
-        }
+        parameter.setPromptText(promptText);
     }
 
     /**
@@ -94,14 +91,9 @@ public class InputParamTable extends ParamTable {
      * @throws CodeException 编码错误
      */
     public void setTextFormatter(String paramName, TextFormatter<Double> formatter) throws CodeException {
-        final Parameter parameter = table.get(paramName);
+        final InputParameter parameter = table.get(paramName);
         if (parameter == null) {
             throw new CodeException("指定的参数名不存在");
-        }
-        if (parameter instanceof InputParameter) {
-            ((InputParameter) parameter).setTextFormatter(formatter);
-        } else {
-            throw new CodeException("Parameter控件不是预期的类型");
         }
     }
 
@@ -117,11 +109,21 @@ public class InputParamTable extends ParamTable {
             final Constructor<? extends TextFormatter> constructor = cls.getDeclaredConstructor();
             table.values().parallelStream().forEach(p -> {
                 try {
-                    ((InputParameter) p).setTextFormatter(constructor.newInstance());
+                    p.setTextFormatter(constructor.newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     Log.error(e);
                 }
             });
         }
+    }
+
+    /**
+     * 设置发生变化时的处理器
+     *
+     * @param consumer
+     */
+    @Override
+    public void setOnChanged(Consumer<Object> consumer) {
+        table.values().parallelStream().forEach(inputParameter -> inputParameter.setOnChanged(consumer));
     }
 }

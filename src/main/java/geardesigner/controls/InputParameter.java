@@ -1,5 +1,6 @@
 package geardesigner.controls;
 
+import geardesigner.Changeable;
 import geardesigner.beans.InputException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.collections.ObservableList;
@@ -10,12 +11,14 @@ import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 /**
  * 输入型参数的UI控件
  *
  * @author SUPERSTATION
  */
-public class InputParameter<U extends ConvertibleUnit> extends Parameter {
+public class InputParameter<U extends ConvertibleUnit> extends Parameter implements Changeable {
     private static final StringConverter ConvertibleUnitStringConverter = new StringConverter() {
         @Override
         public String toString(Object o) {
@@ -130,5 +133,16 @@ public class InputParameter<U extends ConvertibleUnit> extends Parameter {
      */
     public void setTextFormatter(TextFormatter<Double> formatter) {
         field.setTextFormatter(formatter);
+    }
+
+    /**
+     * 设置发生变化时的处理器
+     *
+     * @param consumer
+     */
+    @Override
+    public void setOnChanged(final Consumer<Object> consumer) {
+        units.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> consumer.accept(observable));
+        field.lengthProperty().addListener((observable, oldValue, newValue) -> consumer.accept(observable));
     }
 }

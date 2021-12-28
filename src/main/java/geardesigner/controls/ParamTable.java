@@ -25,11 +25,11 @@ import java.util.Set;
 /**
  * @author SuperNote
  */
-public abstract class ParamTable extends VBox {
+public abstract class ParamTable<T extends Parameter> extends VBox {
     private static final Double SPACING = Config.get("ParamTable.SPACING");
     private static final Insets PADDING = Config.get("ParamTable.PADDING");
 
-    final ObservableMap<String, Parameter> table;
+    final ObservableMap<String, T> table;
     final Property<Number> Col0Width;
     final Property<Number> Col1Width;
     final Property<Number> Col2Width;
@@ -48,7 +48,7 @@ public abstract class ParamTable extends VBox {
     @FXML
     private Label lCol2;
 
-    ParamTable(String paneName, String[] colName, Parameter[] pcs) throws IOException {
+    ParamTable(String paneName, String[] colName, T[] pcs) throws IOException {
         super();
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ParamTable.fxml"));
         fxmlLoader.setRoot(this);
@@ -98,10 +98,10 @@ public abstract class ParamTable extends VBox {
         lCol2.prefWidthProperty().bind(Col2Width);
     }
 
-    private void addParams(Parameter[] pcs) {
+    private void addParams(T[] pcs) {
         if (pcs != null) {
             final ObservableList<Node> children = getChildren();
-            for (Parameter p : pcs) {
+            for (T p : pcs) {
                 if (p != null) {
                     final String name = p.getName();
                     rowSizeBinding(p);
@@ -131,7 +131,7 @@ public abstract class ParamTable extends VBox {
      *
      * @param p 待绑定的Parameter实例
      */
-    abstract void rowSizeBinding(Parameter p);
+    abstract void rowSizeBinding(T p);
 
     /**
      * 重写该方法，以定义不同类型面板的排版样式。必须指定列宽的默认值
@@ -162,9 +162,9 @@ public abstract class ParamTable extends VBox {
      * @return 当前数据面板的显示值
      */
     public Map<String, Number> getValues() throws InputException {
-        final Set<Map.Entry<String, Parameter>> params = table.entrySet();
+        final Set<Map.Entry<String, T>> params = table.entrySet();
         final Map<String, Number> cValues = new HashMap<>(params.size());
-        for (Map.Entry<String, Parameter> p : params) {
+        for (Map.Entry<String, T> p : params) {
             cValues.put(p.getKey(), p.getValue().getValue());
         }
         return cValues;

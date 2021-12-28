@@ -15,14 +15,14 @@ import java.util.Set;
  *
  * @author SUPERSTATION
  */
-public class OutputParamTable extends ParamTable {
+public class OutputParamTable extends ParamTable<OutputParameter> {
     private static final Number INIT_COL0_WIDTH = Config.get("OutputParamTable.INIT_COL0_WIDTH");
     private static final Number INIT_COL1_WIDTH = Config.get("OutputParamTable.INIT_COL1_WIDTH");
     private static final Number INIT_COL2_WIDTH = Config.get("OutputParamTable.INIT_COL2_WIDTH");
     private static final Number INIT_ROW_HEIGHT = Config.get("OutputParamTable.INIT_ROW_HEIGHT");
     private IntegerProperty digit;
 
-    OutputParamTable(final String paneName, final String[] colName, final Parameter[] pcs) throws IOException {
+    OutputParamTable(final String paneName, final String[] colName, final OutputParameter[] pcs) throws IOException {
         super(paneName, colName, pcs);
     }
 
@@ -38,7 +38,7 @@ public class OutputParamTable extends ParamTable {
     public static OutputParamTable createTable(final String paneName, final String[] colName,
                                                Object[][] pNameAndUnit) throws IOException {
         if (pNameAndUnit != null && pNameAndUnit.length > 0) {
-            final Parameter[] pcs = new Parameter[pNameAndUnit.length];
+            final OutputParameter[] pcs = new OutputParameter[pNameAndUnit.length];
             for (int i = 0; i < pNameAndUnit.length; i++) {
                 if (pNameAndUnit[i] != null && pNameAndUnit[i].length == 2) {
                     final OutputParameter pc = new OutputParameter((String) pNameAndUnit[i][0], (ConvertibleUnit) pNameAndUnit[i][1]);
@@ -52,7 +52,7 @@ public class OutputParamTable extends ParamTable {
     }
 
     @Override
-    final void rowSizeBinding(final Parameter p) {
+    final void rowSizeBinding(final OutputParameter p) {
         if (p != null) {
             p.bindNamePreWidthProperty(Col0Width);
             p.bindValuePreWidthProperty(Col1Width);
@@ -81,23 +81,23 @@ public class OutputParamTable extends ParamTable {
      * @param ip null->清除绑定
      */
     public void bindDigitProperty(@Nullable IntegerProperty ip) {
-        final Set<Map.Entry<String, Parameter>> pcs = table.entrySet();
+        final Set<Map.Entry<String, OutputParameter>> pcs = table.entrySet();
         if (ip == null) {
             if (digit == null) {
                 return;
             }
-            for (Map.Entry<String, Parameter> ep : pcs) {
-                ((OutputParameter) ep.getValue()).unbindDigitProperty(digit);
+            for (Map.Entry<String, OutputParameter> ep : pcs) {
+                (ep.getValue()).unbindDigitProperty(digit);
             }
         } else {
             if (digit == null) {
-                for (Map.Entry<String, Parameter> ep : pcs) {
-                    ((OutputParameter) ep.getValue()).bindDigitProperty(ip);
+                for (Map.Entry<String, OutputParameter> ep : pcs) {
+                    (ep.getValue()).bindDigitProperty(ip);
                 }
 
             } else {
-                for (Map.Entry<String, Parameter> ep : pcs) {
-                    final OutputParameter p = (OutputParameter) ep.getValue();
+                for (Map.Entry<String, OutputParameter> ep : pcs) {
+                    final OutputParameter p = ep.getValue();
                     p.unbindDigitProperty(digit);
                     p.bindDigitProperty(ip);
                 }

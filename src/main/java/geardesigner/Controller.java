@@ -72,7 +72,7 @@ public class Controller {
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
         angleUnit = new SimpleObjectProperty<>(Angle.DEGREES);
-        accessibleAnyCircle = new SimpleBooleanProperty(true);
+        accessibleAnyCircle = new SimpleBooleanProperty(false);
     }
 
     private static void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
@@ -150,6 +150,10 @@ public class Controller {
     }
 
     private void initBindings() {
+        /**
+         * 当输入发生改变时，禁用任一圆面板
+         */
+        tableInputParams.setOnChanged(o -> accessibleAnyCircle.set(false));
         tableBaseTanAndSpan.bindDigitProperty(preservedDigits);
         tableDeviation.bindDigitProperty(preservedDigits);
         /**
@@ -218,8 +222,13 @@ public class Controller {
             /**
              * 记录计算历史
              */
+            //TODO 2021/12/28:优化性能
             Services.get().RecordBase().submitRecord(new Record(specs));
             flushTables();
+            /**
+             * 启用任一圆计算
+             */
+            accessibleAnyCircle.set(true);
         } catch (InputException e) {
             Alerts.warning(tableInputParams.getScene().getWindow(), "请输入完整有效的设计参数");
             Log.warning("参数输入错误", e);

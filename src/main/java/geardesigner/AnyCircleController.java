@@ -56,6 +56,7 @@ public class AnyCircleController {
         }
         APaneAnyCircle.getChildren().add(tableAnyCircle);
         btCalAnyCircle.setOnAction(event -> flushAnyCircle(true));
+        tfDoubleAnyCircle.setOnAction(actionEvent -> System.out.println(tfDoubleAnyCircle.getCharacters()));
     }
 
     private void initTables() throws IOException {
