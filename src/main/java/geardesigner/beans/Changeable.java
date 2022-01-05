@@ -1,4 +1,4 @@
-package geardesigner;
+package geardesigner.beans;
 
 import java.util.function.Consumer;
 

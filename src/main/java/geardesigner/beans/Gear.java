@@ -1,59 +1,25 @@
-package geardesigner;
+package geardesigner.beans;
 
-import geardesigner.beans.Specifications;
+import geardesigner.MathUtils;
 
 /**
  * 计算结果。角全部以弧度制存储
  *
  * @author SuperNote
  */
-public class Gear {
-    /**
-     * 设计规格
-     */
-    Specifications specs;
-    /**
-     * 分度圆直径
-     */
-    double d;
-    /**
-     * 齿顶圆直径
-     */
-    double da;
-    /**
-     * 齿根圆直径
-     */
-    double df;
-    /**
-     * 中圆直径
-     */
-    double dm;
-    /**
-     * 端面压力角
-     */
-    double alphaT;
-    /**
-     * 基圆直径
-     */
-    double db;
-    /**
-     * 当量齿数
-     */
-    double Zp;
-    /**
-     * 跨齿数（基准）
-     */
-    int k;
-
-    /**
-     * 公法线
-     */
-    BaseTangent baseTangent;
-
-    /**
-     * 跨棒距
-     */
-    Span span;
+public record Gear(
+        Specifications specs,//设计规格
+        double d,//分度圆直径
+        double da,//齿顶圆直径
+        double df,//齿根圆直径
+        double dm,//中圆直径
+        double alphaT,//端面压力角
+        double db,//基圆直径
+        double Zp,//当量齿数
+        int k,//跨齿数（基准）
+        BaseTangent baseTangent,//公法线
+        Span span//跨棒距
+) {
 
     public Gear(Specifications specs) {
         this.specs = specs;

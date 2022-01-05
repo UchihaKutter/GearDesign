@@ -14,21 +14,25 @@ import java.util.Map;
  *
  * @author SuperNote
  */
-public class Specifications implements Serializable {
+public record Specifications
+(
+     int Mn,//法向模数
+     int Z,//齿数
+     double alphaN,//法向压力角
+     double beta,//螺旋角
+     double Xn,//法向变位系数
+     double ha,//齿顶高系数
+     double hf,//齿根高系数
+     double Cf,//顶隙系数
+     double dp,//量棒直径
+     double Ws,//
+     double Wx,
+     double Ms,
+     double Mx
+)implements Serializable
+        {
     @Serial
     private static final long serialVersionUID = 5572715615929878142L;
-    /**
-     * 法向模数
-     */
-    public final int Mn;
-    /**
-     * 齿数（内齿为负）
-     */
-    public final int Z;
-    /**
-     * 法向压力角
-     */
-    public final double alphaN;
     /**
      * 螺旋角
      */

@@ -1,6 +1,7 @@
 package geardesigner;
 
 import geardesigner.beans.CodeException;
+import geardesigner.beans.Gear;
 import geardesigner.controls.Alerts;
 import geardesigner.controls.OutputParamTable;
 import geardesigner.units.Angle;

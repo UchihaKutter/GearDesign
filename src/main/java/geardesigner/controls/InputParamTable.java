@@ -1,6 +1,6 @@
 package geardesigner.controls;
 
-import geardesigner.Changeable;
+import geardesigner.beans.Changeable;
 import geardesigner.Config;
 import geardesigner.Log;
 import geardesigner.beans.CodeException;
