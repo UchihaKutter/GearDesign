@@ -43,9 +43,9 @@ public class TableSettings {
     public static final String DEVIATION_PARAMS_PANE_NAME = "偏差转换";
     public static final String[] DEVIATION_PARAMS_COLUMNS = new String[]{"参数名", "计算值", null};
     public static final Object[][] DEVIATION_PARAMS_NAME_UNIT
-            = new Object[][]{{"公法线上偏差", Length.MILLIMETERS}, {"跨棒距一", Length.MILLIMETERS},
-            {"跨棒距上偏差", Length.MILLIMETERS}, {"公法线下偏差", Length.MILLIMETERS}, {"跨棒距二", Length.MILLIMETERS},
-            {"跨棒距下偏差", Length.MILLIMETERS}, {"跨棒距上偏差am1", Length.MILLIMETERS}, {"公法线上偏差Ws", Length.MILLIMETERS},
+            = new Object[][]{{"公法线上偏差X1", Length.MILLIMETERS}, {"跨棒距一M1", Length.MILLIMETERS},
+            {"跨棒距上偏差Ms", Length.MILLIMETERS}, {"公法线下偏差X2", Length.MILLIMETERS}, {"跨棒距二M2", Length.MILLIMETERS},
+            {"跨棒距下偏差Mx", Length.MILLIMETERS}, {"跨棒距上偏差am1", Length.MILLIMETERS}, {"公法线上偏差Ws", Length.MILLIMETERS},
             {"跨棒距下偏差am2", Length.MILLIMETERS}, {"公法线下偏差Wx", Length.MILLIMETERS}};
 
     private TableSettings() {

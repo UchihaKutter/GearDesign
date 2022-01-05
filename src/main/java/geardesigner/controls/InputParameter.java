@@ -1,6 +1,6 @@
 package geardesigner.controls;
 
-import geardesigner.Changeable;
+import geardesigner.beans.Changeable;
 import geardesigner.beans.InputException;
 import geardesigner.units.ConvertibleUnit;
 import javafx.collections.ObservableList;

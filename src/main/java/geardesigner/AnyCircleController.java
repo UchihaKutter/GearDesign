@@ -1,6 +1,7 @@
 package geardesigner;
 
 import geardesigner.beans.CodeException;
+import geardesigner.beans.Gear;
 import geardesigner.controls.Alerts;
 import geardesigner.controls.OutputParamTable;
 import geardesigner.units.Angle;
@@ -44,7 +45,7 @@ public class AnyCircleController {
      */
     @Contract(value = "!null,!null->!null", pure = true)
     private static Gear.AnyCircle calculateAnyCircle(Gear gear, Double diameter) {
-        return gear.new AnyCircle(diameter).calculate();
+        return gear.calcAnyCircle(diameter);
     }
 
     @FXML
@@ -115,11 +116,11 @@ public class AnyCircleController {
                     .setValue("任一圆法向弦齿厚", null)
                     .setValue("任一圆螺旋角", null);
         } else {
-            tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.getAlphaT1())
-                    .setValue("分度圆弧齿厚", anyCircle.getS())
-                    .setValue("任一圆弧齿厚", anyCircle.getSa1())
-                    .setValue("任一圆法向弦齿厚", anyCircle.getSn1())
-                    .setValue("任一圆螺旋角", anyCircle.getBeta1());
+            tableAnyCircle.setValue("齿顶圆端面压力角", anyCircle.alphaT1())
+                    .setValue("分度圆弧齿厚", anyCircle.s())
+                    .setValue("任一圆弧齿厚", anyCircle.sa1())
+                    .setValue("任一圆法向弦齿厚", anyCircle.sn1())
+                    .setValue("任一圆螺旋角", anyCircle.beta1());
         }
     }
 

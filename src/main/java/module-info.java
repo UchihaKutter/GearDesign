@@ -12,6 +12,7 @@ module GearDesign {
 
     opens geardesigner;
     opens geardesigner.controls to javafx.fxml;
-    opens geardesigner.beans to com.fasterxml.jackson.databind;
     exports geardesigner;
+    exports geardesigner.beans;
+    opens geardesigner.beans;
 }

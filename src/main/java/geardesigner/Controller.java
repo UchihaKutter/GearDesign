@@ -1,9 +1,7 @@
 package geardesigner;
 
-import geardesigner.beans.CodeException;
-import geardesigner.beans.InputException;
 import geardesigner.beans.Record;
-import geardesigner.beans.Specifications;
+import geardesigner.beans.*;
 import geardesigner.controls.*;
 import geardesigner.units.Angle;
 import javafx.beans.property.*;
@@ -176,7 +174,7 @@ public class Controller {
 
     private @NotNull Specifications getAllSpecs() throws InputException {
         final Map<String, Number> values = tableInputParams.getValues();
-        return new Specifications(values);
+        return Specifications.toSpecifications(values);
     }
 
     /**
@@ -285,17 +283,17 @@ public class Controller {
      */
     private void setTableBaseTanAndSpan(Gear gear) throws CodeException {
         if (gear != null) {
-            tableBaseTanAndSpan.setValue("分度圆直径", gear.d)
-                    .setValue("齿顶圆直径", gear.da)
-                    .setValue("齿根圆直径", gear.df)
-                    .setValue("基圆", gear.db)
-                    .setValue("当量齿数", gear.Zp)
-                    .setValue("跨齿数", (double) gear.k)
-                    .setValue("公法线长度", gear.getWk())
-                    .setValue("公法线长度处直径", gear.getDWk())
-                    .setValue("跨棒距测量点直径", gear.getDkm())
-                    .setValue("跨棒距", gear.getM())
-                    .setValue("端面压力角", gear.alphaT);
+            tableBaseTanAndSpan.setValue("分度圆直径", gear.d())
+                    .setValue("齿顶圆直径", gear.da())
+                    .setValue("齿根圆直径", gear.df())
+                    .setValue("基圆", gear.db())
+                    .setValue("当量齿数", gear.zp())
+                    .setValue("跨齿数", (double) gear.k())
+                    .setValue("公法线长度", gear.baseTangent().Wk())
+                    .setValue("公法线长度处直径", gear.baseTangent().dWk())
+                    .setValue("跨棒距测量点直径", gear.span().dkm())
+                    .setValue("跨棒距", gear.span().M())
+                    .setValue("端面压力角", gear.alphaT());
         }
     }
 
@@ -304,16 +302,16 @@ public class Controller {
      */
     private void setTableDeviation(Gear gear) throws CodeException {
         if (gear != null) {
-            tableDeviation.setValue("公法线上偏差", (gear.getX1()))
-                    .setValue("跨棒距一", gear.getM1())
-                    .setValue("跨棒距上偏差", gear.getMs())
-                    .setValue("公法线下偏差", gear.getX2())
-                    .setValue("跨棒距二", gear.getM2())
-                    .setValue("跨棒距下偏差", gear.getMx())
-                    .setValue("公法线上偏差Ws", gear.getWs())
-                    .setValue("公法线下偏差Wx", gear.getWx())
-                    .setValue("跨棒距上偏差am1", gear.getAlphaM1())
-                    .setValue("跨棒距下偏差am2", gear.getAlphaM2());
+            tableDeviation.setValue("公法线上偏差X1", (gear.btDeviation().x1()))
+                    .setValue("跨棒距一M1", gear.btDeviation().M1())
+                    .setValue("跨棒距上偏差Ms", gear.btDeviation().Ms())
+                    .setValue("公法线下偏差X2", gear.btDeviation().x2())
+                    .setValue("跨棒距二M2", gear.btDeviation().M2())
+                    .setValue("跨棒距下偏差Mx", gear.btDeviation().Mx())
+                    .setValue("公法线上偏差Ws", gear.sDeviation().Ws())
+                    .setValue("公法线下偏差Wx", gear.sDeviation().Wx())
+                    .setValue("跨棒距上偏差am1", gear.sDeviation().alphaM1())
+                    .setValue("跨棒距下偏差am2", gear.sDeviation().alphaM2());
         }
     }
 
