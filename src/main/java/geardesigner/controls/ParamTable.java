@@ -4,6 +4,7 @@ import geardesigner.Config;
 import geardesigner.Log;
 import geardesigner.beans.CodeException;
 import geardesigner.beans.InputException;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -30,23 +33,16 @@ public abstract class ParamTable<T extends Parameter> extends VBox {
     private static final Insets PADDING = Config.get("ParamTable.PADDING");
 
     final ObservableMap<String, T> table;
-    final Property<Number> Col0Width;
-    final Property<Number> Col1Width;
-    final Property<Number> Col2Width;
 
     final Property<Number> RowHeight;
-
+    final DoubleProperty Col0Width;
+    final DoubleProperty Col1Width;
+    final DoubleProperty Col2Width;
     @FXML
     private Text tTitle;
 
     @FXML
-    private Label lCol0;
-
-    @FXML
-    private Label lCol1;
-
-    @FXML
-    private Label lCol2;
+    private HBox hbLabels;
 
     ParamTable(String paneName, String[] colName, T[] pcs) throws IOException {
         super();
@@ -62,9 +58,9 @@ public abstract class ParamTable<T extends Parameter> extends VBox {
         Col2Width = new SimpleDoubleProperty();
         RowHeight = new SimpleDoubleProperty();
         table = FXCollections.observableMap(new HashMap<>(pcs.length));
-        setBinds();
         setNames(paneName, colName);
         addParams(pcs);
+        setBinds();
         initLayout();
         initStyle();
     }
@@ -77,25 +73,35 @@ public abstract class ParamTable<T extends Parameter> extends VBox {
      */
     private void setNames(String paneName, String[] colName) {
         tTitle.setText(paneName);
-        if (colName != null && colName.length > 0) {
-            switch (colName.length) {
-                case 3:
-                    lCol2.setText(colName[2]);
-                case 2:
-                    lCol1.setText(colName[1]);
-                case 1:
-                    lCol0.setText(colName[0]);
-                    break;
-                default:
-                    Log.info("传入的列名过多");
+        if (colName != null) {
+            final ObservableList<Node> hbc = hbLabels.getChildren();
+            for (int i = 0; i < colName.length; i++) {
+                hbc.add(new Label(colName[i]));
             }
         }
     }
 
     private void setBinds() {
-        lCol0.prefWidthProperty().bind(Col0Width);
-        lCol1.prefWidthProperty().bind(Col1Width);
-        lCol2.prefWidthProperty().bind(Col2Width);
+        final ObservableList<Node> hbc = hbLabels.getChildren();
+        final int hbSize = hbc.size();
+        switch (hbSize) {
+            case 3:
+                if (hbc.get(2) instanceof Region col2) {
+                    col2.prefWidthProperty().bind(Col2Width);
+                }
+            case 2:
+                if (hbc.get(1) instanceof Region col1) {
+                    col1.prefWidthProperty().bind(Col2Width);
+                }
+            case 1:
+                if (hbc.get(0) instanceof Region col0) {
+                    col0.prefWidthProperty().bind(Col2Width);
+                }
+            case 0:
+                break;
+            default:
+                Log.error("太多的列名参数");
+        }
     }
 
     private void addParams(T[] pcs) {
@@ -189,17 +195,4 @@ public abstract class ParamTable<T extends Parameter> extends VBox {
             }
         }
     }
-
-    public void setCol0Width(double width) {
-        lCol0.setMinWidth(width);
-    }
-
-    public void setCol1Width(double width) {
-        lCol1.setMinWidth(width);
-    }
-
-    public void setCol2Width(double width) {
-        lCol2.setMinWidth(width);
-    }
-
 }

@@ -16,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-import static geardesigner.TableSettings.*;
+import static geardesigner.TableSettings.ANY_CIRCLE_PARAMS_NAME_UNIT;
+import static geardesigner.TableSettings.ANY_CIRCLE_PARAMS_PANE_NAME;
 
 /**
  * 计算任一园面板
@@ -63,7 +64,7 @@ public class AnyCircleController {
     private void initTables() throws IOException {
         tableAnyCircle = OutputParamTable.createTable(
                 ANY_CIRCLE_PARAMS_PANE_NAME,
-                ANY_CIRCLE_PARAMS_COLUMNS,
+                null,
                 ANY_CIRCLE_PARAMS_NAME_UNIT);
         tableAnyCircle.bindDigitProperty(preservedDigits);
     }

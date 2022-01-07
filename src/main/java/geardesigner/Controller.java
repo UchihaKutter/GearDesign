@@ -112,12 +112,12 @@ public class Controller {
                 INPUT_PARAMS_NAME_UNIT);
         tableBaseTanAndSpan = OutputParamTable.createTable(
                 BASE_TAN_AND_SPAN_PARAMS_PANE_NAME,
-                BASE_TAN_AND_SPAN_PARAMS_COLUMNS,
+                null,
                 BASE_TAN_AND_SPAN_PARAMS_NAME_UNIT
         );
         tableDeviation = OutputParamTable.createTable(
                 DEVIATION_PARAMS_PANE_NAME,
-                DEVIATION_PARAMS_COLUMNS,
+                null,
                 DEVIATION_PARAMS_NAME_UNIT
         );
         /**
