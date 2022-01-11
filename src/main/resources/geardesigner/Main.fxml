@@ -17,6 +17,16 @@
             <children>
                 <VBox alignment="TOP_CENTER" spacing="20.0">
                     <children>
+                        <AnchorPane stylesheets="@Info.css">
+                            <children>
+                                <Label fx:id="lInfo" text="Label" AnchorPane.leftAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0"/>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="程序版本号" AnchorPane.rightAnchor="50.0"
+                                      AnchorPane.topAnchor="0.0"/>
+                                <Label fx:id="lVersion" text="V1.2" AnchorPane.rightAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0"/>
+                            </children>
+                        </AnchorPane>
                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
                                 <RadioButton fx:id="rbToDegree" selected="true" text="角度制">

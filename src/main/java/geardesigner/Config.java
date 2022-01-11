@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public final class Config {
     private volatile static Config config;
-    private Map<String, Object> configurations;
+    private final Map<String, Object> configurations;
 
     private Config() {
         configurations = new HashMap<>();
@@ -24,8 +24,8 @@ public final class Config {
         configurations.put("OutputParamTable.INIT_COL0_WIDTH", 110);
         configurations.put("OutputParamTable.INIT_COL1_WIDTH", 80);
         configurations.put("OutputParamTable.INIT_COL2_WIDTH", 30);
-        configurations.put("OutputParamTable.INIT_ROW_HEIGHT", 20);
-        configurations.put("ParamTable.SPACING", 12d);
+        configurations.put("OutputParamTable.INIT_ROW_HEIGHT", 16);
+        configurations.put("ParamTable.SPACING", 10d);
         configurations.put("ParamTable.PADDING", new Insets(6, 6, 12, 6));
         configurations.put("TexFormula.FONT_SIZE", 14f);
         /**
@@ -33,6 +33,8 @@ public final class Config {
          */
         configurations.put("TexFormula.DEFAULT_STYLE", 0);
         configurations.put("SQLiteDatabase.COMPRESSION_BUFFER_SIZE", 1024);
+        configurations.put("Version", "V1.2");
+        configurations.put("Info", "本程序遵照国标方法计算");
     }
 
     public static Config getInstance() {

@@ -1,0 +1,8 @@
+* {
+    -fx-font-size: 14;
+    -fx-font-family: "Microsoft YaHei UI";
+}
+
+.label {
+    -fx-text-fill: #C0392B;
+}

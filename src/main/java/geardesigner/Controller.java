@@ -11,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,6 +28,10 @@ public class Controller {
     private final IntegerProperty preservedDigits;
     private final ObjectProperty<Angle> angleUnit;
     private final BooleanProperty accessibleAnyCircle;
+    @FXML
+    private Label lInfo;
+    @FXML
+    private Label lVersion;
     @FXML
     private AnchorPane APaneInputParams;
     @FXML
@@ -54,6 +55,7 @@ public class Controller {
     private Button btSelectRecord;
     @FXML
     private Button btAnyCircle;
+
     private InputParamTable tableInputParams;
     private OutputParamTable tableBaseTanAndSpan;
     private OutputParamTable tableDeviation;
@@ -82,6 +84,8 @@ public class Controller {
 
     @FXML
     void initialize() {
+        lInfo.setText(Config.get("Info"));
+        lVersion.setText(Config.get("Version"));
         APaneInputParams.getChildren().add(tableInputParams);
         APaneBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
         APaneDeviation.getChildren().add(tableDeviation);
