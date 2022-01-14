@@ -24,10 +24,13 @@ import java.util.Map;
 
 import static geardesigner.TableSettings.*;
 
+/**
+ * @author SUPERTOP
+ */
 public class Controller {
     private final IntegerProperty preservedDigits;
     private final ObjectProperty<Angle> angleUnit;
-    private final BooleanProperty accessibleAnyCircle;
+    private final BooleanProperty accessibleDetails;
     @FXML
     private Label lInfo;
     @FXML
@@ -36,8 +39,6 @@ public class Controller {
     private AnchorPane APaneInputParams;
     @FXML
     private AnchorPane APaneBaseTanAndSpan;
-    @FXML
-    private AnchorPane APaneDeviation;
     @FXML
     private RadioButton rbToDegree;
     @FXML
@@ -49,22 +50,25 @@ public class Controller {
     @FXML
     /**
      * 重算所有值
-     */
-    private Button btCalculate;
+     */ private Button btCalculate;
     @FXML
     private Button btSelectRecord;
     @FXML
     private Button btAnyCircle;
+    @FXML
+    private Button btDeviation;
 
     private InputParamTable tableInputParams;
     private OutputParamTable tableBaseTanAndSpan;
-    private OutputParamTable tableDeviation;
+
     /**
      * 因为selector需要指定Owner，所以必须使用懒加载
      */
     private RecordSelector selector;
     private AnyCircleController anyCircleController;
     private Stage anyCircleStage;
+    private DeviationController deviationController;
+    private Stage deviationStage;
     private Gear gear;
 
     public Controller() throws IOException, NoSuchMethodException {
@@ -72,7 +76,7 @@ public class Controller {
         initTables();
         preservedDigits = new SimpleIntegerProperty(4);
         angleUnit = new SimpleObjectProperty<>(Angle.DEGREES);
-        accessibleAnyCircle = new SimpleBooleanProperty(false);
+        accessibleDetails = new SimpleBooleanProperty(false);
     }
 
     private static void setNoAnchorPaneGap(@NotNull Node childOfAnchorPane) {
@@ -88,10 +92,10 @@ public class Controller {
         lVersion.setText(Config.get("Version"));
         APaneInputParams.getChildren().add(tableInputParams);
         APaneBaseTanAndSpan.getChildren().add(tableBaseTanAndSpan);
-        APaneDeviation.getChildren().add(tableDeviation);
         btCalculate.setOnAction(event -> calGear());
         btSelectRecord.setOnAction(event -> btaSelectRecord());
         btAnyCircle.setOnAction(actionEvent -> btaAnyCircle());
+        btDeviation.setOnAction(actionEvent -> btaDeviation());
         /**
          * 角度值切换
          */
@@ -110,20 +114,9 @@ public class Controller {
     }
 
     private void initTables() throws IOException, NoSuchMethodException {
-        tableInputParams = InputParamTable.createTable(
-                INPUT_PARAMS_PANE_NAME,
-                INPUT_PARAMS_COLUMNS,
-                INPUT_PARAMS_NAME_UNIT);
-        tableBaseTanAndSpan = OutputParamTable.createTable(
-                BASE_TAN_AND_SPAN_PARAMS_PANE_NAME,
-                null,
-                BASE_TAN_AND_SPAN_PARAMS_NAME_UNIT
-        );
-        tableDeviation = OutputParamTable.createTable(
-                DEVIATION_PARAMS_PANE_NAME,
-                null,
-                DEVIATION_PARAMS_NAME_UNIT
-        );
+        tableInputParams = InputParamTable.createTable(INPUT_PARAMS_PANE_NAME, INPUT_PARAMS_COLUMNS, INPUT_PARAMS_NAME_UNIT);
+        tableBaseTanAndSpan = OutputParamTable.createTable(BASE_TAN_AND_SPAN_PARAMS_PANE_NAME, null, BASE_TAN_AND_SPAN_PARAMS_NAME_UNIT);
+
         /**
          * 添加输入过滤器
          */
@@ -155,22 +148,21 @@ public class Controller {
         /**
          * 当输入发生改变时，禁用任一圆面板
          */
-        tableInputParams.setOnChanged(o -> accessibleAnyCircle.set(false));
+        tableInputParams.setOnChanged(o -> accessibleDetails.set(false));
         tableBaseTanAndSpan.bindDigitProperty(preservedDigits);
-        tableDeviation.bindDigitProperty(preservedDigits);
+
         /**
          * 添加Listener，同步修改一个其他的Property
          */
-        cbPreservedDigit.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> preservedDigits.setValue(newValue));
-        btAnyCircle.disableProperty().bind(accessibleAnyCircle.not());
+        cbPreservedDigit.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> preservedDigits.setValue(newValue));
+        btAnyCircle.disableProperty().bind(accessibleDetails.not());
+        btDeviation.disableProperty().bind(accessibleDetails.not());
         angleUnit.addListener((observable, oldValue, newValue) -> refreshAngleDisplay(oldValue, newValue));
         /**
          * 绑定列宽
          */
         setNoAnchorPaneGap(tableInputParams);
         setNoAnchorPaneGap(tableBaseTanAndSpan);
-        setNoAnchorPaneGap(tableDeviation);
     }
 
     private void setLayout() {
@@ -212,6 +204,22 @@ public class Controller {
         }
     }
 
+    private void btaDeviation() {
+        if (gear != null) {
+            if (deviationStage == null) {
+                initDeviation(btDeviation.getScene());
+            }
+            try {
+                deviationController.run(angleUnit.get(), preservedDigits.get(), gear);
+            } catch (CodeException e) {
+                Log.error(e);
+            }
+            deviationStage.showAndWait();
+        } else {
+            Alerts.warning(btDeviation.getScene().getWindow(), "请先计算有效的基本参数");
+        }
+    }
+
     /**
      * 执行齿轮计算
      */
@@ -230,7 +238,7 @@ public class Controller {
             /**
              * 启用任一圆计算
              */
-            accessibleAnyCircle.set(true);
+            accessibleDetails.set(true);
         } catch (InputException e) {
             Alerts.warning(tableInputParams.getScene().getWindow(), "请输入完整有效的设计参数");
             Log.warning("参数输入错误", e);
@@ -257,13 +265,11 @@ public class Controller {
     private void refreshAngleDisplay(Angle oldUnit, Angle newUnit) {
         if (newUnit != oldUnit) {
             tableBaseTanAndSpan.changeUnits(oldUnit, newUnit);
-            tableDeviation.changeUnits(oldUnit, newUnit);
         }
     }
 
     private void flushTables() {
         flushTableBaseTanAndSpan();
-        flushTableDeviation();
     }
 
     private void flushTableBaseTanAndSpan() {
@@ -274,57 +280,22 @@ public class Controller {
         }
     }
 
-    private void flushTableDeviation() {
-        try {
-            setTableDeviation(gear);
-        } catch (CodeException e) {
-            Log.error(e);
-        }
-    }
-
     /**
      * 不包含计算
      */
     private void setTableBaseTanAndSpan(Gear gear) throws CodeException {
         if (gear != null) {
-            tableBaseTanAndSpan.setValue("分度圆直径", gear.d())
-                    .setValue("齿顶圆直径", gear.da())
-                    .setValue("齿根圆直径", gear.df())
-                    .setValue("基圆", gear.db())
-                    .setValue("当量齿数", gear.zp())
-                    .setValue("跨齿数", (double) gear.k())
-                    .setValue("公法线长度", gear.baseTangent().Wk())
-                    .setValue("公法线长度处直径", gear.baseTangent().dWk())
-                    .setValue("跨棒距测量点直径", gear.span().dkm())
-                    .setValue("跨棒距", gear.span().M())
-                    .setValue("端面压力角", gear.alphaT());
+            tableBaseTanAndSpan.setValue("分度圆直径", gear.d()).setValue("齿顶圆直径", gear.da()).setValue("齿根圆直径", gear.df()).setValue("基圆", gear.db()).setValue("当量齿数", gear.zp()).setValue("跨齿数", (double) gear.k()).setValue("公法线长度", gear.baseTangent().Wk()).setValue("公法线长度处直径", gear.baseTangent().dWk()).setValue("跨棒距测量点直径", gear.span().dkm()).setValue("跨棒距", gear.span().M()).setValue("端面压力角", gear.alphaT());
         }
     }
 
-    /**
-     * 不包含计算
-     */
-    private void setTableDeviation(Gear gear) throws CodeException {
-        if (gear != null) {
-            tableDeviation.setValue("公法线上偏差X1", (gear.btDeviation().x1()))
-                    .setValue("跨棒距一M1", gear.btDeviation().M1())
-                    .setValue("跨棒距上偏差Ms", gear.btDeviation().Ms())
-                    .setValue("公法线下偏差X2", gear.btDeviation().x2())
-                    .setValue("跨棒距二M2", gear.btDeviation().M2())
-                    .setValue("跨棒距下偏差Mx", gear.btDeviation().Mx())
-                    .setValue("公法线上偏差Ws", gear.sDeviation().Ws())
-                    .setValue("公法线下偏差Wx", gear.sDeviation().Wx())
-                    .setValue("跨棒距上偏差am1", gear.sDeviation().alphaM1())
-                    .setValue("跨棒距下偏差am2", gear.sDeviation().alphaM2());
-        }
-    }
 
     /**
      * 初始化任一圆计算面板
      */
     private void initAnyCircle(Scene parentScene) {
         if (parentScene != null) {
-            URL fxml = getClass().getResource("AnyCircle.fxml");
+            URL fxml = getClass().getResource("controls/AnyCircle.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(fxml);
             Parent root;
             try {
@@ -341,6 +312,32 @@ public class Controller {
                 anyCircleController = fxmlLoader.getController();
             } catch (IOException e) {
                 Log.error("初始化任一圆面板失败", e);
+            }
+        }
+    }
+
+    /**
+     * 初始化偏差转换面板
+     */
+    private void initDeviation(Scene parentScene) {
+        if (parentScene != null) {
+            URL fxml = getClass().getResource("controls/Deviation.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(fxml);
+            Parent root;
+            try {
+                root = fxmlLoader.load();
+                final Scene scene = new Scene(root);
+                deviationStage = new Stage();
+                deviationStage.initModality(Modality.WINDOW_MODAL);
+                deviationStage.setTitle("偏差转换");
+                deviationStage.setScene(scene);
+                deviationStage.sizeToScene();
+                deviationStage.setResizable(false);
+                deviationStage.getIcons().addAll(((Stage) parentScene.getWindow()).getIcons());
+                deviationStage.initOwner(parentScene.getWindow());
+                deviationController = fxmlLoader.getController();
+            } catch (IOException e) {
+                Log.error("初始化偏差转换面板失败", e);
             }
         }
     }

@@ -1,9 +1,8 @@
-package geardesigner;
+package geardesigner.controls;
 
+import geardesigner.Log;
 import geardesigner.beans.CodeException;
 import geardesigner.beans.Gear;
-import geardesigner.controls.Alerts;
-import geardesigner.controls.OutputParamTable;
 import geardesigner.units.Angle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

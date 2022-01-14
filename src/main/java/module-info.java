@@ -11,8 +11,9 @@ module GearDesign {
     requires com.fasterxml.jackson.databind;
 
     opens geardesigner;
-    opens geardesigner.controls to javafx.fxml;
     exports geardesigner;
     exports geardesigner.beans;
     opens geardesigner.beans;
+    exports geardesigner.controls;
+    opens geardesigner.controls;
 }

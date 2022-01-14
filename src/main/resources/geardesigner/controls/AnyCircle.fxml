@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/16"
-      fx:controller="geardesigner.AnyCircleController">
+      fx:controller="geardesigner.controls.AnyCircleController">
     <children>
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <children>

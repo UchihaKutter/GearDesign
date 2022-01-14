@@ -125,11 +125,6 @@ public abstract class ParamTable<T extends Parameter> extends VBox {
     void initStyle() {
         setSpacing(SPACING);
         setPadding(PADDING);
-        setStyle("-fx-border-color: rgba(0, 0, 0, 0.33);" +
-                "-fx-border-style: dashed;" +
-                "-fx-border-width: 3;" +
-                "-fx-border-radius: 2;"
-        );
     }
 
     /**
